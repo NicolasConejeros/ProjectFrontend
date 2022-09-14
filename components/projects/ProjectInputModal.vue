@@ -87,13 +87,15 @@
               "
             />
           </div>
-          <button
+
+          <label
+            for="my-modal"
+            type="btn"
             class="btn btn-primary btn-block"
-            v-on:click="onSubmit"
-            type="button"
+            @click="onSubmit"
           >
-            crear
-          </button>
+            crear</label
+          >
         </form>
       </div>
     </div>
@@ -114,6 +116,7 @@ export default {
       };
       console.log(project);
       await this.$api.project.createProject(project);
+      this.$emit("updateArray");
     },
   },
 };

@@ -36,7 +36,7 @@
           </svg>
         </label>
       </button>
-      <ProjectsProjectInputModal />
+      <ProjectsProjectInputModal @updateArray="fetchProjects"/>
     </div>
 
     <div
@@ -103,6 +103,7 @@ import ProjectCard from "../../components/projects/ProjectCard.vue";
 export default {
   data: () => ({
     projects: [],
+    componentKey: 0,
   }),
   async fetch() {
     this.startLoading();
