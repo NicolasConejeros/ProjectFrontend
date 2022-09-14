@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="text-4xl font-semibold dark:text-white">
-      Proyectos  <button
+      Proyectos
+      <button
         for="my-modal"
         type="btn"
         class="
@@ -35,7 +36,7 @@
           </svg>
         </label>
       </button>
-      <ProjectsProjectModal />
+      <ProjectsProjectInputModal />
     </div>
 
     <div
@@ -46,6 +47,7 @@
         gap-x-6
         justify-start
         content-center
+        mt-12
       "
     >
       <ProjectsProjectCard
@@ -53,6 +55,7 @@
         :key="index"
         :name="project.name"
         :description="project.description"
+        :project-id="project.id"
       ></ProjectsProjectCard>
       <nuxt-link to="/projects">
         <button
@@ -92,7 +95,6 @@
         </button>
       </nuxt-link>
     </div>
-    <div>{{ name }},{{ description }}</div>
   </div>
 </template>
 
@@ -121,14 +123,6 @@ export default {
           this.$nuxt.$loading.finish();
         });
       }
-    },
-    async onSubmit() {
-      const project = {
-        name: this.name,
-        description: this.description,
-      };
-      console.log(project);
-      await this.$api.project.createProject(project);
     },
     async fetchProjects() {
       const loadedProjects = await this.$api.project.getProjects();

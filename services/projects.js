@@ -9,9 +9,9 @@ export default (axios) => ({
         }
 
     },
-    async getProjects(idUser) {
+    async getProjects() {
         try {
-            console.log(idUser);
+            // console.log(idUser);
             const { data } = await axios.get("/projects");
             return data;
         } catch (error) {
@@ -19,10 +19,20 @@ export default (axios) => ({
         }
 
     },
-    async getAllProjects(idUser) {
+    async getAllProjects() {
         try {
-            console.log(idUser);
+            // console.log(idUser);
             const { data } = await axios.get("/projects/myprojects");
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+
+    },
+    async getProject(idProject) {
+        try {
+            console.log(idProject);
+            const { data } = await axios.get(`/projects/${idProject}`);
             return data;
         } catch (error) {
             console.log(error);

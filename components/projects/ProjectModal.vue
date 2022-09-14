@@ -1,10 +1,10 @@
- <template>
+<template>
   <div>
-    <input type="checkbox" id="my-modal" class="modal-toggle" />
+    <input type="checkbox" id="my-modal1" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box">
         <label
-          for="my-modal"
+          for="my-modal1"
           type="btn"
           class="
             modal-button
@@ -31,26 +31,11 @@
               "
               >Título del proyecto</label
             >
-            <input
-              type="text"
-              v-model="name"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
-            />
+            <p
+              class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+            >
+              {{ name }}
+            </p>
           </div>
           <label
             for="text"
@@ -66,54 +51,28 @@
             >Descripción del proyecto</label
           >
           <div class="mb-6">
-            <input
-              type="text"
-              v-model="description"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
-            />
+            <p
+              class="text-base leading-relaxed text-gray-500 dark:text-gray-400"
+            >
+              {{ description }}
+            </p>
           </div>
-          <button
-            class="btn btn-primary btn-block"
-            v-on:click="onSubmit"
-            type="button"
-          >
-            crear
-          </button>
         </form>
       </div>
     </div>
   </div>
 </template>
-
-<script>
+  
+  <script>
 export default {
-  data: () => ({
-    name: "",
-    description: "",
-  }),
-  methods: {
-    async onSubmit() {
-      const project = {
-        name: this.name,
-        description: this.description,
-      };
-      console.log(project);
-      await this.$api.project.createProject(project);
+  props: {
+    name: {
+      type: String,
+      default: "Nombre del proyecto",
+    },
+    description: {
+      type: String,
+      default: "Descripción",
     },
   },
 };

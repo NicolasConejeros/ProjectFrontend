@@ -1,25 +1,18 @@
 <template>
   <div>
     <div class="grid grid-cols-1">
-      <ProjectsProjectCard
-        v-for="(project, index) in projects"
-        :key="index"
-        :name="project.name"
-        :description="project.description"
-        :project-id="project.id"
-      >
+      <ProjectsProjectCard :name="this.name" :description="this.description">
       </ProjectsProjectCard>
     </div>
   </div>
 </template>
-  
-  <script>
-import ProjectCard from "../../components/projects/ProjectCard.vue";
+    
+<script>
 export default {
   data: () => ({
     name: "",
     description: "",
-    projects: [],
+    requirements: [],
   }),
   async fetch() {
     this.startLoading();
@@ -42,16 +35,13 @@ export default {
       }
     },
     async fetchProjects() {
-      const loadedProjects = await this.$api.project.getAllProjects();
+      const loadedProjects = await this.$api.project.getProject(this.$route.params.id);
       console.log(loadedProjects);
-      if (loadedProjects?.length > 0) {
-        this.projects = loadedProjects;
-      } else {
-        this.projects = [];
-      }
+      this.name = loadedProjects.name;
+      this.description = loadedProjects.description;
+      this.requirements = loadedProjects.requirements;
     },
   },
-  components: { ProjectCard },
 };
 </script>
-  
+    
