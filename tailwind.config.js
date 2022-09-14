@@ -4,6 +4,7 @@ module.exports = {
         // './layouts/**/*.vue',
         './pages/**/*.vue',
         './plugins/**/*.js',
+        "./nuxt.config.js",
     ],
-    // plugins: [require("daisyui")],
+    plugins: [require("daisyui")]
 };

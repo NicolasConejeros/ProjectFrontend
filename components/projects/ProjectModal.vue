@@ -1,18 +1,120 @@
  <template>
   <div>
-    <label for="my-modal" class="btn modal-button">open modal</label>
     <input type="checkbox" id="my-modal" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg">Congratulations random Internet user!</h3>
-        <p class="py-4">
-          You've been selected for a chance to get one year of subscription to
-          use Wikipedia for free!
-        </p>
-        <div class="modal-action">
-          <label for="my-modal" class="btn">Yay!</label>
-        </div>
+        <label
+          for="my-modal"
+          type="btn"
+          class="
+            modal-button
+            btn btn-sm btn-primary btn-circle
+            absolute
+            right-2
+            top-2
+          "
+        >
+          ✕
+        </label>
+        <form>
+          <div class="mb-6">
+            <label
+              for="text"
+              class="
+                block
+                mb-2
+                text-sm
+                font-medium
+                text-gray-900
+                dark:text-gray-300
+                font-semibold
+              "
+              >Título del proyecto</label
+            >
+            <input
+              type="text"
+              v-model="name"
+              class="
+                bg-gray-50
+                border border-gray-300
+                text-gray-900 text-sm
+                rounded-lg
+                focus:ring-blue-500 focus:border-blue-500
+                block
+                w-full
+                p-2.5
+                dark:bg-gray-700
+                dark:border-gray-600
+                dark:placeholder-gray-400
+                dark:text-white
+                dark:focus:ring-blue-500
+                dark:focus:border-blue-500
+              "
+            />
+          </div>
+          <label
+            for="text"
+            class="
+              block
+              mb-2
+              text-sm
+              font-medium
+              text-gray-900
+              dark:text-gray-300
+              font-semibold
+            "
+            >Descripción del proyecto</label
+          >
+          <div class="mb-6">
+            <input
+              type="text"
+              v-model="description"
+              class="
+                bg-gray-50
+                border border-gray-300
+                text-gray-900 text-sm
+                rounded-lg
+                focus:ring-blue-500 focus:border-blue-500
+                block
+                w-full
+                p-2.5
+                dark:bg-gray-700
+                dark:border-gray-600
+                dark:placeholder-gray-400
+                dark:text-white
+                dark:focus:ring-blue-500
+                dark:focus:border-blue-500
+              "
+            />
+          </div>
+          <button
+            class="btn btn-primary btn-block"
+            v-on:click="onSubmit"
+            type="button"
+          >
+            crear
+          </button>
+        </form>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    name: "",
+    description: "",
+  }),
+  methods: {
+    async onSubmit() {
+      const project = {
+        name: this.name,
+        description: this.description,
+      };
+      console.log(project);
+      await this.$api.project.createProject(project);
+    },
+  },
+};
+</script>
