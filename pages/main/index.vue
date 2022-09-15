@@ -49,6 +49,7 @@
         content-center
         mt-12
       "
+      :key="updateCard"
     >
       <ProjectsProjectCard
         v-for="(project, index) in projects"
@@ -103,7 +104,7 @@ import ProjectCard from "../../components/projects/ProjectCard.vue";
 export default {
   data: () => ({
     projects: [],
-    componentKey: 0,
+    updateCard: 0,
   }),
   async fetch() {
     this.startLoading();
@@ -127,7 +128,7 @@ export default {
     },
     async fetchProjects() {
       const loadedProjects = await this.$api.project.getProjects();
-      console.log(loadedProjects);
+      this.updateCard= this.updateCard + 1;
       if (loadedProjects?.length > 0) {
         this.projects = loadedProjects;
       } else {
