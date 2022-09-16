@@ -1,10 +1,10 @@
  <template>
   <div>
-    <input type="checkbox" id="my-modal" class="modal-toggle" />
+    <input type="checkbox" id="addProjectModal" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box">
         <label
-          for="my-modal"
+          for="addProjectModal"
           type="btn"
           class="
             modal-button
@@ -89,7 +89,7 @@
           </div>
 
           <label
-            for="my-modal"
+            for="addProjectModal"
             type="btn"
             class="btn btn-primary btn-block"
             @click="onSubmit"

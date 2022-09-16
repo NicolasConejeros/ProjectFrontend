@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div class="text-4xl font-semibold dark:text-white">
+  <div class="grid grid-cols-12 grid-rows-12 gap-4">
+    <div class="text-4xl font-semibold dark:text-white row-start-4 col-span-4 col-start-3">
       Proyectos
       <button
-        for="my-modal"
+        for="addProjectModal"
         type="btn"
         class="
           text-blue-700
@@ -18,10 +18,9 @@
           dark:text-blue-500
           dark:hover:text-white
           dark:focus:ring-blue-800
-          mt-12
         "
       >
-        <label for="my-modal" class="modal-button">
+        <label for="addProjectModal" class="modal-button">
           <svg
             width="25"
             height="25"
@@ -36,7 +35,7 @@
           </svg>
         </label>
       </button>
-      <ProjectsProjectInputModal @updateArray="fetchProjects"/>
+      <ProjectsProjectInputModal @updateArray="fetchProjects" />
     </div>
 
     <div
@@ -48,6 +47,8 @@
         justify-start
         content-center
         mt-12
+        row-start-4
+        col-start-3
       "
       :key="updateCard"
     >
@@ -128,7 +129,7 @@ export default {
     },
     async fetchProjects() {
       const loadedProjects = await this.$api.project.getProjects();
-      this.updateCard= this.updateCard + 1;
+      this.updateCard = this.updateCard + 1;
       if (loadedProjects?.length > 0) {
         this.projects = loadedProjects;
       } else {

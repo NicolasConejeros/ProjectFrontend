@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="grid grid-cols-1" :key="componentKey">
+  <div class="grid grid-cols-12 grid-rows-12 gap-4">
+    <div class="grid grid-cols-1 col-start-3">
       <ProjectsProjectCard
         v-for="(project, index) in projects"
         :key="index"
