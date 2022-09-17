@@ -16,5 +16,14 @@ export default (axios) => ({
         } catch (error) {
             console.log(error);
         }
+    },
+    async createEpic(epic) {
+        try {
+            console.log('creando Épica ' + epic);
+            const { data } = await axios.post("/epics/",epic)
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
     }
 });

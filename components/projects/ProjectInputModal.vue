@@ -115,7 +115,12 @@ export default {
         description: this.description,
       };
       console.log(project);
-      await this.$api.project.createProject(project);
+      const newProject = await this.$api.project.createProject(project);
+      const epic = {
+        projectId: newProject.id,
+        title: "Sin asignar",
+      }
+      await this.$api.epic.createEpic(epic);
       this.$emit("updateArray");
     },
   },

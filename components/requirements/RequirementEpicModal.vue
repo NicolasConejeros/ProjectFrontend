@@ -14,7 +14,7 @@
     >
       Épica
     </div>
-    <label tabindex="0" class="btn w-full">{{ epicSelected }}</label>
+    <label tabindex="0" class="btn w-full" >{{ epicSelected }}</label>
     <ul
       tabindex="0"
       class="dropdown-content menu shadow bg-base-100 rounded-box w-full"
@@ -33,12 +33,34 @@ export default {
   },
   data: () => ({
     id: "",
-    epicSelected: "Sin asignar",
+    epicSelected: "Seleccionar",
+    default: {
+      title: "seleccionar",
+    },
   }),
+  async mounted(){
+    await this.startLoading();
+    this.epics.push(this.epicSelected);
+    await this.finishLoading();
+  },
   methods: {
-    changeSelected(epic, id) {
+    startLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.start();
+        });
+      }
+    },
+    finishLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.finish();
+        });
+      }
+    },
+    changeSelected(epic,id) {
       this.epicSelected = epic;
-      this.$emit("dropdownSelection", id);
+      this.$emit('dropdownSelection',id);
     },
   },
 };
