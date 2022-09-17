@@ -142,7 +142,7 @@
           </div>
         </form>
         <!-- <div class="w-full"> -->
-          <!-- <div
+        <!-- <div
             class="
               block
               mb-2
@@ -174,7 +174,7 @@
               dark:focus:border-blue-500
             "
           /> -->
-          <RequirementsRequirementDropdown  :epics="test" />
+        <RequirementsRequirementDropdown :epics="epics" />
         <!-- </div> -->
 
         <label
@@ -192,16 +192,15 @@
   
 <script>
 export default {
+  props: {
+    epics: []
+  },
   data: () => ({
     projectId: "",
     epicId: "",
-    newEpic: "",
     title: "",
     description: "",
     acceptanceCriteria: "",
-    epicSelected: "",
-    epics: [],
-    test: ["usuario", "servicio", "internet", "carrito", "pago"],
   }),
   methods: {
     async onSubmit() {

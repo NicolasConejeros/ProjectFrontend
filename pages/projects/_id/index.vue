@@ -11,8 +11,8 @@
     >
       {{ name }}
     </div>
-    <div class="row-start-7 col-start-3 col-end-8">
-      <div class="text-lg font-medium sticky top-0 items-center">
+    <div class="row-start-7 col-start-3 col-end-6">
+      <div class="text-lg font-medium items-center pb-4">
         Requerimientos
         <button
           for="addRequirementModal"
@@ -20,17 +20,13 @@
           class="
             text-blue-700
             border border-blue-700
-            hover:bg-blue-700 hover:text-white
-            focus:ring-4 focus:outline-none focus:ring-blue-300
             rounded-md
             text-center
             inline-flex
             items-center
             dark:border-blue-500
-            dark:text-blue-500
-            dark:hover:text-white
-            dark:focus:ring-blue-800
           "
+          :class="hover"
         >
           <label for="addRequirementModal" class="modal-button">
             <svg
@@ -47,57 +43,110 @@
             </svg>
           </label>
         </button>
-        <RequirementInputModal @updateArray="fetchProject" />
+        <RequirementInputModal
+          :epics="epics"
+          @updateArray="fetchRequirements"
+        />
       </div>
-      <RequerimentCard v-for="(requirement, index) in requirements" :key="index" :title="requirement.title" :description="requirement.description"/>
+      <RequerimentCard
+        class="mb-2 w-3/4"
+        v-for="(requirement, index) in requirements"
+        :key="index"
+        :id="requirement.id"
+        :epic-id="requirement.epicId"
+        :title="requirement.title"
+        :description="requirement.description"
+        :button="true"
+        :hover="hover"
+        :justify="'justify-center'"
+        @display="displayInfo"
+      />
+    </div>
+    <div class="row-start-7 col-start-5 col-end-8 items-start ml-12">
+      <div class="text-lg font-medium sticky top-0 pb-4">
+        Descripción
+        <RequerimentCard
+          class="mt-4"
+          :font="'font-medium'"
+          :size="'text-base'"
+          :title="this.id"
+        />
+      </div>
+    </div>
+    <div class="row-start-7 col-start-8 col-end-11 items-start ml-0">
+      <div class="text-lg font-medium sticky top-0 pb-4">
+        Épica
+        <RequerimentCard
+          class="mt-4"
+          :justify="'justify-center'"
+          :title="this.epic"
+        />
+      </div>
     </div>
   </div>
 </template>
     
 <script>
-import RequirementInputModal from '../../../components/requirements/RequirementInputModal.vue';
-import RequerimentCard from '../../../components/requirements/RequerimentCard.vue';
+import RequirementInputModal from "../../../components/requirements/RequirementInputModal.vue";
+import RequerimentCard from "../../../components/requirements/RequerimentCard.vue";
 export default {
-    data: () => ({
-        name: "",
-        description: "",
-        requirements: [],
-        updateCard: 0,
-    }),
-    async fetch() {
-        this.startLoading();
-        await this.fetchProject();
-        await this.fetchRequeriments();
-        this.finishLoading();
+  data: () => ({
+    name: "",
+    description: "",
+    requirements: [],
+    epics: [],
+    id: "",
+    epic: "",
+    hover:
+      "hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800",
+  }),
+  async created() {
+    await this.onGetEpics();
+  },
+  async fetch() {
+    await this.startLoading();
+    await this.fetchProject();
+    await this.fetchRequirements();
+
+    this.finishLoading();
+  },
+  methods: {
+    startLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.start();
+        });
+      }
     },
-    methods: {
-        startLoading() {
-            if (process.client) {
-                this.$nextTick(() => {
-                    this.$nuxt.$loading.start();
-                });
-            }
-        },
-        finishLoading() {
-            if (process.client) {
-                this.$nextTick(() => {
-                    this.$nuxt.$loading.finish();
-                });
-            }
-        },
-        async fetchProject() {
-            const loadedProject = await this.$api.project.getProject(this.$route.params.id);
-            this.updateCard = this.updateCard + 1;
-            console.log(loadedProject);
-            this.name = loadedProject.name;
-            this.description = loadedProject.description;
-            this.requirements = loadedProject.requirements;
-        },
-        async fetchRequeriments() {
-          this.requirements = await this.$api.requirement.getRequirements(this.$route.params.id);
-        },
+    finishLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.finish();
+        });
+      }
     },
-    components: { RequirementInputModal, RequerimentCard }
+    async fetchProject() {
+      const loadedProject = await this.$api.project.getProject(
+        this.$route.params.id
+      );
+      this.name = loadedProject.name;
+      this.description = loadedProject.description;
+      this.requirements = loadedProject.requirements;
+    },
+    async fetchRequirements() {
+      this.requirements = await this.$api.requirement.getRequirements(
+        this.$route.params.id
+      );
+    },
+    async onGetEpics() {
+      this.epics = await this.$api.epic.getEpics(this.$route.params.id);
+    },
+    async displayInfo(id, epicId) {
+      this.id = id;
+      this.epic = epicId;
+    },
+  },
+  components: { RequirementInputModal, RequerimentCard },
 };
 </script>
     
