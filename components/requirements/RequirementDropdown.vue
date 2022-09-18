@@ -10,16 +10,17 @@
         dark:text-gray-300
         font-semibold
         w-full
+        overflow-auto
       "
     >
       Épica
     </div>
-    <label tabindex="0" class="btn w-full">{{ epicSelected }}</label>
+    <label tabindex="0" class="btn w-full ">{{ epicSelected }}</label>
     <ul
       tabindex="0"
-      class="dropdown-content menu shadow bg-base-100 rounded-box w-full"
+      class="dropdown-content menu shadow bg-base-100 rounded-box w-full h-40 overflow-y-auto"
     >
-      <li v-for="(Epic, index) in epics" :key="index">
+      <li v-for="(Epic, index) in epics" :key="index" >
         <a @click="changeSelected(Epic.title, Epic.id)">{{ Epic.title }}</a>
       </li>
     </ul>

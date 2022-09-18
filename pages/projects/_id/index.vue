@@ -76,6 +76,8 @@
     <div class="row-start-7 col-start-8 col-end-11 items-start ml-0">
       <div class="text-lg font-medium sticky top-0 pb-4">
         Épica
+        <AppModalButton :forModal="'addEpicModal'" :hover="hover" />
+        <EpicsModal :epics="epics" @updateEpics="onGetEpics" />
         <RequerimentCard
           class="mt-4"
           :justify="'justify-center'"
@@ -89,6 +91,7 @@
 <script>
 import RequirementInputModal from "../../../components/requirements/RequirementInputModal.vue";
 import RequerimentCard from "../../../components/requirements/RequerimentCard.vue";
+import EpicsModal from "../../../components/epics/EpicsModal.vue";
 export default {
   data: () => ({
     name: "",
@@ -139,6 +142,7 @@ export default {
       );
     },
     async onGetEpics() {
+      console.log("entra");
       this.epics = await this.$api.epic.getEpics(this.$route.params.id);
     },
     async displayInfo(id, epicId) {
@@ -146,7 +150,7 @@ export default {
       this.epic = epicId;
     },
   },
-  components: { RequirementInputModal, RequerimentCard },
+  components: { RequirementInputModal, RequerimentCard, EpicsModal },
 };
 </script>
     
