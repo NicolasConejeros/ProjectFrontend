@@ -10,13 +10,16 @@
       inline-flex
       items-center
       dark:border-blue-500
+      dark:text-blue-500
+      dark:hover:text-white
+      dark:focus:ring-blue-800
     "
-    :class="hover"
+    :class="[hover, classOptions]"
   >
     <label :for="forModal" class="modal-button">
       <svg
-        width="18"
-        height="18"
+        :width="width"
+        :height="height"
         fill="currentColor"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
@@ -35,6 +38,9 @@ export default {
   props: {
     hover: "",
     forModal: "",
+    width: 25,
+    height: 25,
+    classOptions: "",
   },
   data: () => ({
     projectId: "",

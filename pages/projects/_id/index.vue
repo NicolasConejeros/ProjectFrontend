@@ -14,35 +14,12 @@
     <div class="row-start-7 col-start-3 col-end-6">
       <div class="text-lg font-medium items-center pb-4">
         Requerimientos
-        <button
-          for="addRequirementModal"
-          type="btn"
-          class="
-            text-blue-700
-            border border-blue-700
-            rounded-md
-            text-center
-            inline-flex
-            items-center
-            dark:border-blue-500
-          "
-          :class="hover"
-        >
-          <label for="addRequirementModal" class="modal-button">
-            <svg
-              width="18"
-              height="18"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 7a.75.75 0 0 1 .75.75v3.5h3.5a.75.75 0 0 1 0 1.5h-3.5v3.5a.75.75 0 0 1-1.5 0v-3.5h-3.5a.75.75 0 0 1 0-1.5h3.5v-3.5A.75.75 0 0 1 12 7Z"
-                fill="evenodd"
-              />
-            </svg>
-          </label>
-        </button>
+        <AppModalButton
+          :forModal="'addRequirementModal'"
+          :hover="hover"
+          :width="18"
+          :height="18"
+        />
         <RequirementInputModal
           :epics="epics"
           @updateArray="fetchRequirements"
@@ -76,7 +53,12 @@
     <div class="row-start-7 col-start-8 col-end-11 items-start ml-0">
       <div class="text-lg font-medium sticky top-0 pb-4">
         Épica
-        <AppModalButton :forModal="'addEpicModal'" :hover="hover" />
+        <AppModalButton
+          :forModal="'addEpicModal'"
+          :hover="hover"
+          :width="18"
+          :height="18"
+        />
         <EpicsModal :epics="epics" @updateEpics="onGetEpics" />
         <RequerimentCard
           class="mt-4"

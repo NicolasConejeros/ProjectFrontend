@@ -2,39 +2,13 @@
   <div class="grid grid-cols-12 grid-rows-12 gap-4">
     <div class="text-4xl font-semibold dark:text-white row-start-4 col-span-4 col-start-3">
       Proyectos
-      <button
-        for="addProjectModal"
-        type="btn"
-        class="
-          text-blue-700
-          border border-blue-700
-          hover:bg-blue-700 hover:text-white
-          focus:ring-4 focus:outline-none focus:ring-blue-300
-          rounded-md
-          text-center
-          inline-flex
-          items-center
-          dark:border-blue-500
-          dark:text-blue-500
-          dark:hover:text-white
-          dark:focus:ring-blue-800
-        "
-      >
-        <label for="addProjectModal" class="modal-button">
-          <svg
-            width="25"
-            height="25"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 7a.75.75 0 0 1 .75.75v3.5h3.5a.75.75 0 0 1 0 1.5h-3.5v3.5a.75.75 0 0 1-1.5 0v-3.5h-3.5a.75.75 0 0 1 0-1.5h3.5v-3.5A.75.75 0 0 1 12 7Z"
-              fill="evenodd"
-            />
-          </svg>
-        </label>
-      </button>
+      <AppModalButton
+          :forModal="'addProjectModal'"
+          :hover="hover"
+          :width="25"
+          :height="25"
+          :classOptions="classOptions"
+        />
       <ProjectsProjectInputModal @updateArray="fetchProjects" />
     </div>
 
@@ -106,6 +80,7 @@ export default {
   data: () => ({
     projects: [],
     updateCard: 0,
+    classOptions: "hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300"
   }),
   async fetch() {
     this.startLoading();
