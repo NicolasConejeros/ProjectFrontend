@@ -1,31 +1,69 @@
 <template>
   <div
     class="
-      p-6
-      bg-white
-      rounded-lg
-      border border-gray-200
-      shadow-md
+      card-body
       dark:bg-gray-800 dark:border-gray-700
-      flex-none
       w-full
       type:btn
+      flex grow
     "
     :class="[hover]"
-    v-on="button ? { click: () => displayInfo(description, epicId) } : {}"
+    v-on="
+      button
+        ? {
+            click: () =>
+              displayInfo(description, epicId, acceptanceCriteria, title),
+          }
+        : {}
+    "
   >
     <h5
       class="
         flex
-        mb-2
-        tracking-tight
+        tracking-wide
         text-gray-900
         dark:text-white
+        justify-center
+        font-bold
+        text-xl
       "
-      :class="[font, size, justify]"
     >
       {{ title }}
     </h5>
+    <p
+      v-show="descriptionCard"
+      class="
+        text-gray-900
+        dark:text-gray-300
+        font-semibold
+        grid
+        place-content-start
+        text-base
+      "
+    >
+      Descripción
+    </p>
+
+    <p v-if="descriptionCard" class="text-clip" :class="[font, size, justify]">
+      {{ description }}
+    </p>
+    <p
+      v-show="descriptionCard"
+      class="
+        text-gray-900
+        dark:text-gray-300
+        font-semibold
+        grid
+        place-content-start
+        text-base
+      "
+    >
+      Criterios de aceptación
+    </p>
+
+    <p v-if="descriptionCard" :class="[font, size, justify]">
+      {{ acceptanceCriteria }}
+    </p>
   </div>
 </template>
   
@@ -43,11 +81,15 @@ export default {
     },
     title: {
       type: String,
-      default: "Título del requerimiento",
+      default: "",
     },
     description: {
       type: String,
-      default: "Descripción",
+      default: "",
+    },
+    acceptanceCriteria: {
+      type: String,
+      default: "",
     },
     font: {
       type: String,
@@ -61,6 +103,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    descriptionCard: {
+      type: Boolean,
+      default: false,
+    },
     hover: {
       type: String,
       default: "",
@@ -68,11 +114,17 @@ export default {
     justify: {
       type: String,
       default: "justify-start",
-    }
+    },
   },
   methods: {
-    displayInfo(description, epicId) {
-      this.$emit("display", description, epicId.title);
+    displayInfo(description, epicId, acceptanceCriteria, title) {
+      this.$emit(
+        "display",
+        description,
+        epicId.title,
+        acceptanceCriteria,
+        title
+      );
     },
   },
 };

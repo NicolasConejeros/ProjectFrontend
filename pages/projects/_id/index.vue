@@ -1,70 +1,75 @@
 <template>
-  <div class="grid grid-cols-12 grid-rows-12 gap-4">
+  <div class="container grid grid-cols-12 grid-rows-12 gap-4">
     <div
       class="
         text-4xl
         font-semibold
         dark:text-white
         row-start-4
-        col-span-4 col-start-3
+        col-span-1 col-start-3
       "
     >
       {{ name }}
     </div>
-    <div class="row-start-7 col-start-3 col-end-6">
-      <div class="text-lg font-medium items-center pb-4">
-        Requerimientos
+    <div class="row-start-7 col-span-3 col-start-3 items-start">
+      <div class="text-lg font-medium">
+        Requisitos
         <AppModalButton
           :forModal="'addRequirementModal'"
           :hover="hover"
           :width="18"
           :height="18"
         />
-        <RequirementInputModal
-          :epics="epics"
-          @updateArray="fetchRequirements"
-        />
       </div>
+      <RequirementInputModal :epics="epics" @updateArray="fetchRequirements" />
       <RequerimentCard
-        class="mb-2 w-3/4"
+        class="card text-primary-content mt-4 w-9/10"
         v-for="(requirement, index) in requirements"
         :key="index"
         :id="requirement.id"
         :epic-id="requirement.epicId"
         :title="requirement.title"
         :description="requirement.description"
+        :acceptance-criteria="requirement.acceptanceCriteria"
         :button="true"
         :hover="hover"
         :justify="'justify-center'"
         @display="displayInfo"
       />
     </div>
-    <div class="row-start-7 col-start-5 col-end-8 items-start ml-12">
-      <div class="text-lg font-medium sticky top-0 pb-4">
-        Descripción
+    <div class="row-start-7 col-span-3 col-start-6">
+      <div class="text-lg font-medium sticky top-0">
+        Resumen
         <RequerimentCard
-          class="mt-4"
-          :font="'font-medium'"
+          class=" card text-primary-content mt-4 w-9/10"
+          :font="'font-sans'"
           :size="'text-base'"
-          :title="this.id"
+          :title="this.title"
+          :description="this.description"
+          :acceptance-criteria="this.acceptanceCriteria"
+          :description-card="true"
         />
       </div>
     </div>
-    <div class="row-start-7 col-start-8 col-end-11 items-start ml-0">
-      <div class="text-lg font-medium sticky top-0 pb-4">
-        Épica
-        <AppModalButton
-          :forModal="'addEpicModal'"
-          :hover="hover"
-          :width="18"
-          :height="18"
-        />
-        <EpicsModal :epics="epics" @updateEpics="onGetEpics" />
-        <RequerimentCard
-          class="mt-4"
-          :justify="'justify-center'"
-          :title="this.epic"
-        />
+    <div class="row-start-7 row-span-1 col-span-3 col-start-9">
+      <div class="sticky top-0 pb-4">
+        <div class="text-lg font-medium">
+          Épica
+          <AppModalButton
+            :forModal="'addEpicModal'"
+            :hover="hover"
+            :width="18"
+            :height="18"
+          />
+          <EpicsModal :epics="epics" @updateEpics="onGetEpics" />
+        </div>
+        <div>
+          <RequerimentCard
+            class="card mt-4 w-3/4"
+            :justify="'justify-center'"
+            :title="this.epic"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -81,6 +86,8 @@ export default {
     requirements: [],
     epics: [],
     id: "",
+    title: "",
+    acceptanceCriteria: "",
     epic: "",
     hover:
       "hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800",
@@ -115,21 +122,22 @@ export default {
         this.$route.params.id
       );
       this.name = loadedProject.name;
-      this.description = loadedProject.description;
       this.requirements = loadedProject.requirements;
     },
     async fetchRequirements() {
       this.requirements = await this.$api.requirement.getRequirements(
         this.$route.params.id
       );
+      console.log(this.requirements);
     },
     async onGetEpics() {
-      console.log("entra");
       this.epics = await this.$api.epic.getEpics(this.$route.params.id);
     },
-    async displayInfo(id, epicId) {
-      this.id = id;
-      this.epic = epicId;
+    async displayInfo(description, epicName, acceptanceCriteria, title) {
+      this.description = description;
+      this.title = title;
+      this.epic = epicName;
+      this.acceptanceCriteria = acceptanceCriteria;
     },
   },
   components: { RequirementInputModal, RequerimentCard, EpicsModal },

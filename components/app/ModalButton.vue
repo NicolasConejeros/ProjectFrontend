@@ -38,8 +38,8 @@ export default {
   props: {
     hover: "",
     forModal: "",
-    width: 25,
-    height: 25,
+    width: Number,
+    height: Number,
     classOptions: "",
   },
   data: () => ({

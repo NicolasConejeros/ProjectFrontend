@@ -28,7 +28,7 @@
             place-content-center
           "
         >
-          Añadir Requerimiento
+          Añadir Requisito
         </div>
         <form>
           <div class="mb-6">
@@ -82,11 +82,12 @@
               Descripción
             </div>
 
-            <input
+            <textarea
               type="text"
               v-model="description"
               placeholder="Ej: el siguiente proyecto se basa en.."
               class="
+                textarea textarea-primary
                 bg-gray-50
                 border border-gray-300
                 text-gray-900 text-sm
@@ -118,11 +119,12 @@
             >
               Criterios de aceptación
             </div>
-            <input
+            <textarea
               type="text"
               v-model="acceptanceCriteria"
               placeholder="Ej: Cuando el usuario.. entonces.."
               class="
+                textarea textarea-primary
                 bg-gray-50
                 border border-gray-300
                 text-gray-900 text-sm
@@ -187,7 +189,8 @@ export default {
       if (epic == "Sin asignar") {
         const temp = this.epics.find(
           (epic) =>
-            epic.title == "Sin asignar" && epic.projectId == this.$route.params.id
+            epic.title == "Sin asignar" &&
+            epic.projectId == this.$route.params.id
         );
         this.epicId = temp.id;
       } else {
