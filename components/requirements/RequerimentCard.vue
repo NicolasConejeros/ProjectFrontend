@@ -5,7 +5,7 @@
       dark:bg-gray-800 dark:border-gray-700
       w-full
       type:btn
-      flex grow
+      flex
     "
     :class="[hover]"
     v-on="

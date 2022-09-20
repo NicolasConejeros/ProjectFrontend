@@ -6,5 +6,5 @@ module.exports = {
         './plugins/**/*.js',
         "./nuxt.config.js",
     ],
-    plugins: [require("daisyui")]
+    plugins: [require("@tailwindcss/typography"),require("daisyui")]
 };
