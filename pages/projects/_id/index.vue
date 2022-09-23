@@ -41,35 +41,43 @@
       <div class="text-lg font-medium sticky top-0">
         Resumen
         <RequerimentCard
-          class=" card text-primary-content mt-4 w-9/10"
+          class="card text-primary-content mt-4 w-9/10"
           :font="'font-sans'"
           :size="'text-base'"
+          :id="this.id"
           :title="this.title"
           :description="this.description"
           :acceptance-criteria="this.acceptanceCriteria"
           :description-card="true"
+          @updateArray="fetchRequirements"
         />
       </div>
+      <RequirementInputUpdate
+        :epics="epics"
+        :requirement-title="this.title"
+        :requirement-description="this.description"
+        :requirement-acceptance-criteria="this.acceptanceCriteria"
+        :id="id"
+        @updateArray="fetchRequirements"
+      />
     </div>
-    <div class="row-start-7 row-span-1 col-span-3 col-start-9">
-      <div class="sticky top-0 pb-4">
-        <div class="text-lg font-medium">
-          Épica
-          <AppModalButton
-            :forModal="'addEpicModal'"
-            :hover="hover"
-            :width="18"
-            :height="18"
-          />
-          <EpicsModal :epics="epics" @updateEpics="onGetEpics" />
-        </div>
-        <div>
-          <RequerimentCard
-            class="card mt-4 w-3/4"
-            :justify="'justify-center'"
-            :title="this.epic"
-          />
-        </div>
+    <div class="row-start-7 col-span-3 col-start-9">
+      <div class="text-lg font-medium">
+        Épica
+        <AppModalButton
+          :forModal="'addEpicModal'"
+          :hover="hover"
+          :width="18"
+          :height="18"
+        />
+        <EpicsModal :epics="epics" @updateEpics="onGetEpics" />
+      </div>
+      <div>
+        <RequerimentCard
+          class="card mt-4 w-3/4"
+          :justify="'justify-center'"
+          :title="this.epic"
+        />
       </div>
     </div>
   </div>
@@ -79,6 +87,7 @@
 import RequirementInputModal from "../../../components/requirements/RequirementInputModal.vue";
 import RequerimentCard from "../../../components/requirements/RequerimentCard.vue";
 import EpicsModal from "../../../components/epics/EpicsModal.vue";
+import RequirementInputUpdate from "../../../components/requirements/RequirementInputUpdate.vue";
 export default {
   data: () => ({
     name: "",
@@ -99,8 +108,7 @@ export default {
     await this.startLoading();
     await this.fetchProject();
     await this.fetchRequirements();
-
-    this.finishLoading();
+    await this.finishLoading();
   },
   methods: {
     startLoading() {
@@ -133,14 +141,25 @@ export default {
     async onGetEpics() {
       this.epics = await this.$api.epic.getEpics(this.$route.params.id);
     },
-    async displayInfo(description, epicName, acceptanceCriteria, title) {
+    async displayInfo(id, description, epicName, acceptanceCriteria, title) {
+      this.id = id;
       this.description = description;
       this.title = title;
       this.epic = epicName;
       this.acceptanceCriteria = acceptanceCriteria;
+      console.log("id: " + this.id);
+      console.log("description: " + this.description);
+      console.log("title: " + this.title);
+      console.log("epic: " + this.epic);
+      console.log("acceptanceCriteria: " + this.acceptanceCriteria);
     },
   },
-  components: { RequirementInputModal, RequerimentCard, EpicsModal },
+  components: {
+    RequirementInputModal,
+    RequerimentCard,
+    EpicsModal,
+    RequirementInputUpdate,
+  },
 };
 </script>
     

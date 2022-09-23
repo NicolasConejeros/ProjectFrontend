@@ -1,10 +1,10 @@
 <template>
   <div>
-    <input type="checkbox" id="addRequirementModal" class="modal-toggle" />
+    <input type="checkbox" id="requirementUpdate" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box overflow-y-visible">
         <label
-          for="addRequirementModal"
+          for="requirementUpdate"
           type="btn"
           class="
             modal-button
@@ -28,7 +28,7 @@
             place-content-center
           "
         >
-          Añadir Requisito
+          Editar requisito
         </div>
         <form>
           <div class="mb-6">
@@ -145,18 +145,18 @@
         </form>
         <RequirementDropdown @dropdownSelection="addEpic" :epics="epics" />
         <label
-          for="addRequirementModal"
+          for="requirementUpdate"
           type="btn"
           class="btn btn-primary btn-block"
-          @click="onSubmit"
+          @click="onSubmitEdit(id)"
         >
-          crear</label
+          editar</label
         >
       </div>
     </div>
   </div>
 </template>
-  
+    
 <script>
 import RequirementDropdown from "./RequirementDropdown.vue";
 export default {
@@ -179,15 +179,36 @@ export default {
       default: "",
     },
   },
-  data: () => ({
-    projectId: "",
-    epicId: "",
-    title: "",
-    description: "",
-    acceptanceCriteria: "",
-  }),
+  data: function () {
+    return {
+      projectId: "",
+      epicId: "",
+      title: "",
+      description: "",
+      acceptanceCriteria: "",
+    };
+  },
+  created() {
+    this.title = this.requirementTitle;
+    this.description = this.requirementDescription;
+    this.acceptanceCriteria = this.requirementAcceptanceCriteria;
+  },
   methods: {
-    async onSubmit() {
+    startLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.start();
+        });
+      }
+    },
+    finishLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.finish();
+        });
+      }
+    },
+    async onSubmitEdit(id) {
       if (!this.epicId) this.addEpic("Sin asignar");
       const requirement = {
         projectId: this.$route.params.id,
@@ -198,7 +219,7 @@ export default {
         epicId: this.epicId,
       };
       console.log(requirement);
-      await this.$api.requirement.createRequirement(requirement);
+      await this.$api.requirement.updateRequirements(requirement, id);
       this.$emit("updateArray");
     },
     addEpic(epic) {
