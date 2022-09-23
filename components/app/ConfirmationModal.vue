@@ -33,7 +33,7 @@
         <label
           for="confirmationModal"
           type="btn"
-          class="modal-button btn btn-primary px-2"
+          class="modal-button btn btn-primary px-4 mt-12"
           @click="onDelete(id)"
         >
           Eliminar
@@ -41,7 +41,7 @@
         <label
           for="confirmationModal"
           type="btn"
-          class="modal-button btn btn-primary px-2 ml-12"
+          class="modal-button btn btn-primary px-4 absolute right-5 mt-12"
         >
           Cancelar
         </label>
