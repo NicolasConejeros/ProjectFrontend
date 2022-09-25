@@ -1,6 +1,13 @@
 <template>
   <div
-    class="card-body dark:bg-gray-800 dark:border-gray-700 w-full type:btn flex"
+    class="
+      card-body
+      w-full
+      type:btn
+      flex
+      text-neutral-content
+      border border-primary
+    "
     :class="[hover]"
     v-on="
       button
@@ -15,56 +22,12 @@
       v-if="descriptionCard"
       class="absolute right-2 top-2"
     />
-    <!-- <label
-      v-if="descriptionCard"
-      for="requirementUpdate"
-      type="btn"
-      class="
-        absolute
-        right-2
-        top-2
-        modal-button
-        hover:text-white
-        focus:ring-4 focus:outline-none focus:ring-blue-300
-        dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800
-      "
-    >
-      <svg
-        width="24"
-        height="24"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M13.94 5 19 10.06 9.062 20a2.25 2.25 0 0 1-.999.58l-5.116 1.395a.75.75 0 0 1-.92-.921l1.395-5.116a2.25 2.25 0 0 1 .58-.999L13.938 5Zm7.09-2.03a3.578 3.578 0 0 1 0 5.06l-.97.97L15 3.94l.97-.97a3.578 3.578 0 0 1 5.06 0Z"
-          fill="evenodd"
-        />
-      </svg>
-    </label> -->
-    <h5
-      class="
-        flex
-        tracking-wide
-        text-gray-900
-        dark:text-white
-        justify-center
-        font-bold
-        text-xl
-      "
-    >
+    <h5 class="flex tracking-wide justify-center font-bold text-xl">
       {{ title }}
     </h5>
     <p
       v-if="descriptionCard"
-      class="
-        text-gray-900
-        dark:text-gray-300
-        font-semibold
-        grid
-        place-content-start
-        text-base
-      "
+      class="font-semibold grid place-content-start text-base"
     >
       Descripción
     </p>
@@ -74,14 +37,7 @@
     </p>
     <p
       v-if="descriptionCard"
-      class="
-        text-gray-900
-        dark:text-gray-300
-        font-semibold
-        grid
-        place-content-start
-        text-base
-      "
+      class="font-semibold grid place-content-start text-base"
     >
       Criterios de aceptación
     </p>
@@ -89,9 +45,27 @@
     <p v-if="descriptionCard" :class="[font, size, justify]">
       {{ acceptanceCriteria }}
     </p>
+    <label
+      v-if="descriptionCard && length > 0"
+      class="type:btn absolute bottom-2 right-2 p-2"
+      @click="commentToggle(showComments)"
+      ><svg
+        width="24"
+        height="24"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.042 19.003h5.916a3 3 0 0 1-5.916 0Zm2.958-17a7.5 7.5 0 0 1 7.5 7.5v4l1.418 3.16A.95.95 0 0 1 20.052 18h-16.1a.95.95 0 0 1-.867-1.338l1.415-3.16V9.49l.005-.25A7.5 7.5 0 0 1 12 2.004Z"
+          fill="evenodd"
+        />
+      </svg>
+    </label>
     <ConfirmationModal
       v-if="descriptionCard"
       :id="this.id"
+      :element-to-delete="'requirement'"
       @updateArray="getArrays"
     />
   </div>
@@ -140,6 +114,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showComments: {
+      type: Boolean,
+      default: false,
+    },
     hover: {
       type: String,
       default: "",
@@ -148,9 +126,16 @@ export default {
       type: String,
       default: "justify-start",
     },
+    length: {
+      type: Number,
+      default: 0,
+    },
   },
+  data: () => ({
+    color: "",
+  }),
   methods: {
-    displayInfo(id, description, epicId, acceptanceCriteria, title) {
+    async displayInfo(id, description, epicId, acceptanceCriteria, title) {
       this.$emit(
         "display",
         id,
@@ -163,7 +148,11 @@ export default {
     getArrays() {
       this.$emit("updateArray");
     },
+    commentToggle(showComments) {
+      this.$emit("showComments", !showComments);
+    },
   },
+
   components: {
     RequirementInputModal,
     RequirementCardDropdown,

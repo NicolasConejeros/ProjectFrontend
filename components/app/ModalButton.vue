@@ -4,15 +4,12 @@
     type="btn"
     class="
       text-blue-700
-      border border-blue-700
+      border border-primary
       rounded-md
       text-center
       inline-flex
       items-center
-      dark:border-blue-500
-      dark:text-blue-500
-      dark:hover:text-white
-      dark:focus:ring-blue-800
+      text-primary
     "
     :class="[hover, classOptions]"
   >

@@ -194,20 +194,6 @@ export default {
     this.acceptanceCriteria = this.requirementAcceptanceCriteria;
   },
   methods: {
-    startLoading() {
-      if (process.client) {
-        this.$nextTick(() => {
-          this.$nuxt.$loading.start();
-        });
-      }
-    },
-    finishLoading() {
-      if (process.client) {
-        this.$nextTick(() => {
-          this.$nuxt.$loading.finish();
-        });
-      }
-    },
     async onSubmitEdit(id) {
       if (!this.epicId) this.addEpic("Sin asignar");
       const requirement = {

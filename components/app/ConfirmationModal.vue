@@ -33,8 +33,8 @@
         <label
           for="confirmationModal"
           type="btn"
-          class="modal-button btn btn-primary px-4 mt-12"
-          @click="onDelete(id)"
+          class="modal-button btn btn-accent px-4 mt-12"
+          @click="onDelete(id,elementToDelete)"
         >
           Eliminar
         </label>
@@ -50,16 +50,18 @@
   </div>
 </template>
       
-    <script>
+<script>
 export default {
   props: {
     id: "",
+    elementToDelete: "",
   },
   data: () => ({}),
   methods: {
-    async onDelete(id) {
-      await this.$api.requirement.deleteRequirements(id);
-      this.$emit("updateArray");
+    async onDelete(id,elementToDelete) {
+      if(elementToDelete === 'requirement')
+        await this.$api.requirement.deleteRequirements(id);
+        this.$emit("updateArray");
     },
   },
   components: {},

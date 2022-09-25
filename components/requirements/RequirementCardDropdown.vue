@@ -3,8 +3,9 @@
     <label
       tabindex="0"
       class="
-        hover:text-white
-        dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800
+        hover:text-accent
+        text-primary
+        drop-shadow-md
       "
     >
       <svg
@@ -22,15 +23,18 @@
     </label>
     <ul
       tabindex="0"
-      class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+      class="dropdown-content menu p-2 shadow bg-base-300 rounded-box w-52"
     >
       <li>
-        <label for="requirementUpdate" type="btn" class="modal-button"
+        <label
+          for="requirementUpdate"
+          type="btn"
+          class="modal-button hover:bg-primary-focus"
           >editar</label
         >
       </li>
       <li>
-        <label for="confirmationModal" type="btn" class="modal-button"
+        <label for="confirmationModal" type="btn" class="modal-button hover:bg-accent"
           >Eliminar</label
         >
       </li>
@@ -39,5 +43,8 @@
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+  },
+};
 </script>

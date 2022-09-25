@@ -4,7 +4,7 @@
       class="
         text-4xl
         font-semibold
-        dark:text-white
+        text-neutral-content
         row-start-4
         col-span-1 col-start-3
       "
@@ -12,7 +12,7 @@
       {{ name }}
     </div>
     <div class="row-start-7 col-span-3 col-start-3 items-start">
-      <div class="text-lg font-medium">
+      <div class="text-lg font-medium text-neutral-content">
         Requisitos
         <AppModalButton
           :forModal="'addRequirementModal'"
@@ -21,27 +21,29 @@
           :height="18"
         />
       </div>
+      <div class="">
+        <RequerimentCard
+          class="card mt-4 w-9/10"
+          v-for="(requirement, index) in requirements"
+          :key="index"
+          :id="requirement.id"
+          :epic-id="requirement.epicId"
+          :title="requirement.title"
+          :description="requirement.description"
+          :acceptance-criteria="requirement.acceptanceCriteria"
+          :button="true"
+          :hover="hover"
+          :justify="'justify-center'"
+          @display="displayInfo"
+        />
+      </div>
       <RequirementInputModal :epics="epics" @updateArray="fetchRequirements" />
-      <RequerimentCard
-        class="card text-primary-content mt-4 w-9/10"
-        v-for="(requirement, index) in requirements"
-        :key="index"
-        :id="requirement.id"
-        :epic-id="requirement.epicId"
-        :title="requirement.title"
-        :description="requirement.description"
-        :acceptance-criteria="requirement.acceptanceCriteria"
-        :button="true"
-        :hover="hover"
-        :justify="'justify-center'"
-        @display="displayInfo"
-      />
     </div>
-    <div class="row-start-7 col-span-3 col-start-6">
-      <div class="text-lg font-medium sticky top-0">
+    <div class="row-start-7 col-span-4 col-start-6">
+      <div class="text-lg font-medium sticky text-neutral-content top-0">
         Resumen
         <RequerimentCard
-          class="card text-primary-content mt-4 w-9/10"
+          class="card bg-base-100 mt-4 w-full"
           :font="'font-sans'"
           :size="'text-base'"
           :id="this.id"
@@ -49,9 +51,44 @@
           :description="this.description"
           :acceptance-criteria="this.acceptanceCriteria"
           :description-card="true"
+          :show-comments="this.showComments"
+          :length="length"
           @updateArray="fetchRequirements"
+          @showComments="commentsToggle"
         />
+
+        <!-- <CommentInput
+          :id="this.id"
+          class="w-full"
+          @updateComments="onGetComments(id)"
+        /> -->
+        <p
+          v-if="showComments && this.length > 0"
+          class="
+            text-gray-900
+            dark:text-gray-300
+            font-semibold
+            grid
+            place-content-start
+            text-base
+            py-4
+            ml-2
+          "
+        >
+          Observaciones
+        </p>
+        <div
+          v-if="showComments && this.length > 0"
+          class="overflow-auto hover:overflow-y-auto h-96"
+        >
+          <Comment
+            v-for="(comment, index) in comments"
+            :key="index"
+            :comment-content="comment.content"
+          />
+        </div>
       </div>
+
       <RequirementInputUpdate
         :epics="epics"
         :requirement-title="this.title"
@@ -61,8 +98,8 @@
         @updateArray="fetchRequirements"
       />
     </div>
-    <div class="row-start-7 col-span-3 col-start-9">
-      <div class="text-lg font-medium">
+    <div class="row-start-7 col-span-3 col-start-10">
+      <div class="text-lg font-medium text-neutral-content">
         Épica
         <AppModalButton
           :forModal="'addEpicModal'"
@@ -88,18 +125,22 @@ import RequirementInputModal from "../../../components/requirements/RequirementI
 import RequerimentCard from "../../../components/requirements/RequerimentCard.vue";
 import EpicsModal from "../../../components/epics/EpicsModal.vue";
 import RequirementInputUpdate from "../../../components/requirements/RequirementInputUpdate.vue";
+import Comment from "../../../components/app/Comment.vue";
+import CommentInput from "../../../components/app/CommentInput.vue";
 export default {
   data: () => ({
     name: "",
+    length: 0,
     description: "",
     requirements: [],
     epics: [],
+    comments: [],
     id: "",
     title: "",
     acceptanceCriteria: "",
     epic: "",
-    hover:
-      "hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800",
+    hover: "hover:text-neutral-content hover:bg-primary",
+    showComments: true,
   }),
   async created() {
     await this.onGetEpics();
@@ -136,10 +177,13 @@ export default {
       this.requirements = await this.$api.requirement.getRequirements(
         this.$route.params.id
       );
-      console.log(this.requirements);
     },
     async onGetEpics() {
       this.epics = await this.$api.epic.getEpics(this.$route.params.id);
+    },
+    async onGetComments(requirementId) {
+      this.comments = await this.$api.comment.getCommentsR(requirementId);
+      this.length = this.comments.length;
     },
     async displayInfo(id, description, epicName, acceptanceCriteria, title) {
       this.id = id;
@@ -147,11 +191,11 @@ export default {
       this.title = title;
       this.epic = epicName;
       this.acceptanceCriteria = acceptanceCriteria;
-      console.log("id: " + this.id);
-      console.log("description: " + this.description);
-      console.log("title: " + this.title);
-      console.log("epic: " + this.epic);
-      console.log("acceptanceCriteria: " + this.acceptanceCriteria);
+      await this.onGetComments(this.id);
+      this.showComments = true;
+    },
+    commentsToggle(value) {
+      this.showComments = value;
     },
   },
   components: {
@@ -159,6 +203,8 @@ export default {
     RequerimentCard,
     EpicsModal,
     RequirementInputUpdate,
+    Comment,
+    CommentInput,
   },
 };
 </script>

@@ -1,7 +1,6 @@
 export default (axios) => ({
     async createProject(project) {
         try {
-            console.log(project);
             const { data } = await axios.post("/projects", project);
             return data;
         } catch (error) {
@@ -31,7 +30,6 @@ export default (axios) => ({
     },
     async getProject(idProject) {
         try {
-            console.log(idProject);
             const { data } = await axios.get(`/projects/${idProject}`);
             return data;
         } catch (error) {

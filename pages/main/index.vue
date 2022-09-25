@@ -4,7 +4,6 @@
       Proyectos
       <AppModalButton
           :forModal="'addProjectModal'"
-          :hover="hover"
           :width="25"
           :height="25"
           :classOptions="classOptions"

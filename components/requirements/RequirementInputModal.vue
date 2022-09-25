@@ -147,7 +147,7 @@
         <label
           for="addRequirementModal"
           type="btn"
-          class="btn btn-primary btn-block"
+          class="btn btn-accent btn-block "
           @click="onSubmit"
         >
           crear</label
