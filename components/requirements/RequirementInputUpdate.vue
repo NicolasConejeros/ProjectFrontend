@@ -186,6 +186,7 @@ export default {
       title: "",
       description: "",
       acceptanceCriteria: "",
+      epicName: "",
     };
   },
   created() {
@@ -207,18 +208,22 @@ export default {
       console.log(requirement);
       await this.$api.requirement.updateRequirements(requirement, id);
       this.$emit("updateArray");
+      this.$emit(
+        "displayInfo",
+        id,
+        requirement.description,
+        this.epicName,
+        requirement.acceptanceCriteria,
+        requirement.title
+      );
     },
-    addEpic(epic) {
-      if (epic == "Sin asignar") {
-        const temp = this.epics.find(
-          (epic) =>
-            epic.title == "Sin asignar" &&
-            epic.projectId == this.$route.params.id
-        );
-        this.epicId = temp.id;
-      } else {
-        this.epicId = epic;
-      }
+    addEpic(epicSelected, id) {
+      const temp = this.epics.find(
+        (epic) =>
+          epic.title == epicSelected && epic.projectId == this.$route.params.id
+      );
+      this.epicId = temp.id;
+      this.epicName = temp.title;
     },
   },
   components: { RequirementDropdown },

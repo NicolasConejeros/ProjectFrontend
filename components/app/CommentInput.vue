@@ -4,7 +4,7 @@
       <input
         type="text"
         v-model="content"
-        placeholder="Type here"
+        placeholder="Añadir observación"
         class="input input-bordered input-primary w-full"
       />
       <label

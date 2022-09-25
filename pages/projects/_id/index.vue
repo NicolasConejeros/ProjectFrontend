@@ -21,26 +21,27 @@
           :height="18"
         />
       </div>
-      <div class="">
-        <RequerimentCard
-          class="card mt-4 w-9/10"
-          v-for="(requirement, index) in requirements"
-          :key="index"
-          :id="requirement.id"
-          :epic-id="requirement.epicId"
-          :title="requirement.title"
-          :description="requirement.description"
-          :acceptance-criteria="requirement.acceptanceCriteria"
-          :button="true"
-          :hover="hover"
-          :justify="'justify-center'"
-          @display="displayInfo"
-        />
-      </div>
+      <RequerimentCard
+        class="card mt-4 w-9/10"
+        v-for="(requirement, index) in requirements"
+        :key="index"
+        :id="requirement.id"
+        :epic-id="requirement.epicId"
+        :title="requirement.title"
+        :description="requirement.description"
+        :acceptance-criteria="requirement.acceptanceCriteria"
+        :button="true"
+        :hover="hover"
+        :justify="'justify-center'"
+        @display="displayInfo"
+      />
       <RequirementInputModal :epics="epics" @updateArray="fetchRequirements" />
     </div>
     <div class="row-start-7 col-span-4 col-start-6">
-      <div class="text-lg font-medium sticky text-neutral-content top-0">
+      <div
+        v-if="showInfo"
+        class="text-lg font-medium sticky text-neutral-content top-0"
+      >
         Resumen
         <RequerimentCard
           class="card bg-base-100 mt-4 w-full"
@@ -52,16 +53,19 @@
           :acceptance-criteria="this.acceptanceCriteria"
           :description-card="true"
           :show-comments="this.showComments"
+          :show-input-box="this.showInputBox"
           :length="length"
           @updateArray="fetchRequirements"
           @showComments="commentsToggle"
+          @showInputBox="inputToggle"
         />
 
-        <!-- <CommentInput
+        <CommentInput
+          v-if="showInputBox"
           :id="this.id"
           class="w-full"
           @updateComments="onGetComments(id)"
-        /> -->
+        />
         <p
           v-if="showComments && this.length > 0"
           class="
@@ -84,7 +88,9 @@
           <Comment
             v-for="(comment, index) in comments"
             :key="index"
+            :id="comment.id"
             :comment-content="comment.content"
+            @updateComments="onGetComments"
           />
         </div>
       </div>
@@ -96,10 +102,11 @@
         :requirement-acceptance-criteria="this.acceptanceCriteria"
         :id="id"
         @updateArray="fetchRequirements"
+        @displayInfo="displayInfo"
       />
     </div>
     <div class="row-start-7 col-span-3 col-start-10">
-      <div class="text-lg font-medium text-neutral-content">
+      <div v-if="showInfo" class="text-lg font-medium text-neutral-content">
         Épica
         <AppModalButton
           :forModal="'addEpicModal'"
@@ -141,6 +148,9 @@ export default {
     epic: "",
     hover: "hover:text-neutral-content hover:bg-primary",
     showComments: true,
+    showInputBox: false,
+    showInfo: false,
+    timer: null,
   }),
   async created() {
     await this.onGetEpics();
@@ -150,6 +160,14 @@ export default {
     await this.fetchProject();
     await this.fetchRequirements();
     await this.finishLoading();
+  },
+  mounted: function () {
+    this.timer = setInterval(() => {
+      this.onGetComments(this.id);
+    }, 30000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   methods: {
     startLoading() {
@@ -182,8 +200,13 @@ export default {
       this.epics = await this.$api.epic.getEpics(this.$route.params.id);
     },
     async onGetComments(requirementId) {
-      this.comments = await this.$api.comment.getCommentsR(requirementId);
-      this.length = this.comments.length;
+      if (!requirementId) {
+        this.comments = await this.$api.comment.getCommentsR(this.id);
+        this.length = this.comments.length;
+      } else {
+        this.comments = await this.$api.comment.getCommentsR(requirementId);
+        this.length = this.comments.length;
+      }
     },
     async displayInfo(id, description, epicName, acceptanceCriteria, title) {
       this.id = id;
@@ -193,9 +216,14 @@ export default {
       this.acceptanceCriteria = acceptanceCriteria;
       await this.onGetComments(this.id);
       this.showComments = true;
+      this.showInputBox = false;
+      this.showInfo = true;
     },
     commentsToggle(value) {
       this.showComments = value;
+    },
+    inputToggle(value) {
+      this.showInputBox = value;
     },
   },
   components: {

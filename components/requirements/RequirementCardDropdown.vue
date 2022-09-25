@@ -1,13 +1,6 @@
 <template>
   <div class="dropdown dropdown-left p-2">
-    <label
-      tabindex="0"
-      class="
-        hover:text-accent
-        text-primary
-        drop-shadow-md
-      "
-    >
+    <label tabindex="0" class="hover:text-accent text-primary drop-shadow-md">
       <svg
         width="24"
         height="24"
@@ -27,14 +20,18 @@
     >
       <li>
         <label
-          for="requirementUpdate"
+          :for="forModal"
           type="btn"
-          class="modal-button hover:bg-primary-focus"
+          class="hover:bg-primary-focus"
+          :class="[modalButtonString]"
           >editar</label
         >
       </li>
       <li>
-        <label for="confirmationModal" type="btn" class="modal-button hover:bg-accent"
+        <label
+          :for="forModalC"
+          type="btn"
+          class="modal-button hover:text-base-300 hover:bg-accent"
           >Eliminar</label
         >
       </li>
@@ -44,7 +41,27 @@
 
 <script>
 export default {
-  methods: {
+  props: {
+    forModal: {
+      type: String,
+      default: "",
+    },
+    forModalC: {
+      type: String,
+      default: "",
+    },
+    modalButton: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  data: () => ({
+    modalButtonString: "",
+  }),
+  created() {
+    if (this.modalButton) {
+      this.modalButtonString = "modal-button";
+    }
   },
 };
 </script>

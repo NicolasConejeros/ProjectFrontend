@@ -1,10 +1,10 @@
 <template>
   <div>
-    <input type="checkbox" id="confirmationModal" class="modal-toggle" />
+    <input type="checkbox" id="confirmationModalC" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box">
         <label
-          for="confirmationModal"
+          for="confirmationModalC"
           type="btn"
           class="
             modal-button
@@ -28,18 +28,18 @@
             place-content-center
           "
         >
-          Estás seguro/a?
+          Estás seguro/a?ss
         </div>
         <label
-          for="confirmationModal"
+          for="confirmationModalC"
           type="btn"
           class="modal-button btn btn-accent px-4 mt-12"
-          @click="onDelete(id,elementToDelete)"
+          @click="onDelete(id)"
         >
           Eliminar
         </label>
         <label
-          for="confirmationModal"
+          for="confirmationModalC"
           type="btn"
           class="modal-button btn btn-primary px-4 absolute right-5 mt-12"
         >
@@ -49,19 +49,17 @@
     </div>
   </div>
 </template>
-      
-<script>
+        
+  <script>
 export default {
   props: {
     id: "",
-    elementToDelete: "",
   },
   data: () => ({}),
   methods: {
-    async onDelete(id,elementToDelete) {
-      if(elementToDelete === 'requirement')
-        await this.$api.requirement.deleteRequirements(id);
-        this.$emit("updateArray");
+    async onDelete(id) {
+      await this.$api.comment.deleteComment(id);
+      this.$emit("updateComments");
     },
   },
   components: {},

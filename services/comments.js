@@ -16,5 +16,14 @@ export default (axios) => ({
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+    async deleteComment(commentId) {
+        try {
+            console.log('borrando comentario ' + commentId);
+            const { data } = await axios.delete(`/comments/${commentId}`)
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
 });

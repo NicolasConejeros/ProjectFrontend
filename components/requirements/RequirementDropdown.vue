@@ -39,7 +39,7 @@ export default {
   methods: {
     changeSelected(epic, id) {
       this.epicSelected = epic;
-      this.$emit("dropdownSelection", id);
+      this.$emit("dropdownSelection", epic,id);
     },
   },
 };
