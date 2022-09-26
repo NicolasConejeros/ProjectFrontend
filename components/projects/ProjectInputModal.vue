@@ -16,6 +16,20 @@
         >
           ✕
         </label>
+        <div
+          class="
+            block
+            text-xl
+            font-medium
+            text-gray-900
+            dark:text-gray-300
+            font-semibold
+            grid
+            place-content-center
+          "
+        >
+          Añadir proyecto
+        </div>
         <form>
           <div class="mb-6">
             <label

@@ -147,7 +147,7 @@
         <label
           for="addRequirementModal"
           type="btn"
-          class="btn btn-accent btn-block "
+          class="btn btn-accent btn-block"
           @click="onSubmit"
         >
           crear</label
@@ -201,17 +201,13 @@ export default {
       await this.$api.requirement.createRequirement(requirement);
       this.$emit("updateArray");
     },
-    addEpic(epic) {
-      if (epic == "Sin asignar") {
-        const temp = this.epics.find(
-          (epic) =>
-            epic.title == "Sin asignar" &&
-            epic.projectId == this.$route.params.id
-        );
-        this.epicId = temp.id;
-      } else {
-        this.epicId = epic;
-      }
+    addEpic(epicSelected) {
+      const temp = this.epics.find(
+        (epic) =>
+          epic.title == epicSelected && epic.projectId == this.$route.params.id
+      );
+      this.epicId = temp.id;
+      this.epicName = temp.title;
     },
   },
   components: { RequirementDropdown },

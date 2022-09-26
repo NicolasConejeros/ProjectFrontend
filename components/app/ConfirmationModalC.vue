@@ -28,7 +28,7 @@
             place-content-center
           "
         >
-          Estás seguro/a?ss
+          Estás seguro/a?
         </div>
         <label
           for="confirmationModalC"

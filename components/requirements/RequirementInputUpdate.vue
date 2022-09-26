@@ -217,7 +217,7 @@ export default {
         requirement.title
       );
     },
-    addEpic(epicSelected, id) {
+    addEpic(epicSelected) {
       const temp = this.epics.find(
         (epic) =>
           epic.title == epicSelected && epic.projectId == this.$route.params.id

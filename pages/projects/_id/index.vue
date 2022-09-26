@@ -135,6 +135,7 @@ import RequirementInputUpdate from "../../../components/requirements/Requirement
 import Comment from "../../../components/app/Comment.vue";
 import CommentInput from "../../../components/app/CommentInput.vue";
 export default {
+  layout: "projects",
   data: () => ({
     name: "",
     length: 0,

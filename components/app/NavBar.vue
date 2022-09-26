@@ -1,8 +1,8 @@
 <template>
   <div class="navbar bg-base-300">
     <div class="flex-none">
-      <button class="btn btn-square btn-ghost">
-        <svg
+      <label v-if="isLoggedIn" for="my-drawer" class="btn btn-primary drawer-button"
+        ><svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -15,10 +15,10 @@
             d="M4 6h16M4 12h16M4 18h16"
           ></path>
         </svg>
-      </button>
+      </label>
     </div>
     <div class="flex-1">
-      <a class="btn btn-ghost normal-case text-xl">daisyUI</a>
+      <a class="btn btn-ghost normal-case text-xl">Proyecto de Tesis</a>
     </div>
     <div class="flex-none">
       <button class="btn btn-square btn-ghost">
@@ -39,3 +39,16 @@
     </div>
   </div>
 </template>
+
+<script>
+
+
+export default {
+  props: {
+    isLoggedIn: {
+      type: Boolean,
+      default: false
+    }
+  }
+}
+</script>

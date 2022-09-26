@@ -1,0 +1,38 @@
+export default (axios) => ({
+    async getRooms(projectId) {
+        try {
+            console.log('obteniendo salas ' + projectId);
+            const { data } = await axios.get(`/rooms/project/${projectId}`)
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async getRoom(roomId) {
+        try {
+            console.log('obteniendo sala ' + roomId);
+            const { data } = await axios.get(`/rooms/${roomId}`)
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async createRoom(room) {
+        try {
+            console.log('creando sala ' + room);
+            const { data } = await axios.post("/rooms/", room)
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    // async deleteComment(commentId) {
+    //     try {
+    //         console.log('borrando comentario ' + commentId);
+    //         const { data } = await axios.delete(`/comments/${commentId}`)
+    //         return data;
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // },
+});

@@ -33,27 +33,14 @@
 <script>
 export default {
   props: {
-    hover: "",
+    hover: {
+      type: String,
+      default: "hover:text-neutral-content hover:bg-primary"
+    },
     forModal: "",
     width: Number,
     height: Number,
     classOptions: "",
   },
-  data: () => ({
-    projectId: "",
-    title: "",
-  }),
-  methods: {
-    async onSubmit() {
-      const epic = {
-        projectId: this.$route.params.id,
-        title: this.title,
-      };
-      console.log(epic);
-      await this.$api.epic.createEpic(epic);
-      this.$emit("updateEpics");
-    },
-  },
-  components: {},
 };
 </script>
