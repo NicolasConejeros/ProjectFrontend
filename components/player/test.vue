@@ -12,8 +12,18 @@
       :max="audioDuration"
       class="w-full range range-primary"
     />
-    <div>{{ elapsedTime() }} {{ convertTime(audioDuration) }}</div>
-    <player-buttons class="justify-items-center ml-20" @toggleAudio="toggleAudio" @nextAudio="nextAudio" @prevAudio="prevAudio" :key="updateButtons" />
+    <div>
+      <a class="justify-items-start">{{ elapsedTime() }}</a>
+      <a class="grid justify-items-end -mt-6">{{ convertTime(audioDuration) }}</a>
+    </div>
+
+    <player-buttons
+      class="justify-items-center ml-20"
+      @toggleAudio="toggleAudio"
+      @nextAudio="nextAudio"
+      @prevAudio="prevAudio"
+      :key="updateButtons"
+    />
   </div>
 </template>
 
@@ -101,7 +111,7 @@ export default {
     endListener() {
       this.isPlaying = false;
       this.listenerActive = false;
-      this.updateButtons+=1;
+      this.updateButtons += 1;
       this.cleanupListeners();
     },
     //Remove listeners after audio play stops
