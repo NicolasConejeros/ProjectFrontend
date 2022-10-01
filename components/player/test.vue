@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="grid">
     {{ this.subtitle }}
     <audio v-if="url" style="display: none" controls ref="player" id="playerid">
       <source v-bind:src="url" type="audio/mpeg" />
@@ -13,7 +13,7 @@
       class="w-full range range-primary"
     />
     <div>{{ elapsedTime() }} {{ convertTime(audioDuration) }}</div>
-    <player-buttons @toggleAudio="toggleAudio" @nextAudio="nextAudio" @prevAudio="prevAudio" />
+    <player-buttons class="justify-items-center ml-20" @toggleAudio="toggleAudio" @nextAudio="nextAudio" @prevAudio="prevAudio" :key="updateButtons" />
   </div>
 </template>
 
@@ -61,6 +61,7 @@ export default {
       playbackTime: 0,
       isPlaying: false,
       audioDuration: 100,
+      updateButtons: 0,
     };
   },
   methods: {
@@ -100,6 +101,7 @@ export default {
     endListener() {
       this.isPlaying = false;
       this.listenerActive = false;
+      this.updateButtons+=1;
       this.cleanupListeners();
     },
     //Remove listeners after audio play stops

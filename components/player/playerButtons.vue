@@ -1,13 +1,31 @@
 <template>
-  <div>
-    <label class="swap swap-rotate">
+  <div class="grid grid-cols-4 grid-flow-col" :key="update">
+    <div class="items-center text-primary hover:text-accent ml-7 mt-4">
+      <svg
+        width="24"
+        height="24"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+        @click="prevAudio"
+      >
+        <path
+          d="M2.75 20a1 1 0 1 0 2 0V4a1 1 0 1 0-2 0v16ZM20.75 19.053c0 1.424-1.612 2.252-2.77 1.422L7.51 12.968a1.75 1.75 0 0 1 .075-2.895l10.47-6.716c1.165-.748 2.695.089 2.695 1.473v14.223Z"
+          fill="evenodd"
+        />
+      </svg>
+    </div>
+
+    <label class="swap swap-rotate justify-center">
       <input type="checkbox" />
       <div
         class="
           swap-on
-          flex
+          h-12
+          w-12
           border border-accent
           rounded-full
+          flex
           justify-center
           text-accent
         "
@@ -32,7 +50,7 @@
           swap-off
           h-12
           w-12
-          border border-primary
+          border-2 border-primary
           rounded-full
           flex
           justify-center
@@ -55,49 +73,39 @@
         </svg>
       </div>
     </label>
-
-    <svg
-      width="24"
-      height="24"
-      fill="currentColor"
-      class="items-center text-primary hover:text-accent"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-      @click="nextAudio"
-    >
-      <path
-        d="M21 4a1 1 0 1 0-2 0v16a1 1 0 1 0 2 0V4ZM3 4.947c0-1.424 1.612-2.252 2.77-1.422l10.47 7.507a1.75 1.75 0 0 1-.075 2.895l-10.47 6.716C4.53 21.39 3 20.554 3 19.17V4.947Z"
-        fill="evenodd"
-      />
-    </svg>
-    <button class="btn">
+    <div class="items-center text-primary hover:text-accent mr-7 mt-4">
       <svg
         width="24"
         height="24"
         fill="currentColor"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
-        @click="prevAudio"
+        @click="nextAudio"
       >
         <path
-          d="M2.75 20a1 1 0 1 0 2 0V4a1 1 0 1 0-2 0v16ZM20.75 19.053c0 1.424-1.612 2.252-2.77 1.422L7.51 12.968a1.75 1.75 0 0 1 .075-2.895l10.47-6.716c1.165-.748 2.695.089 2.695 1.473v14.223Z"
+          d="M21 4a1 1 0 1 0-2 0v16a1 1 0 1 0 2 0V4ZM3 4.947c0-1.424 1.612-2.252 2.77-1.422l10.47 7.507a1.75 1.75 0 0 1-.075 2.895l-10.47 6.716C4.53 21.39 3 20.554 3 19.17V4.947Z"
           fill="evenodd"
         />
       </svg>
-    </button>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  data: () => ({
+    update: 0,
+  }),
   methods: {
     toggleAudio() {
       this.$emit("toggleAudio");
     },
     nextAudio() {
+      this.update += 1;
       this.$emit("nextAudio");
     },
     prevAudio() {
+      this.update += 1;
       this.$emit("prevAudio");
     },
   },
