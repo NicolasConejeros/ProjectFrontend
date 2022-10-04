@@ -47,7 +47,8 @@
             </div>
             <input
               type="text"
-              v-model="title"
+              :value="requirementTitle"
+              @input="(event) => (title = event.target.value)"
               placeholder="Ej: Proyecto 1"
               class="
                 bg-gray-50
@@ -84,7 +85,8 @@
 
             <textarea
               type="text"
-              v-model="description"
+              :value="requirementDescription"
+              @input="(event) => (description = event.target.value)"
               placeholder="Ej: el siguiente proyecto se basa en.."
               class="
                 textarea textarea-primary
@@ -121,7 +123,8 @@
             </div>
             <textarea
               type="text"
-              v-model="acceptanceCriteria"
+              :value="requirementAcceptanceCriteria"
+              @input="(event) => (acceptanceCriteria = event.target.value)"
               placeholder="Ej: Cuando el usuario.. entonces.."
               class="
                 textarea textarea-primary
@@ -160,6 +163,11 @@
 <script>
 import RequirementDropdown from "./RequirementDropdown.vue";
 export default {
+  mounted: function () {
+    this.title = this.requirementTitle;
+    this.description = this.requirementDescription;
+    this.acceptanceCriteria = this.requirementAcceptanceCriteria;
+  },
   props: {
     epics: [],
     requirementTitle: {
@@ -189,14 +197,13 @@ export default {
       epicName: "",
     };
   },
-  created() {
-    this.title = this.requirementTitle;
-    this.description = this.requirementDescription;
-    this.acceptanceCriteria = this.requirementAcceptanceCriteria;
-  },
   methods: {
     async onSubmitEdit(id) {
       if (!this.epicId) this.addEpic("Sin asignar");
+      if (!this.title) this.title = this.requirementTitle;
+      if (!this.description) this.description = this.requirementDescription;
+      if (!this.acceptanceCriteria)
+        this.acceptanceCriteria = this.requirementAcceptanceCriteria;
       const requirement = {
         projectId: this.$route.params.id,
         epicId: this.epicId,

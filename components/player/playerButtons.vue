@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-4 grid-flow-col" :key="update">
-    <div class="items-center text-primary hover:text-accent ml-7 mt-4">
+  <div class="grid grid-cols-5 grid-flow-col" :key="update">
+    <div class="items-center text-primary hover:text-accent mt-4 col-span-1">
       <svg
         width="24"
         height="24"
@@ -16,7 +16,7 @@
       </svg>
     </div>
 
-    <label class="swap swap-rotate justify-center">
+    <label class="swap swap-rotate justify-center col-span-1">
       <input type="checkbox" />
       <div
         class="
@@ -73,7 +73,7 @@
         </svg>
       </div>
     </label>
-    <div class="items-center text-primary hover:text-accent mr-7 mt-4">
+    <div class="items-center text-primary hover:text-accent mt-4 col-span-1">
       <svg
         width="24"
         height="24"
@@ -88,13 +88,71 @@
         />
       </svg>
     </div>
+    <div class="items-center text-accent hover:text-base-300 mt-4 col-span-1">
+      <div class="dropdown dropdown-right">
+        <label tabindex="0" class="">
+          <svg
+            width="24"
+            height="24"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            @click="colorDropdown = true"
+          >
+            <path
+              d="M3 3.747a.75.75 0 0 1 .75-.75h16.504a.75.75 0 0 1 .6 1.2L16.69 9.748l4.164 5.552a.75.75 0 0 1-.6 1.2H4.5v4.749a.75.75 0 0 1-.648.743L3.75 22a.75.75 0 0 1-.743-.648L3 21.249V3.747Z"
+              fill="evenodd"
+            />
+          </svg>
+        </label>
+
+        <ul
+          v-if="colorDropdown"
+          tabindex="0"
+          class="
+            dropdown-content
+            menu
+            p-2
+            shadow
+            bg-base-300
+            text-accent
+            rounded-box
+            w-40
+            h-20
+            grid grid-cols-3
+            gap-y-1 gap-x-1
+          "
+        >
+          <div
+            class="rounded-lg bg-primary p-1"
+            @click="addMarker('primary')"
+          ></div>
+          <div class="rounded-lg bg-success p-1" @click="addMarker('primary')"></div>
+          <div class="rounded-lg bg-error p-1" @click="addMarker('error')"></div>
+          <div class="rounded-lg bg-warning p-1" @click="addMarker('warning')"></div>
+          <div class="rounded-lg bg-primary-content p-1" @click="addMarker('primary-content')"></div>
+          <div class="rounded-lg bg-base-content p-1" @click="addMarker('base-content')"></div>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    next: {
+      type: Boolean,
+      default: false,
+    },
+    prev: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data: () => ({
     update: 0,
+    colorDropdown: true,
   }),
   methods: {
     toggleAudio() {
@@ -107,6 +165,10 @@ export default {
     prevAudio() {
       this.update += 1;
       this.$emit("prevAudio");
+    },
+    addMarker(color) {
+      this.colorDropdown = false;
+      this.$emit("bookmark", color);
     },
   },
 };

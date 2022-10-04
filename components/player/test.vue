@@ -1,10 +1,8 @@
 <template>
-  <div class="grid">
-    {{ this.subtitle }}
+  <div class="container w-full">
     <audio v-if="url" style="display: none" controls ref="player" id="playerid">
       <source v-bind:src="url" type="audio/mpeg" />
     </audio>
-
     <input
       v-model="playbackTime"
       type="range"
@@ -14,14 +12,17 @@
     />
     <div>
       <a class="justify-items-start">{{ elapsedTime() }}</a>
-      <a class="grid justify-items-end -mt-6">{{ convertTime(audioDuration) }}</a>
+      <a class="grid justify-items-end -mt-6">{{
+        convertTime(audioDuration)
+      }}</a>
     </div>
 
     <player-buttons
-      class="justify-items-center ml-20"
+      class="justify-items-center ml-28"
       @toggleAudio="toggleAudio"
       @nextAudio="nextAudio"
       @prevAudio="prevAudio"
+      @bookmark="addBookmark"
       :key="updateButtons"
     />
   </div>
@@ -72,6 +73,10 @@ export default {
       isPlaying: false,
       audioDuration: 100,
       updateButtons: 0,
+      bookmark: {
+        time: 0,
+        color: "",
+      },
     };
   },
   methods: {
@@ -136,6 +141,11 @@ export default {
       } else {
         return "00:00";
       }
+    },
+    addBookmark(color) {
+      this.bookmark.time = Math.round(this.playbackTime);
+      this.bookmark.color = color;
+      this.$emit("bookmark",this.bookmark,this.audioDuration);
     },
   },
 };

@@ -1,18 +1,18 @@
 <template>
   <div
     class="
-      p-6
-      bg-white
-      rounded-lg
-      border border-gray-200
-      shadow-md
-      dark:bg-gray-800 dark:border-gray-700
-      flex-none
+      card-body
+
+      type:btn
+      flex grow-0
+      text-neutral-content
+      border border-primary
+      hover:text-neutral-content hover:bg-primary
       w-80
-      h-50
+      h-56
     "
   >
-    <nuxt-link :to="route" >
+    <nuxt-link :to="route">
       <h5
         class="
           -mt-4
@@ -28,10 +28,10 @@
       </h5>
     </nuxt-link>
     <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-    <p class="mt-2 mb-4 font-normal text-gray-700 dark:text-gray-400 truncate">
+    <p class="mt-2 mb-4 font-normal text-gray-700 dark:text-gray-400 ">
       {{ description }}
     </p>
-    <button
+    <!-- <button
       for="my-modal"
       type="btn"
       class="
@@ -64,9 +64,9 @@
             ></path>
           </svg>
         </div>
-        <!-- <ProjectsProjectModal :name="name" :description="description" /> -->
+        <ProjectsProjectModal :name="name" :description="description" />
       </label>
-    </button>
+    </button> -->
   </div>
 </template>
 
@@ -87,7 +87,7 @@ export default {
     },
   },
   data: () => ({
-    route: "/projects/"
+    route: "/projects/",
   }),
   created() {
     this.route = this.route + this.projectId;

@@ -21,7 +21,7 @@
       class="dropdown-content menu shadow bg-base-300 rounded-box w-full max-h-40 overflow-y-auto"
     >
       <li v-for="(Epic, index) in epics" :key="index" >
-        <a @click="changeSelected(Epic.title, Epic.id)">{{ Epic.title }}</a>
+        <a class="hover:bg-accent hover:text-base-300" @click="changeSelected(Epic.title, Epic.id)">{{ Epic.title }}</a>
       </li>
     </ul>
   </div>

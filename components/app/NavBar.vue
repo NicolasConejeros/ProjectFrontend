@@ -1,7 +1,10 @@
 <template>
   <div class="navbar bg-base-300">
     <div class="flex-none">
-      <label v-if="isLoggedIn" for="my-drawer" class="btn btn-primary drawer-button"
+      <label
+        v-if="isLoggedIn"
+        for="my-drawer"
+        class="btn btn-primary drawer-button"
         ><svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -18,7 +21,11 @@
       </label>
     </div>
     <div class="flex-1">
-      <a class="btn btn-ghost normal-case text-xl">Proyecto de Tesis</a>
+      <nuxt-link to="/main"
+        ><a class="btn btn-ghost normal-case text-xl"
+          >Proyecto de Tesis</a
+        ></nuxt-link
+      >
     </div>
     <div class="flex-none">
       <button class="btn btn-square btn-ghost">
@@ -41,14 +48,12 @@
 </template>
 
 <script>
-
-
 export default {
   props: {
     isLoggedIn: {
       type: Boolean,
-      default: false
-    }
-  }
-}
+      default: false,
+    },
+  },
+};
 </script>

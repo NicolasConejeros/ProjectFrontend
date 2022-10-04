@@ -143,10 +143,10 @@ export default {
     },
     async addNewMusic() {
       let types = /(\.|\/)(mp3|mp4)$/i;
-      // if (
-      //   types.test(this.musicDetails.audio.type) ||
-      //   types.test(this.musicDetails.audio.name)
-      // ) {
+      if (
+        types.test(this.musicDetails.audio.type) ||
+        types.test(this.musicDetails.audio.name)
+      ) {
       this.musicDetails.roomId = this.roomId;
       this.musicDetails.title = this.title;
       this.musicDetails.artist = "user";
@@ -156,10 +156,10 @@ export default {
       formData.append("artist", this.musicDetails.artist);
       formData.append("audio", this.musicDetails.audio);
       this.data = await this.$api.audio.postAudio(formData);
-      // } else {
-      //   alert("Invalid file type");
-      //   return !this.isValid;
-      // }
+      } else {
+        alert("Invalid file type");
+        return !this.isValid;
+      }
     },
     async onSubmit() {
       await this.addNewMusic();

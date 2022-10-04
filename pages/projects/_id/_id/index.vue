@@ -11,17 +11,28 @@
     >
       {{ room.name }}
     </div>
-    <div class="row-start-7 col-span-3 col-start-3 items-start">
+    <div class="row-start-7 col-span-3 col-start-3" ref="ee">
       <div class="text-lg font-medium text-neutral-content">
-        Añadir audio
+        <!-- {{ audioTitle }} {{ bookmark }}{{ audioId }} -->
+        {{ totalTime }}|| {{ bookmark }}||{{ flag }}
         <AppModalButton :forModal="'addAudioModal'" :width="18" :height="18" />
       </div>
+      <div :style="flagPositioning">
+        <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M11 6V12H13V6H11M11 14V16H13V14H11Z"
+          />
+        </svg>
+      </div>
       <Test
+        v-if="audios.length > 0"
         :url="url"
         :subtitle="audioTitle"
-        class="row-start-8 col-span-4"
+        class="row-start-8 mt-2"
         @nextAudio="nextAudio"
         @prevAudio="prevAudio"
+        @bookmark="addBookmark"
       ></Test>
     </div>
 
@@ -40,7 +51,15 @@ export default {
     audioIndex: 0,
     audios: [],
     url: "",
-    audioTitle: "",
+    audioTitle: "No hay audio",
+    bookmark: {
+      time: 0,
+      color: "",
+    },
+    audioId: "",
+    sliderWidth: 0,
+    flag: 0,
+    totalTime: 0,
   }),
   async fetch() {
     this.startLoading();
@@ -48,7 +67,22 @@ export default {
     await this.onGetAudios();
     this.finishLoading();
   },
+  computed: {
+    flagPositioning() {
+      return {
+        "margin-left": `${this.flag}px`,
+        width: 20,
+        height: 20,
+      };
+    },
+  },
   methods: {
+    calculate() {
+      this.sliderWidth = this.$refs.ee.clientWidth;
+      const temp = (this.bookmark.time / this.totalTime) * 100;
+      console.log(temp);
+      this.flag = Math.round((this.sliderWidth * temp) / 100) -12;
+    },
     startLoading() {
       if (process.client) {
         this.$nextTick(() => {
@@ -68,21 +102,32 @@ export default {
     },
     async onGetAudios() {
       this.audios = await this.$api.audio.getAudios(this.$route.params.id);
-      this.audioTitle = this.audios[this.audioIndex].title;
-      this.url =
-        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+      if (this.audios.length > 0) {
+        this.audioTitle = this.audios[this.audioIndex].title;
+        this.url =
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+      }
     },
     nextAudio() {
       this.audioIndex = this.audioIndex + 1;
+      if (!this.audios[this.audioIndex]) this.audioIndex = 0;
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
     },
     prevAudio() {
       this.audioIndex = this.audioIndex - 1;
+      if (!this.audios[this.audioIndex])
+        this.audioIndex = this.audios.length - 1;
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+    },
+    addBookmark(bookmark, audioDuration) {
+      this.bookmark = bookmark;
+      this.totalTime = audioDuration;
+      this.audioId = this.audios[this.audioIndex].id;
+      this.calculate();
     },
   },
 

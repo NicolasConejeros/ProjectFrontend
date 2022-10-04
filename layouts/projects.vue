@@ -24,13 +24,13 @@
             :width="18"
             :height="18"
           />
-          <RoomModal @updateRooms="onGetRooms"/>
+          <RoomModal @updateRooms="onGetRooms" />
         </div>
         <!-- Sidebar content here -->
         <li v-for="(room, index) in rooms" :key="index">
           <nuxt-link :to="route + '/' + room.id">
-          <a >{{ room.name }}</a>
-        </nuxt-link>
+            <a>{{ room.name }}</a>
+          </nuxt-link>
         </li>
       </ul>
     </div>
@@ -44,8 +44,8 @@ export default {
     rooms: [],
     route: "/projects/",
   }),
-  created(){
-    this.route = this.route + this.$route.params.id
+  created() {
+    this.route = this.route + this.$route.params.id;
   },
   async fetch() {
     await this.startLoading();
@@ -70,7 +70,7 @@ export default {
     async onGetRooms() {
       const loadedRooms = await this.$api.room.getRooms(this.$route.params.id);
       this.rooms = loadedRooms;
-      console.log(this.rooms);
+      console.log(JSON.stringify(this.rooms, null, 2));
     },
   },
   components: { RoomModal },

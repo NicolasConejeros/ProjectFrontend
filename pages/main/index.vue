@@ -1,13 +1,22 @@
 <template>
   <div class="grid grid-cols-12 grid-rows-12 gap-4">
-    <div class="text-4xl font-semibold dark:text-white row-start-4 col-span-4 col-start-3">
+    <div
+      class="
+        text-4xl
+        font-semibold
+        dark:text-white
+        row-start-4
+        col-span-4 col-start-3
+        items-justify-center
+      "
+    >
       Proyectos
       <AppModalButton
-          :forModal="'addProjectModal'"
-          :width="25"
-          :height="25"
-          :classOptions="classOptions"
-        />
+        :forModal="'addProjectModal'"
+        :width="25"
+        :height="25"
+        :classOptions="classOptions"
+      />
       <ProjectsProjectInputModal @updateArray="fetchProjects" />
     </div>
 
@@ -26,6 +35,7 @@
       :key="updateCard"
     >
       <ProjectsProjectCard
+      class="mt-4"
         v-for="(project, index) in projects"
         :key="index"
         :name="project.name"
@@ -51,7 +61,7 @@
             dark:text-blue-500
             dark:hover:text-white
             dark:focus:ring-blue-800
-            mt-12
+            mt-24
           "
         >
           <svg
@@ -79,7 +89,8 @@ export default {
   data: () => ({
     projects: [],
     updateCard: 0,
-    classOptions: "hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300"
+    classOptions:
+      "hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300",
   }),
   async fetch() {
     this.startLoading();
