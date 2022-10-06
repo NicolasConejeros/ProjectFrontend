@@ -21,8 +21,9 @@
           v-for="(bookmark, index) in bookmarks"
           :key="index"
           :style="calculate(index)"
-          style="width: 24px; height: 24px"
+          style="width: 24px; height: 24px;"
           viewBox="0 0 24 24"
+          @click="goToBookmark(bookmark.time)"
         >
           <path
             fill="currentColor"
@@ -34,6 +35,7 @@
         v-if="audios.length > 0"
         :url="url"
         :subtitle="audioTitle"
+        :new-position="bookmarkP"
         class="row-start-8 mt-2"
         @nextAudio="nextAudio"
         @prevAudio="prevAudio"
@@ -54,6 +56,7 @@ import Test from "../../../../components/player/test.vue";
 export default {
   layout: "projects",
   data: () => ({
+    bookmarkP: 0,
     room: [],
     audios: [],
     bookmarks: [],
@@ -84,7 +87,7 @@ export default {
   },
   computed: {
     //Calculates the positions of the bookmarks
-    flagPositioning() {},
+    
   },
   methods: {
     //To calculate te positioning of the bookmarks
@@ -102,7 +105,9 @@ export default {
         };
       }
     },
-
+    goToBookmark(time) {
+      this.bookmarkP =time;
+    },
     //-------------------Nuxt loading stuff-----------------------
     startLoading() {
       if (process.client) {

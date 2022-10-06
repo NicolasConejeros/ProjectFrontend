@@ -35,6 +35,7 @@ export default {
   components: { playerButtons },
   mounted: function () {
     var audio = this.$refs.player;
+
     //Wait for audio to load, then run initSlider() to get audio duration and set the max value of our slider
     // "loademetadata" Event https://www.w3schools.com/tags/av_event_loadedmetadata.asp
     audio.addEventListener(
@@ -47,6 +48,9 @@ export default {
       const audio = this.$refs.player;
       audio.load();
       this.initSlider();
+    });
+    this.$watch("newPosition", () => {
+      this.playbackTime = this.newPosition;
     });
     this.$nextTick(function () {
       this.$watch("playbackTime", function () {
@@ -78,6 +82,7 @@ export default {
       type: String,
       default: "sin seleccionar",
     },
+    newPosition: 0,
   },
   data() {
     return {
