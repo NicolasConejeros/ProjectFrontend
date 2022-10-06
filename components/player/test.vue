@@ -23,6 +23,7 @@
       @nextAudio="nextAudio"
       @prevAudio="prevAudio"
       @bookmark="addBookmark"
+      @bookmarkToggle="bookmarkToggle"
       :key="updateButtons"
     />
   </div>
@@ -33,8 +34,19 @@ import playerButtons from "./playerButtons.vue";
 export default {
   components: { playerButtons },
   mounted: function () {
+    var audio = this.$refs.player;
+    //Wait for audio to load, then run initSlider() to get audio duration and set the max value of our slider
+    // "loademetadata" Event https://www.w3schools.com/tags/av_event_loadedmetadata.asp
+    audio.addEventListener(
+      "loadedmetadata",
+      function (e) {
+        this.initSlider();
+      }.bind(this)
+    );
     this.$watch("url", () => {
-      this.$refs.player.load();
+      const audio = this.$refs.player;
+      audio.load();
+      this.initSlider();
     });
     this.$nextTick(function () {
       this.$watch("playbackTime", function () {
@@ -73,10 +85,6 @@ export default {
       isPlaying: false,
       audioDuration: 100,
       updateButtons: 0,
-      bookmark: {
-        time: 0,
-        color: "",
-      },
     };
   },
   methods: {
@@ -84,6 +92,7 @@ export default {
       const audio = this.$refs.player;
       if (audio) {
         this.audioDuration = Math.round(audio.duration);
+        this.$emit("audioInfo", this.audioDuration);
       }
     },
     toggleAudio() {
@@ -117,6 +126,7 @@ export default {
       this.isPlaying = false;
       this.listenerActive = false;
       this.updateButtons += 1;
+      this.$emit("bookmarkToggle");
       this.cleanupListeners();
     },
     //Remove listeners after audio play stops
@@ -143,9 +153,14 @@ export default {
       }
     },
     addBookmark(color) {
-      this.bookmark.time = Math.round(this.playbackTime);
-      this.bookmark.color = color;
-      this.$emit("bookmark",this.bookmark,this.audioDuration);
+      const bookmark = {
+        time: Math.round(this.playbackTime),
+        color: color,
+      };
+      this.$emit("bookmark", bookmark);
+    },
+    bookmarkToggle() {
+      this.$emit("bookmarkToggle");
     },
   },
 };

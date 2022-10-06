@@ -11,20 +11,25 @@
     >
       {{ room.name }}
     </div>
-    <div class="row-start-7 col-span-3 col-start-3" ref="ee">
+    <div class="row-start-7 col-span-3 col-start-3" ref="playerSection">
       <div class="text-lg font-medium text-neutral-content">
-        <!-- {{ audioTitle }} {{ bookmark }}{{ audioId }} -->
-        {{ totalTime }}|| {{ bookmark }}||{{ flag }}
+        {{ audioTitle }}
         <AppModalButton :forModal="'addAudioModal'" :width="18" :height="18" />
       </div>
-      <div :style="flagPositioning">
-        <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
+      <template v-if="showBookmarks" >
+        <svg
+          v-for="(bookmark, index) in bookmarks"
+          :key="index"
+          :style="calculate(index)"
+          style="width: 24px; height: 24px"
+          viewBox="0 0 24 24"
+        >
           <path
             fill="currentColor"
             d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M11 6V12H13V6H11M11 14V16H13V14H11Z"
           />
         </svg>
-      </div>
+      </template>
       <Test
         v-if="audios.length > 0"
         :url="url"
@@ -33,6 +38,8 @@
         @nextAudio="nextAudio"
         @prevAudio="prevAudio"
         @bookmark="addBookmark"
+        @audioInfo="audioInfo"
+        @bookmarkToggle="bookmarkToggle"
       ></Test>
     </div>
 
@@ -48,19 +55,27 @@ export default {
   layout: "projects",
   data: () => ({
     room: [],
-    audioIndex: 0,
     audios: [],
+    bookmarks: [],
+    audioIndex: 0,
     url: "",
     audioTitle: "No hay audio",
-    bookmark: {
-      time: 0,
-      color: "",
-    },
     audioId: "",
     sliderWidth: 0,
     flag: 0,
     totalTime: 0,
+    showBookmarks: false,
   }),
+  mounted: function () {
+    this.$watch("showBookmarks", () => {
+      if (this.showBookmarks) {
+        this.calculate();
+      }
+    });
+    this.$watch("audioIndex", () => {
+      this.bookmarks = this.audios[this.audioIndex].bookmarks;
+    });
+  },
   async fetch() {
     this.startLoading();
     await this.onGetRoom();
@@ -68,21 +83,27 @@ export default {
     this.finishLoading();
   },
   computed: {
-    flagPositioning() {
-      return {
-        "margin-left": `${this.flag}px`,
-        width: 20,
-        height: 20,
-      };
-    },
+    //Calculates the positions of the bookmarks
+    flagPositioning() {},
   },
   methods: {
-    calculate() {
-      this.sliderWidth = this.$refs.ee.clientWidth;
-      const temp = (this.bookmark.time / this.totalTime) * 100;
-      console.log(temp);
-      this.flag = Math.round((this.sliderWidth * temp) / 100) -12;
+    //To calculate te positioning of the bookmarks
+    calculate(index) {
+      console.log("index: " + index);
+      if (this.bookmarks.length > 0 && this.bookmarks[index]) {
+        this.sliderWidth = this.$refs.playerSection.clientWidth;
+        console.log(this.totalTime);
+        const temp = (this.bookmarks[index].time / this.totalTime) * 100;
+        console.log(temp);
+
+        const ee = Math.round((this.sliderWidth * temp) / 100) - 12;
+        return {
+          "margin-left": `${ee}px`,
+        };
+      }
     },
+
+    //-------------------Nuxt loading stuff-----------------------
     startLoading() {
       if (process.client) {
         this.$nextTick(() => {
@@ -97,23 +118,33 @@ export default {
         });
       }
     },
+    //-----------------------------------------------------------
+
+    //Get the  info of the room
     async onGetRoom() {
       this.room = await this.$api.room.getRoom(this.$route.params.id);
     },
+    //Get the audios related to the room
     async onGetAudios() {
       this.audios = await this.$api.audio.getAudios(this.$route.params.id);
       if (this.audios.length > 0) {
         this.audioTitle = this.audios[this.audioIndex].title;
         this.url =
           "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+        this.bookmarks = this.audios[this.audioIndex].bookmarks;
       }
     },
+    //------------------------Audio controls------------------------------
     nextAudio() {
       this.audioIndex = this.audioIndex + 1;
       if (!this.audios[this.audioIndex]) this.audioIndex = 0;
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+      //loads the bookmarks of the next audio
+      this.bookmarks = this.audios[this.audioIndex].bookmarks;
+      //resets the icon and hides the bookmarks
+      this.showBookmarks = !this.showBookmarks;
     },
     prevAudio() {
       this.audioIndex = this.audioIndex - 1;
@@ -122,12 +153,32 @@ export default {
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+      //loads the bookmarks of the next audio
+      this.bookmarks = this.audios[this.audioIndex].bookmarks;
+      //resets the icon and hides the bookmarks
+      this.showBookmarks = !this.showBookmarks;
     },
-    addBookmark(bookmark, audioDuration) {
-      this.bookmark = bookmark;
-      this.totalTime = audioDuration;
+    //-----------------------------------------------------------
+
+    //Add bookmarks function
+    async addBookmark(newBookmark) {
+      const bookmark = newBookmark;
+
       this.audioId = this.audios[this.audioIndex].id;
-      this.calculate();
+      const newAudioBookmark = {
+        id: this.audioId,
+        bookmarks: this.audios[this.audioIndex].bookmarks.concat(bookmark),
+      };
+      await this.$api.audio.putAudio(newAudioBookmark);
+      await this.onGetAudios();
+    },
+    //Get the info of the audio playing
+    audioInfo(audioDuration) {
+      this.totalTime = audioDuration;
+      console.log(this.totalTime);
+    },
+    bookmarkToggle() {
+      this.showBookmarks = !this.showBookmarks;
     },
   },
 
