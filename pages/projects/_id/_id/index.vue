@@ -16,27 +16,27 @@
         {{ audioTitle }}
         <AppModalButton :forModal="'addAudioModal'" :width="18" :height="18" />
       </div>
-      <template v-if="showBookmarks" >
+      <span v-if="showBookmarks" class="mb-4">
         <svg
           v-for="(bookmark, index) in bookmarks"
           :key="index"
           :style="calculate(index)"
-          style="width: 24px; height: 24px;"
+          style="width: 24px; height: 24px; position: absolute;"
           viewBox="0 0 24 24"
           @click="goToBookmark(bookmark.time)"
         >
           <path
-            fill="currentColor"
+            
             d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M11 6V12H13V6H11M11 14V16H13V14H11Z"
           />
         </svg>
-      </template>
+      </span>
       <Test
         v-if="audios.length > 0"
         :url="url"
         :subtitle="audioTitle"
         :new-position="bookmarkP"
-        class="row-start-8 mt-2"
+        class="row-start-8 mt-6"
         @nextAudio="nextAudio"
         @prevAudio="prevAudio"
         @bookmark="addBookmark"
@@ -87,7 +87,6 @@ export default {
   },
   computed: {
     //Calculates the positions of the bookmarks
-    
   },
   methods: {
     //To calculate te positioning of the bookmarks
@@ -95,18 +94,20 @@ export default {
       console.log("index: " + index);
       if (this.bookmarks.length > 0 && this.bookmarks[index]) {
         this.sliderWidth = this.$refs.playerSection.clientWidth;
-        console.log(this.totalTime);
-        const temp = (this.bookmarks[index].time / this.totalTime) * 100;
-        console.log(temp);
+        console.log('bTime: '+(this.bookmarks[index].time));
+        console.log('bColor: '+(this.bookmarks[index].color));
+        const temp = ((this.bookmarks[index].time * 100) / this.totalTime);
+        console.log('%:' +temp);
 
-        const ee = Math.round((this.sliderWidth * temp) / 100) - 12;
+        const ee = Math.round((this.sliderWidth * temp) / 100);
         return {
           "margin-left": `${ee}px`,
+          "fill":  `${this.bookmarks[index].color}`
         };
       }
     },
     goToBookmark(time) {
-      this.bookmarkP =time;
+      this.bookmarkP = time;
     },
     //-------------------Nuxt loading stuff-----------------------
     startLoading() {
@@ -190,3 +191,4 @@ export default {
   components: { AudioModal, Test },
 };
 </script>
+

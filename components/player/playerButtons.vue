@@ -124,28 +124,28 @@
           "
         >
           <div
-            class="rounded-lg bg-primary p-1"
-            @click="addMarker('primary')"
+            class="rounded-lg p-1" style="background-color: #8b5cf6"
+            @click="addMarker('#8b5cf6')"
           ></div>
           <div
-            class="rounded-lg bg-success p-1"
-            @click="addMarker('primary')"
+            class="rounded-lg p-1" style="background-color: #36D399"
+            @click="addMarker('#36D399')"
           ></div>
           <div
-            class="rounded-lg bg-error p-1"
-            @click="addMarker('error')"
+            class="rounded-lg bg-error p-1" style="background-color: #F87272"
+            @click="addMarker('#F87272')"
           ></div>
           <div
-            class="rounded-lg bg-warning p-1"
-            @click="addMarker('warning')"
+            class="rounded-lg bg-warning p-1" style="background-color: #FBBD23"
+            @click="addMarker('#FBBD23')"
           ></div>
           <div
-            class="rounded-lg bg-primary-content p-1"
-            @click="addMarker('primary-content')"
+            class="rounded-lg bg-primary-content p-1" style="background-color:#3ABFF8"
+            @click="addMarker('#3ABFF8')"
           ></div>
           <div
-            class="rounded-lg bg-base-content p-1"
-            @click="addMarker('base-content')"
+            class="rounded-lg  p-1" style="background-color: #D926A9"
+            @click="addMarker('#D926A9')"
           ></div>
         </ul>
       </div>
