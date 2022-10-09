@@ -54,7 +54,7 @@
     </div>
 
     <div class="row-start-7 col-span-3 col-start-10"></div>
-    <AudioModal :room-id="this.$route.params.id" @updateAudios="onGetAudios" />
+    <AudioModal :room-id="this.room.id" @updateAudios="onGetAudios" />
   </div>
 </template>
 
@@ -132,11 +132,11 @@ export default {
 
     //Get the  info of the room
     async onGetRoom() {
-      this.room = await this.$api.room.getRoom(this.$route.params.id);
+      this.room = await this.$api.room.getRoom(this.$route.params.slug);
     },
     //Get the audios related to the room
     async onGetAudios() {
-      this.audios = await this.$api.audio.getAudios(this.$route.params.id);
+      this.audios = await this.$api.audio.getAudios(this.room.id);
       if (this.audios.length > 0) {
         this.audioTitle = this.audios[this.audioIndex].title;
         this.url =
@@ -203,7 +203,6 @@ export default {
       };
       await this.$api.audio.putAudio(newBookmarksArray);
       await this.onGetAudios();
-
       this.deleteM = false;
     },
   },

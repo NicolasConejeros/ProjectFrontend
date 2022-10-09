@@ -28,7 +28,7 @@
         </div>
         <!-- Sidebar content here -->
         <li v-for="(room, index) in rooms" :key="index">
-          <nuxt-link :to="route + '/' + room.id">
+          <nuxt-link :to="route + '/' + room.slug">
             <a>{{ room.name }}</a>
           </nuxt-link>
         </li>

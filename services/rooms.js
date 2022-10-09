@@ -8,10 +8,10 @@ export default (axios) => ({
             console.log(error);
         }
     },
-    async getRoom(roomId) {
+    async getRoom(slug) {
         try {
-            console.log('obteniendo sala ' + roomId);
-            const { data } = await axios.get(`/rooms/${roomId}`)
+            console.log('obteniendo sala ' + slug);
+            const { data } = await axios.get(`/rooms/search?slug=${slug}`)
             return data;
         } catch (error) {
             console.log(error);
