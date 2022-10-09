@@ -1,6 +1,37 @@
 <template>
   <div class="grid grid-cols-5 grid-flow-col" :key="update">
-    <div class="items-center text-primary hover:text-accent mt-4 col-span-1" @click="deleteMarker">DELETE</div>
+    <label class="swap justify-center mt-2 col-span-1">
+      <input type="checkbox" />
+
+      <div class="swap-on text-accent" @click="deleteMarker">
+        <svg
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21.5 6a1 1 0 0 1-.883.993L20.5 7h-.845l-1.231 12.52A2.75 2.75 0 0 1 15.687 22H8.313a2.75 2.75 0 0 1-2.737-2.48L4.345 7H3.5a1 1 0 0 1 0-2h5a3.5 3.5 0 1 1 7 0h5a1 1 0 0 1 1 1Zm-7.25 3.25a.75.75 0 0 0-.743.648L13.5 10v7l.007.102a.75.75 0 0 0 1.486 0L15 17v-7l-.007-.102a.75.75 0 0 0-.743-.648Zm-4.5 0a.75.75 0 0 0-.743.648L9 10v7l.007.102a.75.75 0 0 0 1.486 0L10.5 17v-7l-.007-.102a.75.75 0 0 0-.743-.648ZM12 3.5A1.5 1.5 0 0 0 10.5 5h3A1.5 1.5 0 0 0 12 3.5Z"
+            fill="evenodd"
+          />
+        </svg>
+      </div>
+      <div class="swap-off text-base-300" @click="stopDeleting">
+        <svg
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M3.94 5 2.22 3.28a.75.75 0 0 1 1.06-1.06l18.5 18.5a.75.75 0 0 1-1.06 1.06l-2.293-2.292-.003.031A2.75 2.75 0 0 1 15.687 22H8.313a2.75 2.75 0 0 1-2.737-2.48L4.345 7H3.5a1 1 0 0 1 0-2h.44ZM15 16.06l-1.5-1.5V17l.007.102a.75.75 0 0 0 1.486 0L15 17v-.94Zm-4.5-4.5L9 10.06V17l.007.102a.75.75 0 0 0 1.486 0L10.5 17v-5.44ZM15 10v1.818l3.807 3.807L19.655 7h.845l.117-.007A1 1 0 0 0 20.5 5h-5a3.5 3.5 0 1 0-7 0h-.318l5.318 5.318V10l.007-.102a.75.75 0 0 1 1.486 0L15 10Zm-3-6.5A1.5 1.5 0 0 1 13.5 5h-3A1.5 1.5 0 0 1 12 3.5Z"
+            fill="evenodd"
+          />
+        </svg>
+      </div>
+    </label>
     <div class="items-center text-primary hover:text-accent mt-4 col-span-1">
       <svg
         width="24"
@@ -125,15 +156,15 @@
           "
         >
           <div
-            class="rounded-lg bg-[#8b5cf6] hover:bg-[#552fc2] p-1" 
+            class="rounded-lg bg-[#8b5cf6] hover:bg-[#552fc2] p-1"
             @click="addMarker('#8b5cf6')"
           ></div>
           <div
-            class="rounded-lg bg-[#36D399] hover:bg-[#00a16b] p-1" 
+            class="rounded-lg bg-[#36D399] hover:bg-[#00a16b] p-1"
             @click="addMarker('#36D399')"
           ></div>
           <div
-            class="rounded-lg bg-[#F87272] hover:bg-[#c14147] p-1" 
+            class="rounded-lg bg-[#F87272] hover:bg-[#c14147] p-1"
             @click="addMarker('#F87272')"
           ></div>
           <div
@@ -145,7 +176,7 @@
             @click="addMarker('#3ABFF8')"
           ></div>
           <div
-            class="rounded-lg p-1 hover:bg-[#a3007a] bg-[#D926A9]" 
+            class="rounded-lg p-1 hover:bg-[#a3007a] bg-[#D926A9]"
             @click="addMarker('#D926A9')"
           ></div>
         </ul>
@@ -222,11 +253,14 @@ export default {
       this.colorDropdown = false;
       this.$emit("bookmark", color);
     },
-    bookmarkToggle(){
+    bookmarkToggle() {
       this.$emit("bookmarkToggle");
     },
-    deleteMarker(){
+    deleteMarker() {
       this.$emit("deleteMarker");
+    },
+    stopDeleting(){
+      this.$emit("stopDeleting");
     }
   },
 };

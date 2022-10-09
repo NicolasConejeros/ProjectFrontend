@@ -18,13 +18,14 @@
     </div>
 
     <player-buttons
-      class="justify-items-center ml-28"
+      class="justify-items-center ml-6"
       @toggleAudio="toggleAudio"
       @nextAudio="nextAudio"
       @prevAudio="prevAudio"
       @bookmark="addBookmark"
       @bookmarkToggle="bookmarkToggle"
       @deleteMarker="deleteMarker"
+      @stopDeleting="stopDeleting"
       :key="updateButtons"
     />
   </div>
@@ -173,6 +174,9 @@ export default {
     deleteMarker() {
       this.$emit("deleteOption");
     },
+    stopDeleting(){
+      this.$emit("stopDeleting");
+    }
   },
 };
 </script>

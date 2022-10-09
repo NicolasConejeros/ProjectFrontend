@@ -50,6 +50,7 @@
         @audioInfo="audioInfo"
         @bookmarkToggle="bookmarkToggle"
         @deleteOption="deleteOption"
+        @stopDeleting="stopDeleting"
       ></Player>
     </div>
 
@@ -155,6 +156,8 @@ export default {
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
       //resets the icon and hides the bookmarks
       this.showBookmarks = !this.showBookmarks;
+      //Stops the delete option
+      this.deleteM = false;
     },
     prevAudio() {
       this.audioIndex = this.audioIndex - 1;
@@ -167,6 +170,8 @@ export default {
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
       //resets the icon and hides the bookmarks
       this.showBookmarks = !this.showBookmarks;
+      //Stops the delete option
+      this.deleteM = false;
     },
     //-----------------------------------------------------------
 
@@ -203,6 +208,8 @@ export default {
       };
       await this.$api.audio.putAudio(newBookmarksArray);
       await this.onGetAudios();
+    },
+    stopDeleting() {
       this.deleteM = false;
     },
   },
