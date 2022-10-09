@@ -1,5 +1,6 @@
 <template>
   <div class="grid grid-cols-5 grid-flow-col" :key="update">
+    <div class="items-center text-primary hover:text-accent mt-4 col-span-1" @click="deleteMarker">DELETE</div>
     <div class="items-center text-primary hover:text-accent mt-4 col-span-1">
       <svg
         width="24"
@@ -124,27 +125,27 @@
           "
         >
           <div
-            class="rounded-lg p-1" style="background-color: #8b5cf6"
+            class="rounded-lg bg-[#8b5cf6] hover:bg-[#552fc2] p-1" 
             @click="addMarker('#8b5cf6')"
           ></div>
           <div
-            class="rounded-lg p-1" style="background-color: #36D399"
+            class="rounded-lg bg-[#36D399] hover:bg-[#00a16b] p-1" 
             @click="addMarker('#36D399')"
           ></div>
           <div
-            class="rounded-lg bg-error p-1" style="background-color: #F87272"
+            class="rounded-lg bg-[#F87272] hover:bg-[#c14147] p-1" 
             @click="addMarker('#F87272')"
           ></div>
           <div
-            class="rounded-lg bg-warning p-1" style="background-color: #FBBD23"
+            class="rounded-lg bg-[#FBBD23] hover:bg-[#c38d00] p-1"
             @click="addMarker('#FBBD23')"
           ></div>
           <div
-            class="rounded-lg bg-primary-content p-1" style="background-color:#3ABFF8"
+            class="rounded-lg bg-[#3ABFF8] hover:bg-[#008fc5] p-1"
             @click="addMarker('#3ABFF8')"
           ></div>
           <div
-            class="rounded-lg  p-1" style="background-color: #D926A9"
+            class="rounded-lg p-1 hover:bg-[#a3007a] bg-[#D926A9]" 
             @click="addMarker('#D926A9')"
           ></div>
         </ul>
@@ -223,6 +224,9 @@ export default {
     },
     bookmarkToggle(){
       this.$emit("bookmarkToggle");
+    },
+    deleteMarker(){
+      this.$emit("deleteMarker");
     }
   },
 };

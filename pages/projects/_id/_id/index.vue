@@ -21,17 +21,24 @@
           v-for="(bookmark, index) in bookmarks"
           :key="index"
           :style="calculate(index)"
-          style="width: 24px; height: 24px; position: absolute;"
+          style="width: 24px; height: 24px; position: absolute"
           viewBox="0 0 24 24"
-          @click="goToBookmark(bookmark.time)"
+          v-on="
+            deleteM
+              ? {
+                  click: () => deleteMarker(bookmark._id),
+                }
+              : {
+                  click: () => goToBookmark(bookmark.time),
+                }
+          "
         >
           <path
-            
             d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M11 6V12H13V6H11M11 14V16H13V14H11Z"
           />
         </svg>
       </span>
-      <Test
+      <Player
         v-if="audios.length > 0"
         :url="url"
         :subtitle="audioTitle"
@@ -42,7 +49,8 @@
         @bookmark="addBookmark"
         @audioInfo="audioInfo"
         @bookmarkToggle="bookmarkToggle"
-      ></Test>
+        @deleteOption="deleteOption"
+      ></Player>
     </div>
 
     <div class="row-start-7 col-span-3 col-start-10"></div>
@@ -52,7 +60,7 @@
 
 <script>
 import AudioModal from "../../../../components/rooms/audioModal.vue";
-import Test from "../../../../components/player/test.vue";
+import Player from "../../../../components/player/player.vue";
 export default {
   layout: "projects",
   data: () => ({
@@ -68,6 +76,7 @@ export default {
     flag: 0,
     totalTime: 0,
     showBookmarks: false,
+    deleteM: false,
   }),
   mounted: function () {
     this.$watch("showBookmarks", () => {
@@ -91,18 +100,13 @@ export default {
   methods: {
     //To calculate te positioning of the bookmarks
     calculate(index) {
-      console.log("index: " + index);
       if (this.bookmarks.length > 0 && this.bookmarks[index]) {
         this.sliderWidth = this.$refs.playerSection.clientWidth;
-        console.log('bTime: '+(this.bookmarks[index].time));
-        console.log('bColor: '+(this.bookmarks[index].color));
-        const temp = ((this.bookmarks[index].time * 100) / this.totalTime);
-        console.log('%:' +temp);
-
-        const ee = Math.round((this.sliderWidth * temp) / 100);
+        const temp = (this.bookmarks[index].time * 100) / this.totalTime;
+        const approximatePosition = Math.round((this.sliderWidth * temp) / 100);
         return {
-          "margin-left": `${ee}px`,
-          "fill":  `${this.bookmarks[index].color}`
+          "margin-left": `${approximatePosition}px`,
+          fill: `${this.bookmarks[index].color}`,
         };
       }
     },
@@ -181,14 +185,30 @@ export default {
     //Get the info of the audio playing
     audioInfo(audioDuration) {
       this.totalTime = audioDuration;
-      console.log(this.totalTime);
     },
     bookmarkToggle() {
       this.showBookmarks = !this.showBookmarks;
     },
+    deleteOption() {
+      this.deleteM = true;
+    },
+    async deleteMarker(id) {
+      const remainingBookmarks = this.audios[this.audioIndex].bookmarks.filter(
+        (data) => data._id != id
+      );
+      this.audioId = this.audios[this.audioIndex].id;
+      const newBookmarksArray = {
+        id: this.audioId,
+        bookmarks: remainingBookmarks,
+      };
+      await this.$api.audio.putAudio(newBookmarksArray);
+      await this.onGetAudios();
+
+      this.deleteM = false;
+    },
   },
 
-  components: { AudioModal, Test },
+  components: { AudioModal, Player },
 };
 </script>
 
