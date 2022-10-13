@@ -11,12 +11,16 @@
     >
       {{ room.name }}
     </div>
-    <div class="row-start-7 col-span-3 col-start-3" ref="playerSection">
+    <div
+      class="row-start-7 col-span-3 col-start-3 grid justify-items-stretch"
+      ref="playerSection"
+    >
       <div class="text-lg font-medium text-neutral-content">
         {{ audioTitle }}
-        <AppModalButton :forModal="'addAudioModal'" :width="18" :height="18" />
+        <!-- <AppModalButton :forModal="'addAudioModal'" :width="18" :height="18" /> -->
       </div>
-      <span v-if="showBookmarks" class="mb-4">
+      <ProjectDropdown class="justify-self-end -mt-6" />
+      <span v-if="showBookmarks" class="mt-4">
         <svg
           v-for="(bookmark, index) in bookmarks"
           :key="index"
@@ -54,24 +58,37 @@
       ></Player>
     </div>
 
-    <div class="row-start-7 col-span-3 col-start-10"></div>
+    <div class="row-start-7 col-span-1 col-start-12">
+      <button class="btn ml-8" @click="onTranscribeAudio">transcribir</button>
+    </div>
     <AudioModal :room-id="this.room.id" @updateAudios="onGetAudios" />
+    <ConfirmationModal :for-modal="'deleteAudioModal'" :id="audioId" @updateAudios="onGetAudios"/>
   </div>
 </template>
 
 <script>
 import AudioModal from "../../../../components/rooms/audioModal.vue";
 import Player from "../../../../components/player/player.vue";
+import ProjectDropdown from "../../../../components/projects/ProjectDropdown.vue";
+import ConfirmationModal from "../../../../components/app/ConfirmationModal.vue"; 
 export default {
   layout: "projects",
   data: () => ({
+    //bookmark position
     bookmarkP: 0,
+    //room data
     room: [],
+    //array of audios
     audios: [],
+    //array of bookmarks
     bookmarks: [],
+    //to keep track on wich audio is playing
     audioIndex: 0,
+    //the url needed to play the audio
     url: "",
+    //if there isnt any audio uploaded
     audioTitle: "No hay audio",
+    //audio id
     audioId: "",
     sliderWidth: 0,
     flag: 0,
@@ -143,6 +160,7 @@ export default {
         this.url =
           "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
+        this.audioId = this.audios[this.audioIndex].id;
       }
     },
     //------------------------Audio controls------------------------------
@@ -158,6 +176,8 @@ export default {
       this.showBookmarks = !this.showBookmarks;
       //Stops the delete option
       this.deleteM = false;
+      //
+      this.audioId = this.audios[this.audioIndex].id;
     },
     prevAudio() {
       this.audioIndex = this.audioIndex - 1;
@@ -172,6 +192,8 @@ export default {
       this.showBookmarks = !this.showBookmarks;
       //Stops the delete option
       this.deleteM = false;
+      //
+      this.audioId = this.audios[this.audioIndex].id;
     },
     //-----------------------------------------------------------
 
@@ -212,9 +234,12 @@ export default {
     stopDeleting() {
       this.deleteM = false;
     },
+    async onTranscribeAudio() {
+      this.$api.audio.transcribeAudio({ id: this.audios[this.audioIndex].id });
+    },
   },
 
-  components: { AudioModal, Player },
+  components: { AudioModal, Player, ProjectDropdown, ConfirmationModal },
 };
 </script>
 

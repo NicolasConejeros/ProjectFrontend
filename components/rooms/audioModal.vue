@@ -142,7 +142,7 @@ export default {
       // console.log(this.musicDetails.music.type)
     },
     async addNewMusic() {
-      let types = /(\.|\/)(mp3|mp4)$/i;
+      let types = /(\.|\/)(mp3|wav)$/i;
       if (
         types.test(this.musicDetails.audio.type) ||
         types.test(this.musicDetails.audio.name)

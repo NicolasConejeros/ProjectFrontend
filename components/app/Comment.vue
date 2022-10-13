@@ -6,8 +6,9 @@
       <p>{{ commentContent }}</p>
       <div class="card-actions justify-end"></div>
     </div>
-    <ConfirmationModalC
+    <ConfirmationModal
       :id="id"
+      :for-modal="'confirmationModalC'"
       @updateComments="updateComments"
     />
   </div>
@@ -15,7 +16,7 @@
 
 <script>
 import RequirementCardDropdown from "../requirements/RequirementCardDropdown.vue";
-import ConfirmationModalC from "./ConfirmationModalC.vue";
+import ConfirmationModal from "./ConfirmationModal.vue";
 export default {
   props: {
     id: {
@@ -42,6 +43,6 @@ export default {
       this.$emit("updateComments");
     }
   },
-  components: { RequirementCardDropdown, ConfirmationModalC },
+  components: { RequirementCardDropdown, ConfirmationModal },
 };
 </script>

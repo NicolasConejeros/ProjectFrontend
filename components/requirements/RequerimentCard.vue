@@ -85,6 +85,7 @@
     <ConfirmationModal
       v-if="descriptionCard"
       :id="this.id"
+      :for-modal="'confirmationModalR'"
       @updateArray="getArrays"
     />
   </div>
@@ -93,7 +94,7 @@
   <script>
 import RequirementInputModal from "./RequirementInputModal.vue";
 import RequirementCardDropdown from "./RequirementCardDropdown.vue";
-import ConfirmationModal from "../app/ConfirmationModalR.vue";
+import ConfirmationModal from "../app/ConfirmationModal.vue";
 export default {
   props: {
     id: {

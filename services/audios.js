@@ -24,4 +24,21 @@ export default (axios) => ({
             console.log(error);
         }
     },
+    async deleteAudio(id) {
+        try {
+            const { data } = await axios.delete(`/audios/${id}`);
+            console.log(data);
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async transcribeAudio(id) {
+        try {
+            const { data } = await axios.put("/audios/transcribe/", id);
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 });

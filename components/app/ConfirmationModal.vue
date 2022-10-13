@@ -1,10 +1,10 @@
 <template>
   <div>
-    <input type="checkbox" id="confirmationModalR" class="modal-toggle" />
+    <input type="checkbox" :id="forModal" class="modal-toggle" />
     <div class="modal">
       <div class="modal-box">
         <label
-          for="confirmationModalR"
+          :for="forModal"
           type="btn"
           class="
             modal-button
@@ -31,7 +31,7 @@
           Estás seguro/a?
         </div>
         <label
-          for="confirmationModalR"
+          :for="forModal"
           type="btn"
           class="modal-button btn btn-accent px-4 mt-12"
           @click="onDelete(id)"
@@ -39,7 +39,7 @@
           Eliminar
         </label>
         <label
-          for="confirmationModalR"
+          :for="forModal"
           type="btn"
           class="modal-button btn btn-primary px-4 absolute right-5 mt-12"
         >
@@ -49,17 +49,27 @@
     </div>
   </div>
 </template>
-      
-<script>
+        
+  <script>
 export default {
   props: {
     id: "",
+    forModal: "",
   },
-  data: () => ({}),
   methods: {
     async onDelete(id) {
-      await this.$api.requirement.deleteRequirements(id);
-      this.$emit("updateArray");
+      if (this.forModal === "confirmationModalC") {
+        await this.$api.comment.deleteComment(id);
+        this.$emit("updateComments");
+      }
+      if (this.forModal === "confirmationModalR") {
+        await this.$api.requirement.deleteRequirements(id);
+        this.$emit("updateArray");
+      }
+      if (this.forModal === "deleteAudioModal") {
+        await this.$api.audio.deleteAudio(id);
+        this.$emit("updateAudios");
+      }
     },
   },
   components: {},
