@@ -108,15 +108,36 @@
           </div>
           <input
             type="password"
-            v-model="user.passwordHash"
+            v-model="user.password"
+            placeholder="************"
+            class="input input-bordered input-primary w-full w-full p-2.5"
+          />
+        </div>
+        <div class="mb-6">
+          <div
+            class="
+              block
+              mb-2
+              text-md
+              font-medium
+              text-gray-900
+              dark:text-gray-300
+              font-semibold
+            "
+          >
+            Confirmar contraseña
+          </div>
+          <input
+            type="password"
+            v-model="user.passwordConfirm"
             placeholder="************"
             class="input input-bordered input-primary w-full w-full p-2.5"
           />
         </div>
       </form>
       <button class="btn btn-primary w-full" @click="onCreateUser">
-          Registrarse
-        </button>
+        Registrarse
+      </button>
       <label
         ><template class="text-sm text-secondary"
           >ya tienes una cuenta?
@@ -137,12 +158,13 @@ export default {
       avatar: "",
       description: "",
       email: "",
-      passwordHash: "",
+      password: "",
+      passwordConfirm: "",
     },
   }),
   methods: {
     async onCreateUser() {
-      const newUser = await this.$api.user.createUser(this.user);
+      const newUser = await this.$api.auth.createUser(this.user);
     },
   },
 };

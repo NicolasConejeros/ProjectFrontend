@@ -28,6 +28,7 @@
       >
     </div>
     <div class="flex-none">
+      <div v-if="$auth.loggedIn"> {{$auth.user.name}}</div>
       <LoggedOutDropdown />
     </div>
   </div>

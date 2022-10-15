@@ -5,6 +5,7 @@ import Comments from "~/services/comments";
 import Rooms from "~/services/rooms";
 import Audios from "~/services/audios";
 import Users from "~/services/users";
+import Auth from "~/services/auth";
 
 export default ({ $axios }, inject) => {
     // Initialize API factories
@@ -15,7 +16,8 @@ export default ({ $axios }, inject) => {
         comment: Comments($axios),
         room: Rooms($axios),
         audio: Audios($axios),
-        user: Users($axios)
+        user: Users($axios),
+        auth: Auth($axios)
     };
 
     // Inject $api
