@@ -49,22 +49,7 @@
               type="text"
               v-model="title"
               placeholder="Ej: Primera reunión"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              class="input input-bordered input-primary bg-neutral w-full p-2.5"
               required
             />
           </div>
@@ -147,15 +132,15 @@ export default {
         types.test(this.musicDetails.audio.type) ||
         types.test(this.musicDetails.audio.name)
       ) {
-      this.musicDetails.roomId = this.roomId;
-      this.musicDetails.title = this.title;
-      this.musicDetails.artist = "user";
-      let formData = new FormData();
-      formData.append("roomId", this.musicDetails.roomId);
-      formData.append("title", this.musicDetails.title);
-      formData.append("artist", this.musicDetails.artist);
-      formData.append("audio", this.musicDetails.audio);
-      this.data = await this.$api.audio.postAudio(formData);
+        this.musicDetails.roomId = this.roomId;
+        this.musicDetails.title = this.title;
+        this.musicDetails.artist = "user";
+        let formData = new FormData();
+        formData.append("roomId", this.musicDetails.roomId);
+        formData.append("title", this.musicDetails.title);
+        formData.append("artist", this.musicDetails.artist);
+        formData.append("audio", this.musicDetails.audio);
+        this.data = await this.$api.audio.postAudio(formData);
       } else {
         alert("Invalid file type");
         return !this.isValid;

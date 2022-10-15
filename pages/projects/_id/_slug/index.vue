@@ -62,7 +62,25 @@
       <button class="btn ml-8" @click="onTranscribeAudio">transcribir</button>
     </div>
     <AudioModal :room-id="this.room.id" @updateAudios="onGetAudios" />
-    <ConfirmationModal :for-modal="'deleteAudioModal'" :id="audioId" @updateAudios="onGetAudios"/>
+    <ConfirmationModal
+      :for-modal="'deleteAudioModal'"
+      :id="audioId"
+      @updateAudios="onGetAudios"
+    />
+    <div
+      class="
+      card-body
+        row-start-7 row-span-5
+        col-span-4 col-start-6
+        border
+        grid
+        justify-items-stretch
+        h-96
+      "
+    >
+      <div class="justify-self-center">Transcripción</div>
+      
+    </div>
   </div>
 </template>
 
@@ -70,7 +88,7 @@
 import AudioModal from "../../../../components/rooms/audioModal.vue";
 import Player from "../../../../components/player/player.vue";
 import ProjectDropdown from "../../../../components/projects/ProjectDropdown.vue";
-import ConfirmationModal from "../../../../components/app/ConfirmationModal.vue"; 
+import ConfirmationModal from "../../../../components/app/ConfirmationModal.vue";
 export default {
   layout: "projects",
   data: () => ({
@@ -157,9 +175,12 @@ export default {
       this.audios = await this.$api.audio.getAudios(this.room.id);
       if (this.audios.length > 0) {
         this.audioTitle = this.audios[this.audioIndex].title;
+        //defined path to the audio location
         this.url =
           "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+        //loads the bookmarks
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
+        //Saves the id of the audio playing/in queue
         this.audioId = this.audios[this.audioIndex].id;
       }
     },
@@ -176,7 +197,7 @@ export default {
       this.showBookmarks = !this.showBookmarks;
       //Stops the delete option
       this.deleteM = false;
-      //
+      //Saves the id of the audio playing/in queue
       this.audioId = this.audios[this.audioIndex].id;
     },
     prevAudio() {
@@ -192,7 +213,7 @@ export default {
       this.showBookmarks = !this.showBookmarks;
       //Stops the delete option
       this.deleteM = false;
-      //
+      //Saves the id of the audio playing/in queue
       this.audioId = this.audios[this.audioIndex].id;
     },
     //-----------------------------------------------------------

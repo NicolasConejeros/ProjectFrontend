@@ -49,22 +49,8 @@
               type="text"
               v-model="title"
               placeholder="Ej: Proyecto 1"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              class="input input-bordered input-primary bg-neutral w-full p-2.5"
+              required="true"
             />
           </div>
           <div class="mb-6">
@@ -86,23 +72,7 @@
               type="text"
               v-model="description"
               placeholder="Ej: el siguiente proyecto se basa en.."
-              class="
-                textarea textarea-primary
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              class="textarea textarea-primary rounded-lg bg-neutral  w-full p-2.5"
             />
           </div>
           <div class="mb-6">
@@ -123,23 +93,7 @@
               type="text"
               v-model="acceptanceCriteria"
               placeholder="Ej: Cuando el usuario.. entonces.."
-              class="
-                textarea textarea-primary
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              class="textarea textarea-primary bg-neutral w-full p-2.5"
             />
           </div>
         </form>

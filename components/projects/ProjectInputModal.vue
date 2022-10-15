@@ -48,22 +48,8 @@
             <input
               type="text"
               v-model="name"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              :maxlength="30"
+              class="input input-bordered input-primary bg-neutral w-full p-2.5"
             />
           </div>
           <label
@@ -83,22 +69,8 @@
             <input
               type="text"
               v-model="description"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              :maxlength="135"
+              class="input input-bordered input-primary bg-neutral w-full p-2.5"
             />
           </div>
 
@@ -133,7 +105,7 @@ export default {
       const epic = {
         projectId: newProject.id,
         title: "Sin asignar",
-      }
+      };
       await this.$api.epic.createEpic(epic);
       this.$emit("updateArray");
     },

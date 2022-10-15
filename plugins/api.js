@@ -4,6 +4,7 @@ import Epics from "~/services/epics";
 import Comments from "~/services/comments";
 import Rooms from "~/services/rooms";
 import Audios from "~/services/audios";
+import Users from "~/services/users";
 
 export default ({ $axios }, inject) => {
     // Initialize API factories
@@ -13,7 +14,8 @@ export default ({ $axios }, inject) => {
         epic: Epics($axios),
         comment: Comments($axios),
         room: Rooms($axios),
-        audio: Audios($axios)
+        audio: Audios($axios),
+        user: Users($axios)
     };
 
     // Inject $api
