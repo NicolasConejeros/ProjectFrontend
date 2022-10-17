@@ -38,9 +38,9 @@
       class="mt-4"
         v-for="(project, index) in projects"
         :key="index"
-        :name="project.name"
-        :description="project.description"
-        :project-id="project.id"
+        :name="project.project.name"
+        :description="project.project.description"
+        :project-id="project.project.id"
       ></ProjectsProjectCard>
       <nuxt-link to="/projects">
         <button
@@ -86,6 +86,8 @@
 <script>
 import ProjectCard from "../../components/projects/ProjectCard.vue";
 export default {
+  layout: "default",
+  middleware: 'auth',
   data: () => ({
     projects: [],
     updateCard: 0,

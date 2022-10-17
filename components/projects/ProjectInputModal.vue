@@ -99,6 +99,7 @@ export default {
       const project = {
         name: this.name,
         description: this.description,
+        userId: this.$auth.user.id
       };
       console.log(project);
       const newProject = await this.$api.project.createProject(project);

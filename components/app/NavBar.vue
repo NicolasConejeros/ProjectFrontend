@@ -1,11 +1,13 @@
 <template>
   <div class="navbar bg-base-300">
     <div class="flex-none">
+      
       <label
-        v-if="isLoggedIn"
+        v-if="this.$auth.loggedIn &&  $route.name == 'projects-id'"
         for="my-drawer"
         class="btn btn-primary drawer-button"
-        ><svg
+        >
+        {{this.$router.name}}<svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -21,28 +23,27 @@
       </label>
     </div>
     <div class="flex-1">
-      <nuxt-link to="/main"
+      <nuxt-link :to="this.$auth.loggedIn ? '/main' : '/'"
         ><a class="btn btn-ghost normal-case text-xl"
           >Proyecto de Tesis</a
         ></nuxt-link
       >
     </div>
     <div class="flex-none">
-      <div v-if="$auth.loggedIn"> {{$auth.user.name}}</div>
-      <LoggedOutDropdown />
+      <LoggedOutDropdown :is-logged-in="this.$auth.loggedIn ? true : false" />
     </div>
   </div>
 </template>
 
 <script>
-import LoggedOutDropdown from './LoggedOutDropdown.vue';
+import LoggedOutDropdown from "./LoggedOutDropdown.vue";
 export default {
-    props: {
-        isLoggedIn: {
-            type: Boolean,
-            default: false,
-        },
+  props: {
+    isLoggedIn: {
+      type: Boolean,
+      default: false,
     },
-    components: { LoggedOutDropdown }
+  },
+  components: { LoggedOutDropdown },
 };
 </script>

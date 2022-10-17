@@ -2,7 +2,7 @@
   <div class="drawer">
     <input id="my-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
-      <AppNavBar :is-logged-in="true" />
+      <AppNavBar/>
       <Nuxt />
     </div>
     <div class="drawer-side">
