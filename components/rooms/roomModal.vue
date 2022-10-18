@@ -32,24 +32,15 @@
         </div>
         <form>
           <div class="mb-6">
-            <div
-              class="
-                block
-                mb-2
-                text-md
-                font-medium
-                text-gray-900
-                dark:text-gray-300
-                font-semibold
-              "
-            >
-              Nombre
-            </div>
-            <input
-              type="text"
+            <AppInputText
               v-model="roomName"
+              label="Nombre"
+              name="name"
+              required
               placeholder="Ej: Sala 1"
-              class="input input-bordered input-primary bg-neutral w-full p-2.5"
+              :error-messages="nameErrors"
+              @input="$v.roomName.$touch()"
+              @blur="$v.roomName.$touch()"
             />
           </div>
         </form>
@@ -67,10 +58,30 @@
 </template>
     
 <script>
+import { required, maxLength } from "vuelidate/lib/validators";
+import { validationMixin } from "vuelidate";
+
 export default {
+  mixins: [validationMixin],
   data: () => ({
     roomName: "",
   }),
+  validations: {
+    roomName: {
+      required,
+      maxLength: maxLength(40),
+    },
+  },
+  computed: {
+    nameErrors() {
+      const errors = [];
+      if (!this.$v.roomName.$dirty) return errors;
+      !this.$v.roomName.required && errors.push("El título es requerido");
+      !this.$v.roomName.maxLength &&
+        errors.push("El título debe tener menos de 40 caracteres");
+      return errors;
+    },
+  },
   methods: {
     async onSubmit() {
       const room = { projectId: this.$route.params.id, name: this.roomName };

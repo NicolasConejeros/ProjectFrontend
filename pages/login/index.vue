@@ -14,45 +14,28 @@
     <div class="row-start-7 col-span-4 col-start-6 grid">
       <form>
         <div class="mb-6">
-          <div
-            class="
-              block
-              mb-2
-              text-md
-              font-medium
-              text-gray-900
-              dark:text-gray-300
-              font-semibold
-            "
-          >
-            Email
-          </div>
-          <input
-            type="text"
+          <AppInputText
             v-model="user.email"
-            placeholder="Ej: Cuando el usuario.. entonces.."
-            class="input input-bordered input-primary w-full w-full p-2.5"
+            label="Email"
+            name="email"
+            placeholder="Ingrese un correo"
+            required
+            :error-messages="emailErrors"
+            @input="$v.user.email.$touch()"
+            @blur="$v.user.email.$touch()"
           />
         </div>
         <div class="mb-6">
-          <div
-            class="
-              block
-              mb-2
-              text-md
-              font-medium
-              text-gray-900
-              dark:text-gray-300
-              font-semibold
-            "
-          >
-            Contraseña
-          </div>
-          <input
-            type="password"
+          <AppInputText
             v-model="user.password"
-            placeholder="************"
-            class="input input-bordered input-primary w-full w-full p-2.5"
+            label="Contraseña"
+            name="password"
+            :type="'password'"
+            required
+            placeholder="Ingrese una contraseña"
+            :error-messages="passwordErrors"
+            @input="$v.user.password.$touch()"
+            @blur="$v.user.password.$touch()"
           />
         </div>
       </form>
@@ -71,26 +54,71 @@
   </div>
 </template>
   
-  <script>
+<script>
+import {
+  required,
+  maxLength,
+  email,
+  minLength,
+} from "vuelidate/lib/validators";
+import { validationMixin } from "vuelidate";
+
 export default {
+  mixins: [validationMixin],
+
   data: () => ({
     user: {
       email: "",
       password: "",
     },
   }),
+  validations: {
+    user: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+        maxLength: maxLength(60),
+      },
+    },
+  },
+  computed: {
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.user.email.$dirty) return errors;
+      !this.$v.user.email.required && errors.push("El email es requerido");
+      !this.$v.user.email.email && errors.push("El email no es válido");
+      return errors;
+    },
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.user.password.$dirty) return errors;
+      !this.$v.user.password.required &&
+        errors.push("Es requerida una contraseña");
+      !this.$v.user.password.maxLength &&
+        errors.push("La contraseña debe tener menos de 60 caracteres");
+      return errors;
+    },
+  },
   methods: {
     async loginUser() {
       try {
-        await this.$auth.loginWith("local", {
-          data: {
-            email: this.user.email,
-            password: this.user.password,
-          },
-        });
-        this.$router.push('/main');
+        this.$v.$touch();
+        if (this.$v.$invalid) {
+          console.log("Error en el formulario de usuario");
+        } else {
+          await this.$auth.loginWith("local", {
+            data: {
+              email: this.user.email,
+              password: this.user.password,
+            },
+          });
+          this.$router.push("/main");
+        }
       } catch (error) {
-        alert('error al iniciar sesión');
+        alert("error al iniciar sesión");
       }
     },
   },

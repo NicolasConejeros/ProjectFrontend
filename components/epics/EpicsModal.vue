@@ -32,39 +32,16 @@
         </div>
         <form>
           <div class="mb-6">
-            <div
-              class="
-                block
-                mb-2
-                text-md
-                font-medium
-                text-gray-900
-                dark:text-gray-300
-                font-semibold
-              "
-            >
-              Título
-            </div>
-            <input
-              type="text"
+            <AppInputText
               v-model="title"
-              placeholder="Ej: Usuarios"
-              class="
-                bg-gray-50
-                border border-gray-300
-                text-gray-900 text-sm
-                rounded-lg
-                focus:ring-blue-500 focus:border-blue-500
-                block
-                w-full
-                p-2.5
-                dark:bg-gray-700
-                dark:border-gray-600
-                dark:placeholder-gray-400
-                dark:text-white
-                dark:focus:ring-blue-500
-                dark:focus:border-blue-500
-              "
+              label="Título"
+              name="título"
+              required
+              placeholder="Ingrese una épica"
+              :maxLength="40"
+              :error-messages="titleErrors"
+              @input="$v.title.$touch()"
+              @blur="$v.title.$touch()"
             />
           </div>
         </form>
@@ -82,9 +59,28 @@
 </template>
     
   <script>
+import { required, maxLength } from "vuelidate/lib/validators";
+import { validationMixin } from "vuelidate";
 export default {
+  mixins: [validationMixin],
   props: {
     epics: [],
+  },
+  validations: {
+    title: {
+      required,
+      maxLength: maxLength(40),
+    },
+  },
+  computed: {
+    titleErrors() {
+      const errors = [];
+      if (!this.$v.title.$dirty) return errors;
+      !this.$v.title.required && errors.push("Es requerido un título");
+      !this.$v.title.maxLength &&
+        errors.push("El título debe tener menos de 40 caracteres");
+      return errors;
+    },
   },
   data: () => ({
     projectId: "",
@@ -92,13 +88,17 @@ export default {
   }),
   methods: {
     async onSubmit() {
-      const epic = {
-        projectId: this.$route.params.id,
-        title: this.title,
-      };
-      console.log(epic);
-      await this.$api.epic.createEpic(epic);
-      this.$emit("updateEpics");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        console.log("Error en el formulario de épicas");
+      } else {
+        const epic = {
+          projectId: this.$route.params.id,
+          title: this.title,
+        };
+        await this.$api.epic.createEpic(epic);
+        this.$emit("updateEpics");
+      }
     },
   },
   components: {},
