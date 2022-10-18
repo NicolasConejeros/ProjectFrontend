@@ -11,7 +11,7 @@
           dark:text-gray-300
           font-semibold
         "
-        :class="onError ? 'text-error' : ''"
+        :class="onError ? 'text-accent' : ''"
         >{{ label }}</span
       >
     </label>
@@ -26,7 +26,7 @@
         class="input input-bordered input-primary w-full w-full p-2.5"
         :class="
           onError
-            ? 'border border-error text-error focus:ring-red-500 focus:border-red-500'
+            ? 'border border-accent text-accent focus:ring-red-500 focus:border-red-500'
             : ''
         "
       />
@@ -35,13 +35,13 @@
       class="flex -mb-2"
       :class="onError ? 'justify-between' : 'justify-end'"
     >
-      <p v-if="onError" class="mt-1 ml-1 text-sm text-error">
+      <p v-if="onError" class="mt-1 ml-1 text-sm text-accent">
         {{ errorMessages[0] }}
       </p>
       <p
         v-if="counter > 0"
         class="text-right text-sm mr-1 mt-1 p-0"
-        :class="onError ? 'text-error' : ''"
+        :class="onError ? 'text-accent' : ''"
       >
         {{ localValue.length }}/{{ counter }}
       </p>

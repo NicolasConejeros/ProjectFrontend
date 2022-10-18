@@ -32,25 +32,16 @@
         </div>
         <form>
           <div class="mb-6">
-            <div
-              class="
-                block
-                mb-2
-                text-md
-                font-medium
-                text-gray-900
-                dark:text-gray-300
-                font-semibold
-              "
-            >
-              Título
-            </div>
-            <input
-              type="text"
+            <AppInputText
               v-model="title"
-              placeholder="Ej: Primera reunión"
-              class="input input-bordered input-primary bg-neutral w-full p-2.5"
+              label="Título"
+              name="título"
               required
+              placeholder="Ej: Primera reunión"
+              :maxLength="40"
+              :error-messages="titleErrors"
+              @input="$v.title.$touch()"
+              @blur="$v.title.$touch()"
             />
           </div>
           <label class="block">
@@ -92,8 +83,11 @@
   </div>
 </template>
       
-  <script>
+<script>
+import { required, maxLength } from "vuelidate/lib/validators";
+import { validationMixin } from "vuelidate";
 export default {
+  mixins: [validationMixin],
   props: {
     roomId: {
       type: String,
@@ -110,6 +104,12 @@ export default {
     },
     data: {},
   }),
+  validations: {
+    title: {
+      required,
+      maxLength: maxLength(40),
+    },
+  },
   computed: {
     isDisabled: function () {
       if (
@@ -119,6 +119,14 @@ export default {
       ) {
         return !this.isValid;
       }
+    },
+    titleErrors() {
+      const errors = [];
+      if (!this.$v.title.$dirty) return errors;
+      !this.$v.title.required && errors.push("Es requerido un título");
+      !this.$v.title.maxLength &&
+        errors.push("El título debe tener menos de 40 caracteres");
+      return errors;
     },
   },
   methods: {
@@ -147,8 +155,13 @@ export default {
       }
     },
     async onSubmit() {
-      await this.addNewMusic();
-      this.$emit("updateAudios");
+      this.$v.$touch();
+      if (this.$v.$invalid) {
+        console.log("Error en el formulario de audios");
+      } else {
+        await this.addNewMusic();
+        this.$emit("updateAudios");
+      }
     },
   },
 };

@@ -45,9 +45,7 @@
         <nuxt-link to="/config">
           <li><a>Mi cuenta</a></li>
         </nuxt-link>
-        <nuxt-link to="/login">
-          <li><a>Cerrar sesión</a></li>
-        </nuxt-link>
+          <li @click="onLogout"><a>Cerrar sesión</a></li>
       </div>
     </ul>
   </div>
@@ -61,5 +59,11 @@ export default {
       default: false,
     },
   },
+  methods: {
+    async onLogout(){
+      await this.$auth.logout();
+
+    }
+  }
 };
 </script>
