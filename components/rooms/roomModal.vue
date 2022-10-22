@@ -81,10 +81,13 @@ export default {
         errors.push("El título debe tener menos de 40 caracteres");
       return errors;
     },
+    loadedTeam() {
+      return this.$store.getters["teams/getTeam"];
+    },
   },
   methods: {
     async onSubmit() {
-      const room = { projectId: this.$route.params.id, name: this.roomName };
+      const room = { projectId: this.$route.params.id, name: this.roomName, teamId: this.loadedTeam };
       await this.$api.room.createRoom(room);
       this.$emit("updateRooms");
     },

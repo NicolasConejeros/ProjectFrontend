@@ -20,7 +20,15 @@
           >Subir</label
         >
       </li>
-      <li  class="modal-button" type="btn">
+      <li v-if="transcription" class="modal-button" @click="startTranscription" type="btn">
+        <label
+          for="addAudioModal"
+          class="hover:bg-primary-focus"
+          :class="[modalButtonString]"
+          >transcribir</label
+        >
+      </li>
+      <li  v-if="theresAudio" class="modal-button" type="btn">
         <label
           for="deleteAudioModal"
           type="btn"
@@ -35,17 +43,17 @@
 <script>
 export default {
   props: {
-    forModal: {
-      type: String,
-      default: "",
-    },
-    forModalC: {
-      type: String,
-      default: "",
-    },
     modalButton: {
       type: Boolean,
       default: true,
+    },
+    transcription: {
+      type: Boolean,
+      default: false,
+    },
+    theresAudio: {
+      type: Boolean,
+      default: false,
     },
   },
   data: () => ({
@@ -56,6 +64,11 @@ export default {
       this.modalButtonString = "modal-button";
     }
   },
+  methods: {
+    startTranscription(){
+      this.$emit('onTranscribeAudio');
+    }
+  }
 };
 </script>
   

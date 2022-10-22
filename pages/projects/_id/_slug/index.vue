@@ -1,67 +1,69 @@
 <template>
-  <div class="container grid grid-cols-12 grid-rows-12 gap-4">
+  <div class="grid grid-cols-12 grid-rows-12 gap-4">
     <div
       class="
         text-4xl
         font-semibold
         text-neutral-content
-        row-start-4
+        row-start-4 row-end-4
         col-span-1 col-start-3
       "
     >
       {{ room.name }}
     </div>
-    <div
-      class="row-start-7 col-span-3 col-start-3 grid justify-items-stretch"
-      ref="playerSection"
-    >
-      <div class="text-lg font-medium text-neutral-content">
-        {{ audioTitle }}
-        <!-- <AppModalButton :forModal="'addAudioModal'" :width="18" :height="18" /> -->
+    <div class="row-start-7 row-span-5 col-span-3 col-start-3">
+      <div class="grid border" ref="playerSection">
+        <div class="text-lg font-medium text-neutral-content">
+          {{ audioTitle }}
+        </div>
+        <ProjectDropdown
+          class="justify-self-end -mt-6"
+          :transcription="audios.length > 0 ? true : false"
+          :theres-audio="audios.length === 0 ? false : true"
+          @onTranscribeAudio="onTranscribeAudio"
+        />
+        <span v-if="showBookmarks" class="mt-4">
+          <svg
+            v-for="(bookmark, index) in bookmarks"
+            :key="index"
+            :style="calculate(index)"
+            style="width: 24px; height: 24px; position: absolute"
+            viewBox="0 0 24 24"
+            v-on="
+              deleteM
+                ? {
+                    click: () => deleteMarker(bookmark._id),
+                  }
+                : {
+                    click: () => goToBookmark(bookmark.time),
+                  }
+            "
+          >
+            <path
+              d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M11 6V12H13V6H11M11 14V16H13V14H11Z"
+            />
+          </svg>
+        </span>
+        <Player
+          v-if="audios.length > 0"
+          :url="url"
+          :subtitle="audioTitle"
+          :new-position="bookmarkP"
+          class="row-start-8 mt-6"
+          @nextAudio="nextAudio"
+          @prevAudio="prevAudio"
+          @bookmark="addBookmark"
+          @audioInfo="audioInfo"
+          @bookmarkToggle="bookmarkToggle"
+          @deleteOption="deleteOption"
+          @stopDeleting="stopDeleting"
+        ></Player>
       </div>
-      <ProjectDropdown class="justify-self-end -mt-6" />
-      <span v-if="showBookmarks" class="mt-4">
-        <svg
-          v-for="(bookmark, index) in bookmarks"
-          :key="index"
-          :style="calculate(index)"
-          style="width: 24px; height: 24px; position: absolute"
-          viewBox="0 0 24 24"
-          v-on="
-            deleteM
-              ? {
-                  click: () => deleteMarker(bookmark._id),
-                }
-              : {
-                  click: () => goToBookmark(bookmark.time),
-                }
-          "
-        >
-          <path
-            d="M12 2C15.9 2 19 5.1 19 9C19 14.2 12 22 12 22S5 14.2 5 9C5 5.1 8.1 2 12 2M11 6V12H13V6H11M11 14V16H13V14H11Z"
-          />
-        </svg>
-      </span>
-      <Player
-        v-if="audios.length > 0"
-        :url="url"
-        :subtitle="audioTitle"
-        :new-position="bookmarkP"
-        class="row-start-8 mt-6"
-        @nextAudio="nextAudio"
-        @prevAudio="prevAudio"
-        @bookmark="addBookmark"
-        @audioInfo="audioInfo"
-        @bookmarkToggle="bookmarkToggle"
-        @deleteOption="deleteOption"
-        @stopDeleting="stopDeleting"
-      ></Player>
+      <Chat class="mt-8 border " />
     </div>
 
-    <div class="row-start-7 col-span-1 col-start-12">
-      <button class="btn ml-8" @click="onTranscribeAudio">transcribir</button>
-    </div>
     <AudioModal :room-id="this.room.id" @updateAudios="onGetAudios" />
+
     <ConfirmationModal
       :for-modal="'deleteAudioModal'"
       :id="audioId"
@@ -69,17 +71,15 @@
     />
     <div
       class="
-      card-body
         row-start-7 row-span-5
         col-span-4 col-start-6
         border
         grid
         justify-items-stretch
-        h-96
+        ml-4
       "
     >
       <div class="justify-self-center">Transcripción</div>
-      
     </div>
   </div>
 </template>
@@ -123,6 +123,7 @@ export default {
     this.$watch("audioIndex", () => {
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
     });
+    this.socket = this.$nuxtSocket({ persist: true });
   },
   async fetch() {
     this.startLoading();
@@ -130,16 +131,13 @@ export default {
     await this.onGetAudios();
     this.finishLoading();
   },
-  computed: {
-    //Calculates the positions of the bookmarks
-  },
   methods: {
     //To calculate te positioning of the bookmarks
     calculate(index) {
       if (this.bookmarks.length > 0 && this.bookmarks[index]) {
         this.sliderWidth = this.$refs.playerSection.clientWidth;
         const temp = (this.bookmarks[index].time * 100) / this.totalTime;
-        const approximatePosition = Math.round((this.sliderWidth * temp) / 100);
+        const approximatePosition = (this.sliderWidth * temp) / 100;
         return {
           "margin-left": `${approximatePosition}px`,
           fill: `${this.bookmarks[index].color}`,

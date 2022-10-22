@@ -62,9 +62,9 @@
 
         <CommentInput
           v-if="showInputBox"
-          :id="this.id"
+          :user-name="this.$auth.user.name"
           class="w-full"
-          @updateComments="onGetComments(id)"
+          @onCreateComment="onCreateComment"
         />
         <p
           v-if="showComments && this.length > 0"
@@ -89,6 +89,7 @@
             v-for="(comment, index) in comments"
             :key="index"
             :id="comment.id"
+            :user-name="comment.user.name"
             :comment-content="comment.content"
             @updateComments="onGetComments"
           />
@@ -136,6 +137,7 @@ import Comment from "../../../components/app/Comment.vue";
 import CommentInput from "../../../components/app/CommentInput.vue";
 export default {
   layout: "projects",
+  middleware: "auth",
   data: () => ({
     name: "",
     length: 0,
@@ -148,10 +150,11 @@ export default {
     acceptanceCriteria: "",
     epic: "",
     hover: "hover:text-neutral-content hover:bg-primary",
-    showComments: true,
+    showComments: false,
     showInputBox: false,
     showInfo: false,
     timer: null,
+    team: "",
   }),
   async created() {
     await this.onGetEpics();
@@ -161,16 +164,19 @@ export default {
     await this.fetchProject();
     await this.fetchRequirements();
     await this.finishLoading();
+    this.setTeam();
   },
   mounted: function () {
-    this.timer = setInterval(() => {
-      this.onGetComments(this.id);
-    }, 30000);
+    // this.timer = setInterval(() => {
+    //   this.onGetComments(this.id);
+    // }, 30000);
+    this.socket = this.$nuxtSocket({});
   },
   beforeDestroy() {
     clearInterval(this.timer);
   },
   methods: {
+    //-----------------Nuxt loading stuff-------------------
     startLoading() {
       if (process.client) {
         this.$nextTick(() => {
@@ -185,21 +191,35 @@ export default {
         });
       }
     },
+    //-----------------------------------------------------
+    //-------------------get the team---------------------
+    setTeam() {
+      this.$store.dispatch("teams/loadTeam", this.team);
+    },
+
+    //-------------------fetch projects---------------------
     async fetchProject() {
       const loadedProject = await this.$api.project.getProject(
         this.$route.params.id
       );
       this.name = loadedProject.name;
       this.requirements = loadedProject.requirements;
+      this.team = loadedProject.team;
     },
+
+    //-------------------fetch requirements-----------------
     async fetchRequirements() {
       this.requirements = await this.$api.requirement.getRequirements(
         this.$route.params.id
       );
     },
+
+    //-------------------fetch epics-----------------------
     async onGetEpics() {
       this.epics = await this.$api.epic.getEpics(this.$route.params.id);
     },
+
+    //--------------------fetch comments-------------------
     async onGetComments(requirementId) {
       if (!requirementId) {
         this.comments = await this.$api.comment.getCommentsR(this.id);
@@ -209,6 +229,17 @@ export default {
         this.length = this.comments.length;
       }
     },
+    async onCreateComment(value) {
+      const newComment = {
+        requirementId: this.id,
+        user: this.$auth.user.id,
+        content: value,
+      };
+      await this.$api.comment.createComment(newComment);
+      this.commentsToggle(true);
+    },
+
+    //--------------------to display the info------------------------
     async displayInfo(id, description, epicName, acceptanceCriteria, title) {
       this.id = id;
       this.description = description;
@@ -216,13 +247,21 @@ export default {
       this.epic = epicName;
       this.acceptanceCriteria = acceptanceCriteria;
       await this.onGetComments(this.id);
-      this.showComments = true;
+      this.showComments = false;
       this.showInputBox = false;
       this.showInfo = true;
     },
+
+    //--------------------toggle comment section--------------------
     commentsToggle(value) {
       this.showComments = value;
+      //Opens the socket connection
+      this.socket.on(this.id, (message) => {
+        this.comments.push(message);
+      });
+      //-----------------------------
     },
+    //---------------------toggle input section-----------------------
     inputToggle(value) {
       this.showInputBox = value;
     },

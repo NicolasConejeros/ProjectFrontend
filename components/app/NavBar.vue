@@ -3,11 +3,11 @@
     <div class="flex-none">
       
       <label
-        v-if="this.$auth.loggedIn &&  $route.name == 'projects-id'"
+        v-if="this.$auth.loggedIn &&  ($route.name == 'projects-id' ||$route.name == 'projects-id-slug' )"
         for="my-drawer"
         class="btn btn-primary drawer-button"
         >
-        {{this.$router.name}}<svg
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -38,12 +38,6 @@
 <script>
 import LoggedOutDropdown from "./LoggedOutDropdown.vue";
 export default {
-  props: {
-    isLoggedIn: {
-      type: Boolean,
-      default: false,
-    },
-  },
   components: { LoggedOutDropdown },
 };
 </script>

@@ -50,7 +50,7 @@
     </p>
     <label
       v-if="descriptionCard && length > 0"
-      class="type:btn absolute bottom-2 right-2 p-2"
+      class="type:btn indicator absolute bottom-2 right-2 p-2"
       @click="commentToggle(showComments)"
       ><svg
         width="24"
@@ -64,10 +64,19 @@
           fill="evenodd"
         />
       </svg>
+      <span
+        class="indicator-item indicator-top indicator-end badge badge-accent"
+        >{{ length }}</span
+      >
     </label>
     <label
       v-if="descriptionCard"
-      class="type:btn absolute bottom-2 right-10 p-2"
+      :class="
+        descriptionCard && length == 0
+          ? 'absolute bottom-2 right-2'
+          : 'absolute bottom-2 right-10'
+      "
+      class="type:btn p-2"
       @click="inputToggle(showInputBox)"
       ><svg
         width="24"

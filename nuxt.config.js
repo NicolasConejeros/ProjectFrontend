@@ -38,7 +38,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next'],
+  modules: ['@nuxtjs/axios', '@nuxtjs/auth-next', 'nuxt-socket-io'],
 
   auth: {
     strategies: {
@@ -61,7 +61,14 @@ export default {
       }
     }
   },
-
+  io: {
+    // module options
+    sockets: [
+      {
+        url: process.env.SOCKET_IO_SERVER_URL,
+      },
+    ],
+  },
 
   // publicRuntimeConfig: {
   //   axios: {

@@ -32,13 +32,7 @@ export default {
       default: "placeholder",
     },
   },
-  data: () => ({
-    content: "",
-  }),
   methods: {
-    async onCreateComment(comment) {
-      await this.$api.comment.createComment(comment);
-    },
     updateComments(){
       this.$emit("updateComments");
     }

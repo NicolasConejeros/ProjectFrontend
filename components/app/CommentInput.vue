@@ -5,11 +5,12 @@
         type="text"
         v-model="content"
         placeholder="Añadir observación"
+        :maxlength="130"
         class="input input-bordered input-primary w-full"
       />
       <label
         class="btn btn-primary w-full"
-        @click="onCreateComment(id)"
+        @click="onCreateComment()"
       >
         Comentar
       </label>
@@ -21,10 +22,6 @@
   <script>
 export default {
   props: {
-    id: {
-      type: String,
-      default: "",
-    },
     userName: {
       type: String,
       default: "guest",
@@ -38,11 +35,8 @@ export default {
     content: "",
   }),
   methods: {
-    async onCreateComment(id) {
-        console.log(this.id);
-      const newComment = { requirementId: id, content: this.content };
-      await this.$api.comment.createComment(newComment);
-      this.$emit("updateComments");
+    async onCreateComment() {
+      this.$emit("onCreateComment", this.content);
     },
   },
 };
