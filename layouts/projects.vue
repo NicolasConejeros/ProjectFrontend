@@ -70,7 +70,6 @@ export default {
     async onGetRooms() {
       const loadedRooms = await this.$api.room.getRooms(this.$route.params.id);
       this.rooms = loadedRooms;
-      console.log(JSON.stringify(this.rooms, null, 2));
     },
   },
   components: { RoomModal },

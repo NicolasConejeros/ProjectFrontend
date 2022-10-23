@@ -43,7 +43,6 @@ export default {
     },
     async fetchProjects() {
       const loadedProjects = await this.$api.project.getAllProjects();
-      console.log(loadedProjects);
       if (loadedProjects?.length > 0) {
         this.projects = loadedProjects;
       } else {

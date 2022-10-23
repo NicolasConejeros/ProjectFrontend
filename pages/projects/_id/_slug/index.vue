@@ -12,7 +12,7 @@
       {{ room.name }}
     </div>
     <div class="row-start-7 row-span-5 col-span-3 col-start-3">
-      <div class="grid border" ref="playerSection">
+      <div class="grid" ref="playerSection">
         <div class="text-lg font-medium text-neutral-content">
           {{ audioTitle }}
         </div>
@@ -59,10 +59,10 @@
           @stopDeleting="stopDeleting"
         ></Player>
       </div>
-      <Chat class="mt-8 border " />
+      <Chat :chatid="room.chatId" class="mt-8" />
     </div>
 
-    <AudioModal :room-id="this.room.id" @updateAudios="onGetAudios" />
+    <AudioModal :room-id="room.id" @updateAudios="onGetAudios" />
 
     <ConfirmationModal
       :for-modal="'deleteAudioModal'"
@@ -147,28 +147,13 @@ export default {
     goToBookmark(time) {
       this.bookmarkP = time;
     },
-    //-------------------Nuxt loading stuff-----------------------
-    startLoading() {
-      if (process.client) {
-        this.$nextTick(() => {
-          this.$nuxt.$loading.start();
-        });
-      }
-    },
-    finishLoading() {
-      if (process.client) {
-        this.$nextTick(() => {
-          this.$nuxt.$loading.finish();
-        });
-      }
-    },
-    //-----------------------------------------------------------
 
     //Get the  info of the room
     async onGetRoom() {
-      try{
-        this.room = await this.$api.room.getRoom(this.$route.params.slug);
-      } catch(error){
+      try {
+        const loadedRoom = await this.$api.room.getRoom(this.$route.params.slug);
+        this.room = loadedRoom;
+      } catch (error) {
         console.log(error);
       }
     },
@@ -236,12 +221,18 @@ export default {
     audioInfo(audioDuration) {
       this.totalTime = audioDuration;
     },
+
+    //Flag to change the visibility of the bookmarks
     bookmarkToggle() {
       this.showBookmarks = !this.showBookmarks;
     },
+
+    //Starts the bookmark removal option
     deleteOption() {
       this.deleteM = true;
     },
+
+    //Deletes the selected bookmark
     async deleteMarker(id) {
       const remainingBookmarks = this.audios[this.audioIndex].bookmarks.filter(
         (data) => data._id != id
@@ -254,12 +245,32 @@ export default {
       await this.$api.audio.putAudio(newBookmarksArray);
       await this.onGetAudios();
     },
+
+    //Flag to stop the bookmark removal option
     stopDeleting() {
       this.deleteM = false;
     },
+
+    //Starts the Transcribe Audio process
     async onTranscribeAudio() {
       this.$api.audio.transcribeAudio({ id: this.audios[this.audioIndex].id });
     },
+    //-------------------Nuxt loading stuff-----------------------
+    startLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.start();
+        });
+      }
+    },
+    finishLoading() {
+      if (process.client) {
+        this.$nextTick(() => {
+          this.$nuxt.$loading.finish();
+        });
+      }
+    },
+    //-----------------------------------------------------------
   },
 
   components: { AudioModal, Player, PlayerDropdown, ConfirmationModal },

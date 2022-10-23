@@ -174,7 +174,15 @@ export default {
     await this.finishLoading();
   },
   mounted: function () {
-    this.socket = this.$nuxtSocket({persist: false});
+    this.socket = this.$nuxtSocket({ persist: false });
+    this.$watch("id", () => {
+      //Opens the socket connection
+      this.socket.on(this.id, (message) => {
+        this.comments.push(message);
+        this.length += 1;
+      });
+      //-----------------------------
+    });
   },
   computed: {
     onUserRole() {
@@ -267,11 +275,6 @@ export default {
     //--------------------toggle comment section--------------------
     commentsToggle(value) {
       this.showComments = value;
-      //Opens the socket connection
-      this.socket.on(this.id, (message) => {
-        this.comments.push(message);
-      });
-      //-----------------------------
     },
     //---------------------toggle input section-----------------------
     inputToggle(value) {

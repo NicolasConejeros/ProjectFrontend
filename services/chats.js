@@ -1,17 +1,9 @@
 export default (axios) => ({
-    async getRooms(projectId) {
+
+    async getChatRoom(chatId) {
         try {
-            console.log('obteniendo salas ' + projectId);
-            const { data } = await axios.get(`/rooms/project/${projectId}`)
-            return data;
-        } catch (error) {
-            console.log(error);
-        }
-    },
-    async getChatRoom(slug) {
-        try {
-            console.log('obteniendo sala ' + slug);
-            const { data } = await axios.get(`/rooms/search?slug=${slug}`)
+            console.log('obteniendo chat ' + chatId);
+            const { data } = await axios.get(`/chats/${chatId}`)
             return data;
         } catch (error) {
             console.log(error);
@@ -26,4 +18,13 @@ export default (axios) => ({
             console.log(error);
         }
     },
+    async postMessage(message){
+        try{ 
+            console.log('sending message ' + JSON.stringify(message,null,2));
+            const { data } = await axios.post("/chats/", message);
+            return data;
+        } catch(error){
+            console.log(error);
+        }
+    }
 });

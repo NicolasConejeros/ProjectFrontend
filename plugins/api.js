@@ -7,6 +7,7 @@ import Audios from "~/services/audios";
 import Users from "~/services/users";
 import Auth from "~/services/auth";
 import Team from "~/services/team";
+import Chat from "~/services/chats";
 
 export default ({ $axios }, inject) => {
     // Initialize API factories
@@ -19,7 +20,8 @@ export default ({ $axios }, inject) => {
         audio: Audios($axios),
         user: Users($axios),
         auth: Auth($axios),
-        team: Team($axios)
+        team: Team($axios),
+        chat: Chat($axios)
     };
 
     // Inject $api
