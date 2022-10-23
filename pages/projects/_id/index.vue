@@ -1,15 +1,16 @@
 <template>
   <div class="container grid grid-cols-12 grid-rows-12 gap-4">
-    <div
-      class="
-        text-4xl
-        font-semibold
-        text-neutral-content
-        row-start-4
-        col-span-1 col-start-3
-      "
-    >
-      {{ name }}
+    <div class="row-start-4 col-span-3 col-start-3 relative w-full">
+      <div class="text-4xl font-semibold text-neutral-content">
+        {{ name }}
+      </div>
+      <div
+        v-if="onUserRole === 'leader'"
+        class="absolute inset-y-0 right-0 mt-2"
+      >
+        <ProjectDropdown />
+        <AddMemberModal />
+      </div>
     </div>
     <div class="row-start-7 col-span-3 col-start-3 items-start">
       <div class="text-lg font-medium text-neutral-content">
@@ -61,7 +62,7 @@
         />
 
         <CommentInput
-          v-if="showInputBox"
+          v-if="showInputBox && onUserRole === 'leader'"
           :user-name="this.$auth.user.name"
           class="w-full"
           @onCreateComment="onCreateComment"
@@ -119,6 +120,7 @@
       </div>
       <div>
         <RequerimentCard
+          v-if="showInfo"
           class="card mt-4 w-3/4"
           :justify="'justify-center'"
           :title="this.epic"
@@ -135,6 +137,9 @@ import EpicsModal from "../../../components/epics/EpicsModal.vue";
 import RequirementInputUpdate from "../../../components/requirements/RequirementInputUpdate.vue";
 import Comment from "../../../components/app/Comment.vue";
 import CommentInput from "../../../components/app/CommentInput.vue";
+import ProjectDropdown from "../../../components/projects/ProjectDropdown.vue";
+import AddMemberModal from "../../../components/projects/AddMemberModal.vue";
+
 export default {
   layout: "projects",
   middleware: "auth",
@@ -164,16 +169,17 @@ export default {
     await this.fetchProject();
     await this.fetchRequirements();
     await this.finishLoading();
+    await this.startLoading();
     this.setTeam();
+    await this.finishLoading();
   },
   mounted: function () {
-    // this.timer = setInterval(() => {
-    //   this.onGetComments(this.id);
-    // }, 30000);
-    this.socket = this.$nuxtSocket({});
+    this.socket = this.$nuxtSocket({persist: false});
   },
-  beforeDestroy() {
-    clearInterval(this.timer);
+  computed: {
+    onUserRole() {
+      return this.$store.getters["teams/getRole"];
+    },
   },
   methods: {
     //-----------------Nuxt loading stuff-------------------
@@ -195,6 +201,12 @@ export default {
     //-------------------get the team---------------------
     setTeam() {
       this.$store.dispatch("teams/loadTeam", this.team);
+      const user = this.team.members.find(
+        ({ user }) => user === this.$auth.user.id
+      );
+
+      //load user role to store
+      this.$store.dispatch("teams/loadRole", user.role);
     },
 
     //-------------------fetch projects---------------------
@@ -273,6 +285,8 @@ export default {
     RequirementInputUpdate,
     Comment,
     CommentInput,
+    ProjectDropdown,
+    AddMemberModal,
   },
 };
 </script>

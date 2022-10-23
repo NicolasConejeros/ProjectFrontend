@@ -70,7 +70,7 @@
       >
     </label>
     <label
-      v-if="descriptionCard"
+      v-if="descriptionCard && onUserRole === 'leader'"
       :class="
         descriptionCard && length == 0
           ? 'absolute bottom-2 right-2'
@@ -162,6 +162,11 @@ export default {
     length: {
       type: Number,
       default: 0,
+    },
+  },
+  computed: {
+    onUserRole() {
+      return this.$store.getters["teams/getRole"];
     },
   },
   methods: {

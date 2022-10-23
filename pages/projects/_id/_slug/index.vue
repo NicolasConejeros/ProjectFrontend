@@ -16,7 +16,7 @@
         <div class="text-lg font-medium text-neutral-content">
           {{ audioTitle }}
         </div>
-        <ProjectDropdown
+        <PlayerDropdown
           class="justify-self-end -mt-6"
           :transcription="audios.length > 0 ? true : false"
           :theres-audio="audios.length === 0 ? false : true"
@@ -87,7 +87,7 @@
 <script>
 import AudioModal from "../../../../components/rooms/audioModal.vue";
 import Player from "../../../../components/player/player.vue";
-import ProjectDropdown from "../../../../components/projects/ProjectDropdown.vue";
+import PlayerDropdown from "../../../../components/projects/PlayerDropdown.vue";
 import ConfirmationModal from "../../../../components/app/ConfirmationModal.vue";
 export default {
   layout: "projects",
@@ -166,7 +166,11 @@ export default {
 
     //Get the  info of the room
     async onGetRoom() {
-      this.room = await this.$api.room.getRoom(this.$route.params.slug);
+      try{
+        this.room = await this.$api.room.getRoom(this.$route.params.slug);
+      } catch(error){
+        console.log(error);
+      }
     },
     //Get the audios related to the room
     async onGetAudios() {
@@ -258,7 +262,7 @@ export default {
     },
   },
 
-  components: { AudioModal, Player, ProjectDropdown, ConfirmationModal },
+  components: { AudioModal, Player, PlayerDropdown, ConfirmationModal },
 };
 </script>
 
