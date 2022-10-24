@@ -32,7 +32,7 @@
             v-on="
               deleteM
                 ? {
-                    click: () => deleteMarker(bookmark._id),
+                    click: () => deleteMarker(bookmark.time),
                   }
                 : {
                     click: () => goToBookmark(bookmark.time),
@@ -123,13 +123,19 @@ export default {
     this.$watch("audioIndex", () => {
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
     });
-    this.socket = this.$nuxtSocket({ persist: true });
+    this.socket = this.$nuxtSocket({ teardown: true });
   },
   async fetch() {
     this.startLoading();
     await this.onGetRoom();
     await this.onGetAudios();
     this.finishLoading();
+    //Opens the socket connection
+    this.socket.on(this.audioId, (received) => {
+      console.log(JSON.stringify(received, null, 2));
+      this.bookmarks = received;
+    });
+    //-----------------------------
   },
   methods: {
     //To calculate te positioning of the bookmarks
@@ -151,7 +157,9 @@ export default {
     //Get the  info of the room
     async onGetRoom() {
       try {
-        const loadedRoom = await this.$api.room.getRoom(this.$route.params.slug);
+        const loadedRoom = await this.$api.room.getRoom(
+          this.$route.params.slug
+        );
         this.room = loadedRoom;
       } catch (error) {
         console.log(error);
@@ -212,10 +220,9 @@ export default {
       this.audioId = this.audios[this.audioIndex].id;
       const newAudioBookmark = {
         id: this.audioId,
-        bookmarks: this.audios[this.audioIndex].bookmarks.concat(bookmark),
+        bookmarks: this.bookmarks.concat(bookmark),
       };
       await this.$api.audio.putAudio(newAudioBookmark);
-      await this.onGetAudios();
     },
     //Get the info of the audio playing
     audioInfo(audioDuration) {
@@ -233,9 +240,13 @@ export default {
     },
 
     //Deletes the selected bookmark
-    async deleteMarker(id) {
-      const remainingBookmarks = this.audios[this.audioIndex].bookmarks.filter(
-        (data) => data._id != id
+    async deleteMarker(time) {
+      console.log(time);
+      const remainingBookmarks = this.bookmarks.filter(
+        (bookmark) => bookmark.time !== time
+      );
+      console.log(
+        "remaining bookmarks: " + JSON.stringify(remainingBookmarks, null, 2)
       );
       this.audioId = this.audios[this.audioIndex].id;
       const newBookmarksArray = {
@@ -243,7 +254,6 @@ export default {
         bookmarks: remainingBookmarks,
       };
       await this.$api.audio.putAudio(newBookmarksArray);
-      await this.onGetAudios();
     },
 
     //Flag to stop the bookmark removal option
