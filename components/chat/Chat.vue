@@ -2,7 +2,9 @@
   <div class="h-96 bg-base-300 relative flex">
     <div class="overflow-y-auto h-5/6 w-full">
       <div v-for="(message, index) in messages" :key="index">
-        {{ message.text }}
+        <ChatMessage
+          :message="{ text: message.text, user: getUser(message.user) }"
+        />
       </div>
       <div ref="lastMessage"></div>
     </div>
@@ -38,10 +40,7 @@ export default {
       this.onGetChat();
       //Opens the socket connection
       this.socket.on(this.chatid, (received) => {
-        console.log("entra");
-        console.log("here " + received);
         this.messages.push(received);
-        console.log(received);
       });
       //-----------------------------
     });
@@ -63,6 +62,13 @@ export default {
     },
   },
   methods: {
+    getUser(userId) {
+      const user = this.chat.chatters.find(({ user }) => user.id == userId);
+      if (!user) {
+        return { user: { name: "user", avatar: "", id: "" } };
+      }
+      return user.user;
+    },
     scrollToElement() {
       const el = this.$refs.lastMessage;
       if (el) {
@@ -79,7 +85,9 @@ export default {
         this.startLoading();
         this.chat = await this.$api.chat.getChatRoom(this.chatid);
         this.messages = this.chat.messages;
-        console.log(this.messages);
+        console.log(1);
+        console.log(JSON.stringify(this.chat, null, 2));
+        console.log(1);
         this.finishLoading();
         //--------------------------------------------------------
 

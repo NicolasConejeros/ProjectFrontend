@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     async onSubmit() {
-      const room = { projectId: this.$route.params.id, name: this.roomName, teamId: this.loadedTeam.id };
+      const room = { projectId: this.$route.params.id, name: this.roomName, teamId: this.loadedTeam};
       await this.$api.room.createRoom(room);
       this.$emit("updateRooms");
     },
