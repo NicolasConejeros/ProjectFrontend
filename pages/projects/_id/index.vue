@@ -15,12 +15,12 @@
     <div class="row-start-7 col-span-3 col-start-3 items-start">
       <div class="text-lg font-medium text-neutral-content">
         Requisitos
-        <AppModalButton
+        <!-- <AppModalButton
           :forModal="'addRequirementModal'"
           :hover="hover"
           :width="18"
           :height="18"
-        />
+        /> -->
       </div>
       <RequerimentCard
         class="card mt-4 w-9/10"
@@ -37,7 +37,7 @@
         :justify="'justify-center'"
         @display="displayInfo"
       />
-      <RequirementInputModal :epics="epics" @updateArray="fetchRequirements" />
+      <!-- <RequirementInputModal :epics="epics" @updateArray="fetchRequirements" /> -->
     </div>
     <div class="row-start-7 col-span-4 col-start-6">
       <div
@@ -45,7 +45,7 @@
         class="text-lg font-medium sticky text-neutral-content top-0"
       >
         Resumen
-        <RequerimentCard 
+        <RequerimentCard
           class="card bg-base-100 mt-4 w-full"
           :font="'font-sans'"
           :size="'text-base'"

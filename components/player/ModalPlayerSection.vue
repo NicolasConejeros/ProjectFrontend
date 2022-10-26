@@ -39,7 +39,7 @@
         font-semibold
       "
     >
-      Tiempo seleccionado: {{convertTime(bookmarkP)}}
+      Tiempo seleccionado: {{ convertTime(bookmarkP) }}
     </div>
   </div>
 </template>
@@ -79,14 +79,16 @@ export default {
       this.room = this.roomProp;
     });
     this.$watch("audiosProp", () => {
-      this.audios = this.audiosProp;
-      this.url =
-        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
-      //loads the bookmarks
-      this.bookmarks = this.audios[this.audioIndex].bookmarks;
-      //Saves the id of the audio playing/in queue
-      this.audioId = this.audios[this.audioIndex].id;
-      this.audioTitle = this.audios[this.audioIndex].title;
+      if (this.audiosProp.length > 0) {
+        this.audios = this.audiosProp;
+        this.url =
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+        //loads the bookmarks
+        this.bookmarks = this.audios[this.audioIndex].bookmarks;
+        //Saves the id of the audio playing/in queue
+        this.audioId = this.audios[this.audioIndex].id;
+        this.audioTitle = this.audios[this.audioIndex].title;
+      }
     });
   },
   methods: {
@@ -145,7 +147,7 @@ export default {
       const format = (val) => `0${Math.floor(val)}`.slice(-2);
       const hours = seconds / 3600;
       const minutes = (seconds % 3600) / 60;
-      this.$emit("Timestamp",seconds);
+      this.$emit("Timestamp", seconds, this.audioId);
       return [minutes, seconds % 60].map(format).join(":");
     },
   },

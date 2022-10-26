@@ -56,8 +56,15 @@
       {{ acceptanceCriteria }}
     </p>
     <p v-if="descriptionCard && timestamp" :class="[font, size, justify]">
-      Ubiación en audio: {{ timestamp }}
+      Encontrado en el audio: {{ timestamp.audioId.title }}, en el minuto:
+      {{ timestamp.timestamp }}
     </p>
+    <div v-if="descriptionCard && timestamp">
+      <PlayerModalPlayer
+        :url="`http://localhost:3080/${timestamp.audioId.music.path}`"
+        :new-position="timestamp.timestamp"
+      />
+    </div>
     <label
       v-if="descriptionCard && length > 0"
       class="type:btn indicator absolute bottom-2 right-2 p-2"
@@ -138,7 +145,6 @@ export default {
       default: "",
     },
     timestamp: {
-      type: Number,
       default: false,
     },
     font: {

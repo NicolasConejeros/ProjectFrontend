@@ -84,36 +84,45 @@ export default {
     deleteM: false,
   }),
   mounted: function () {
+    this.audioIndex = 0;
     this.$watch("showBookmarks", () => {
       if (this.showBookmarks) {
         this.calculate();
       }
     });
-    this.$watch("audioIndex", () => {
-      this.bookmarks = this.audios[this.audioIndex].bookmarks;
-    });
     this.socket = this.$nuxtSocket({ persist: false, teardown: true });
-    this.$watch("audioId", () => {
-      this.socket.emit("room", this.audioId);
-      this.socket.on("room", (received) => {
-        console.log(JSON.stringify(received, null, 2));
-        this.bookmarks = received;
-        this.audios[this.audioIndex].bookmarks = received;
-      });
-    });
+
     this.$watch("roomProp", () => {
       this.room = this.roomProp;
-      console.log('ROOM: ' + JSON.stringify(this.room,null,2));
+      console.log("ROOM: " + JSON.stringify(this.room, null, 2));
     });
     this.$watch("audiosProp", () => {
-      this.audios = this.audiosProp;
-      this.url =
-        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
-      //loads the bookmarks
-      this.bookmarks = this.audios[this.audioIndex].bookmarks;
-      //Saves the id of the audio playing/in queue
-      this.audioId = this.audios[this.audioIndex].id;
-      this.audioTitle = this.audios[this.audioIndex].title;
+      if (this.audiosProp.length > 0) {
+        this.audios = this.audiosProp;
+        this.url =
+          "http://localhost:3080/" + this.audiosProp[this.audioIndex].music.path;
+          console.log(1);
+        //loads the bookmarks
+        this.bookmarks = this.audios[this.audioIndex].bookmarks;
+        //Saves the id of the audio playing/in queue
+        this.audioId = this.audios[this.audioIndex].id;
+        this.audioTitle = this.audios[this.audioIndex].title;
+      }
+    });
+    this.$watch("audioIndex", () => {
+      if (this.audiosProp) {
+        this.bookmarks = this.audios[this.audioIndex].bookmarks;
+      }
+    });
+    this.$watch("audioId", () => {
+      if (this.audioId) {
+        this.socket.emit("room", this.audioId);
+        this.socket.on("room", (received) => {
+          console.log(JSON.stringify(received, null, 2));
+          this.bookmarks = received;
+          this.audios[this.audioIndex].bookmarks = received;
+        });
+      }
     });
   },
   //   async fetch() {

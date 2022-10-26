@@ -182,6 +182,10 @@ export default {
     acceptanceCriteria: "",
     tempEpics: [],
     bookmarkP: 0,
+    audioId: {
+      type: String,
+      default: "",
+    },
   }),
   async mounted() {
     if (!this.epics) {
@@ -200,7 +204,10 @@ export default {
         description: this.description,
         acceptanceCriteria: this.acceptanceCriteria,
         epicId: this.epicId,
-        timestamp: this.bookmarkP
+        timestamp: {
+          audioId: this.audioId,
+          timestamp: this.bookmarkP,
+        },
       };
       await this.$api.requirement.createRequirement(requirement);
       this.$emit("updateArray");
@@ -213,9 +220,10 @@ export default {
       this.epicId = temp.id;
       this.epicName = temp.title;
     },
-    saveTimestamp(seconds){
+    saveTimestamp(seconds, audioId) {
       this.bookmarkP = seconds;
-    }
+      this.audioId = audioId;
+    },
   },
   components: { RequirementDropdown, ModalPlayerSection },
 };

@@ -30,7 +30,6 @@
   <script>
 export default {
   mounted: function () {
-
     var audio = this.$refs.player;
 
     //Wait for audio to load, then run initSlider() to get audio duration and set the max value of our slider
@@ -123,7 +122,6 @@ export default {
       this.$emit("prevAudio");
     },
     playbackListener(e) {
-
       const audio = this.$refs.player;
 
       //Sync local 'playbackTime' var to audio.currentTime and update global state

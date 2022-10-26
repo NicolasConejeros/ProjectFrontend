@@ -80,7 +80,6 @@ export default {
   },
   props: {
     url: "",
-
     newPosition: 0,
   },
   data() {
