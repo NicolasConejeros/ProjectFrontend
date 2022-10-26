@@ -17,29 +17,23 @@
       }}</a>
     </div>
 
-    <player-buttons
-      class="justify-items-center ml-6"
+    <PlayerModalPlayerButtons
+      class="justify-items-center ml-32"
       @toggleAudio="toggleAudio"
       @nextAudio="nextAudio"
       @prevAudio="prevAudio"
-      @bookmark="addBookmark"
-      @bookmarkToggle="bookmarkToggle"
-      @deleteMarker="deleteMarker"
-      @stopDeleting="stopDeleting"
       :key="updateButtons"
     />
   </div>
 </template>
-
-<script>
-import playerButtons from "./playerButtons.vue";
+  
+  <script>
 export default {
-  components: { playerButtons },
   mounted: function () {
+
     var audio = this.$refs.player;
 
     //Wait for audio to load, then run initSlider() to get audio duration and set the max value of our slider
-    // "loademetadata" Event https://www.w3schools.com/tags/av_event_loadedmetadata.asp
     audio.addEventListener(
       "loadedmetadata",
       function (e) {
@@ -80,7 +74,6 @@ export default {
   },
   props: {
     url: "",
-
     newPosition: 0,
   },
   data() {
@@ -92,6 +85,18 @@ export default {
     };
   },
   methods: {
+    //To calculate te positioning of the bookmarks
+    calculate(index) {
+      if (this.bookmarks.length > 0 && this.bookmarks[index]) {
+        this.sliderWidth = this.$refs.playerArea.clientWidth;
+        const temp = (this.bookmarks[index].time * 100) / this.totalTime;
+        const approximatePosition = (this.sliderWidth * temp) / 100;
+        return {
+          "margin-left": `${approximatePosition}px`,
+          fill: `${this.bookmarks[index].color}`,
+        };
+      }
+    },
     initSlider() {
       const audio = this.$refs.player;
       if (audio) {
@@ -118,11 +123,12 @@ export default {
       this.$emit("prevAudio");
     },
     playbackListener(e) {
+
       const audio = this.$refs.player;
+
       //Sync local 'playbackTime' var to audio.currentTime and update global state
       this.playbackTime = audio.currentTime;
 
-      //console.log("update: " + audio.currentTime);
       //Add listeners for audio pause and audio end events
       audio.addEventListener("ended", this.endListener);
       //   audio.addEventListener("pause", this.pauseListener);
@@ -132,7 +138,6 @@ export default {
       this.isPlaying = false;
       this.listenerActive = false;
       this.updateButtons += 1;
-      this.$emit("bookmarkToggle");
       this.cleanupListeners();
     },
     //Remove listeners after audio play stops
@@ -158,22 +163,7 @@ export default {
         return "00:00";
       }
     },
-    addBookmark(color) {
-      const bookmark = {
-        time: Math.round(this.playbackTime),
-        color: color,
-      };
-      this.$emit("bookmark", bookmark);
-    },
-    bookmarkToggle() {
-      this.$emit("bookmarkToggle");
-    },
-    deleteMarker() {
-      this.$emit("deleteOption");
-    },
-    stopDeleting(){
-      this.$emit("stopDeleting");
-    }
   },
 };
 </script>
+  

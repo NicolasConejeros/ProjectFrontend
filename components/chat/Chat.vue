@@ -85,9 +85,6 @@ export default {
         this.startLoading();
         this.chat = await this.$api.chat.getChatRoom(this.chatid);
         this.messages = this.chat.messages;
-        console.log(1);
-        console.log(JSON.stringify(this.chat, null, 2));
-        console.log(1);
         this.finishLoading();
         //--------------------------------------------------------
 

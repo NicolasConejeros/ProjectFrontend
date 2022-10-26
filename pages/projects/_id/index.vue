@@ -31,6 +31,7 @@
         :title="requirement.title"
         :description="requirement.description"
         :acceptance-criteria="requirement.acceptanceCriteria"
+        :timestamp="requirement.timestamp"
         :button="true"
         :hover="hover"
         :justify="'justify-center'"
@@ -53,6 +54,7 @@
           :description="this.description"
           :acceptance-criteria="this.acceptanceCriteria"
           :description-card="true"
+          :timestamp="this.timestamp"
           :show-comments="this.showComments"
           :show-input-box="this.showInputBox"
           :length="length"
@@ -260,12 +262,13 @@ export default {
     },
 
     //--------------------to display the info------------------------
-    async displayInfo(id, description, epicName, acceptanceCriteria, title) {
+    async displayInfo(id, description, epicName, acceptanceCriteria, title, timestamp) {
       this.id = id;
       this.description = description;
       this.title = title;
       this.epic = epicName;
       this.acceptanceCriteria = acceptanceCriteria;
+      this.timestamp = timestamp;
       await this.onGetComments(this.id);
       this.showComments = false;
       this.showInputBox = false;

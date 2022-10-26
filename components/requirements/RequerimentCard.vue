@@ -13,7 +13,14 @@
       button
         ? {
             click: () =>
-              displayInfo(id, description, epicId, acceptanceCriteria, title),
+              displayInfo(
+                id,
+                description,
+                epicId,
+                acceptanceCriteria,
+                title,
+                timestamp
+              ),
           }
         : {}
     "
@@ -47,6 +54,9 @@
 
     <p v-if="descriptionCard" :class="[font, size, justify]">
       {{ acceptanceCriteria }}
+    </p>
+    <p v-if="descriptionCard && timestamp" :class="[font, size, justify]">
+      Ubiación en audio: {{ timestamp }}
     </p>
     <label
       v-if="descriptionCard && length > 0"
@@ -127,6 +137,10 @@ export default {
       type: String,
       default: "",
     },
+    timestamp: {
+      type: Number,
+      default: false,
+    },
     font: {
       type: String,
       default: "font-bold",
@@ -170,14 +184,22 @@ export default {
     },
   },
   methods: {
-    async displayInfo(id, description, epicId, acceptanceCriteria, title) {
+    async displayInfo(
+      id,
+      description,
+      epicId,
+      acceptanceCriteria,
+      title,
+      timestamp
+    ) {
       this.$emit(
         "display",
         id,
         description,
         epicId.title,
         acceptanceCriteria,
-        title
+        title,
+        timestamp
       );
     },
     getArrays() {
