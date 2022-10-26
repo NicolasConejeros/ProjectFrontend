@@ -45,7 +45,7 @@
         class="text-lg font-medium sticky text-neutral-content top-0"
       >
         Resumen
-        <RequerimentCard
+        <RequerimentCard 
           class="card bg-base-100 mt-4 w-full"
           :font="'font-sans'"
           :size="'text-base'"
