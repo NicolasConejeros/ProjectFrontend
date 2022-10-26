@@ -162,6 +162,7 @@ export default {
     showInfo: false,
     timer: null,
     team: "",
+    oldId: "",
   }),
   async created() {
     await this.onGetEpics();
@@ -170,21 +171,26 @@ export default {
     await this.startLoading();
     await this.fetchProject();
     await this.fetchRequirements();
-    await this.finishLoading();
-    await this.startLoading();
     this.setTeam();
     await this.finishLoading();
   },
   mounted: function () {
-    this.socket = this.$nuxtSocket({ persist: false });
-    this.$watch("id", () => {
-      //Opens the socket connection
-      this.socket.on(this.id, (message) => {
-        this.comments.push(message);
-        this.length += 1;
-      });
-      //-----------------------------
+    this.socket = this.$nuxtSocket({
+      persist: false,
+      teardown: true,
+      reconnection: false,
     });
+
+    //Opens the socket connection
+
+    this.socket.emit("leave", this.oldId);
+    this.socket.on("comments", (message) => {
+      console.log(1);
+      console.log(JSON.stringify(message, null, 2));
+      this.comments.push(message);
+      this.length += 1;
+    });
+    //-----------------------------
   },
   computed: {
     onUserRole() {
@@ -199,6 +205,9 @@ export default {
           this.$nuxt.$loading.start();
         });
       }
+    },
+    joinSocket() {
+      this.socket.emit("comments", this.id);
     },
     finishLoading() {
       if (process.client) {
@@ -262,8 +271,17 @@ export default {
     },
 
     //--------------------to display the info------------------------
-    async displayInfo(id, description, epicName, acceptanceCriteria, title, timestamp) {
+    async displayInfo(
+      id,
+      description,
+      epicName,
+      acceptanceCriteria,
+      title,
+      timestamp
+    ) {
+      
       this.id = id;
+      this.joinSocket();
       this.description = description;
       this.title = title;
       this.epic = epicName;

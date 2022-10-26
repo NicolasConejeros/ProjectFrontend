@@ -56,8 +56,11 @@
       {{ acceptanceCriteria }}
     </p>
     <p v-if="descriptionCard && timestamp" :class="[font, size, justify]">
-      Encontrado en el audio: {{ timestamp.audioId.title }}, en el minuto:
-      {{ timestamp.timestamp }}
+      Encontrado en el audio: {{ timestamp.audioId.title }}
+    </p>
+    <p v-if="descriptionCard && timestamp" :class="[font, size, justify]">
+      En:
+      {{ convertTime(timestamp.timestamp) }}
     </p>
     <div v-if="descriptionCard && timestamp">
       <PlayerModalPlayer
@@ -207,6 +210,12 @@ export default {
         title,
         timestamp
       );
+    },
+    convertTime(seconds) {
+      const format = (val) => `0${Math.floor(val)}`.slice(-2);
+      const hours = seconds / 3600;
+      const minutes = (seconds % 3600) / 60;
+      return [minutes, seconds % 60].map(format).join(":");
     },
     getArrays() {
       this.$emit("updateArray");
