@@ -77,6 +77,8 @@ export default {
     audioTitle: "No hay audio",
     //audio id
     audioId: "",
+    //old audioId
+    audioSocket: "",
     sliderWidth: 0,
     flag: 0,
     totalTime: 0,
@@ -90,23 +92,40 @@ export default {
         this.calculate();
       }
     });
-    this.socket = this.$nuxtSocket({ persist: false, teardown: true });
+    this.socket = this.$nuxtSocket({
+      persist: true,
+    });
 
     this.$watch("roomProp", () => {
       this.room = this.roomProp;
-      console.log("ROOM: " + JSON.stringify(this.room, null, 2));
     });
+
     this.$watch("audiosProp", () => {
       if (this.audiosProp.length > 0) {
         this.audios = this.audiosProp;
         this.url =
-          "http://localhost:3080/" + this.audiosProp[this.audioIndex].music.path;
-          console.log(1);
+          "http://localhost:3080/" +
+          this.audiosProp[this.audioIndex].music.path;
+
         //loads the bookmarks
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
+
+        //Saves the old id of the audio to leave the room
+        // if (this.audioId) this.oldId = this.audioId;
+
         //Saves the id of the audio playing/in queue
         this.audioId = this.audios[this.audioIndex].id;
+        this.audioSocket = this.audioId;
         this.audioTitle = this.audios[this.audioIndex].title;
+        this.joinSocket(this.audioId);
+        this.socket.on("room", (received, index) => {
+          console.log(77);
+          console.log(index);
+          console.log(77);
+
+          this.audios[index].bookmarks = received;
+          if (index == this.audioIndex) this.bookmarks = received;
+        });
       }
     });
     this.$watch("audioIndex", () => {
@@ -114,24 +133,23 @@ export default {
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
       }
     });
-    this.$watch("audioId", () => {
-      if (this.audioId) {
-        this.socket.emit("room", this.audioId);
-        this.socket.on("room", (received) => {
-          console.log(JSON.stringify(received, null, 2));
-          this.bookmarks = received;
-          this.audios[this.audioIndex].bookmarks = received;
-        });
-      }
-    });
+
+    // this.$watch("audioId", () => {
+    //   if (this.audioId) {
+    //     // this.joinSocket();
+    //     // this.socket.on("room", (received, index) => {
+    //     //   this.bookmarks = received;
+    //     //   this.audios[index].bookmarks = received;
+    //     // });
+    //   }
+    // });
   },
-  //   async fetch() {
-  //     this.startLoading();
-  //     // await this.onGetRoom();
-  //     // await this.onGetAudios();
-  //     this.finishLoading();
-  //   },
+
   methods: {
+    joinSocket(id) {
+      this.socket.emit("room", id);
+    },
+
     //To calculate te positioning of the bookmarks
     calculate(index) {
       if (this.bookmarks.length > 0 && this.bookmarks[index]) {
@@ -150,73 +168,72 @@ export default {
       this.bookmarkP = bookmark.time;
     },
 
-    //Get the  info of the room
-    // async onGetRoom() {
-    //   try {
-    //     const loadedRoom = await this.$api.room.getRoom(
-    //       this.$route.params.slug
-    //     );
-    //     this.room = loadedRoom;
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-    //Get the audios related to the room
-    // async onGetAudios() {
-    //   this.audios = await this.$api.audio.getAudios(this.room.id);
-    //   if (this.audios.length > 0) {
-    //     this.audioTitle = this.audios[this.audioIndex].title;
-    //     //defined path to the audio location
-    // this.url =
-    //   "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
-    // //     //loads the bookmarks
-    //     this.bookmarks = this.audios[this.audioIndex].bookmarks;
-    //     //Saves the id of the audio playing/in queue
-    //     this.audioId = this.audios[this.audioIndex].id;
-    //   }
-    // },
     //------------------------Audio controls------------------------------
     nextAudio() {
+      // this.oldId = this.audios[this.audioIndex].id;
       this.audioIndex = this.audioIndex + 1;
+
       if (!this.audios[this.audioIndex]) this.audioIndex = 0;
+
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+
       // //loads the bookmarks of the next audio
-      // this.bookmarks = this.audios[this.audioIndex].bookmarks;
+      this.bookmarks = this.audios[this.audioIndex].bookmarks;
+
       //resets the icon and hides the bookmarks
       this.showBookmarks = !this.showBookmarks;
+
       //Stops the delete option
       this.deleteM = false;
+
+      //Saves the id of the previous audio
+      // this.oldId = this.audioId;
+      // this.socket.emit("leave", this.oldId);
+
       //Saves the id of the audio playing/in queue
-      // this.audioId = this.audios[this.audioIndex].id;
+      this.audioId = this.audios[this.audioIndex].id;
     },
     prevAudio() {
+      // this.oldId = this.audios[this.audioIndex].id;
       this.audioIndex = this.audioIndex - 1;
+
       if (!this.audios[this.audioIndex])
         this.audioIndex = this.audios.length - 1;
+
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
-      //loads the bookmarks of the next audio
+
+      //loads the bookmarks of the previous audio
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
+
       //resets the icon and hides the bookmarks
       this.showBookmarks = !this.showBookmarks;
+
       //Stops the delete option
       this.deleteM = false;
+
+      //Saves the id of the previous audio
+      // this.oldId = this.audioId;
+      // this.socket.emit("leave", this.oldId);
+
       //Saves the id of the audio playing/in queue
-      // this.audioId = this.audios[this.audioIndex].id;
+      this.audioId = this.audios[this.audioIndex].id;
     },
     //-----------------------------------------------------------
 
     //Add bookmarks function
     async addBookmark(newBookmark) {
       const bookmark = newBookmark;
-
       this.audioId = this.audios[this.audioIndex].id;
+      console.log(this.audioSocket);
       const newAudioBookmark = {
         id: this.audioId,
         bookmarks: this.bookmarks.concat(bookmark),
+        index: this.audioIndex,
+        audioSocket: this.audioSocket,
       };
       await this.$api.audio.putAudio(newAudioBookmark);
     },
@@ -237,17 +254,16 @@ export default {
 
     //Deletes the selected bookmark
     async deleteMarker(time) {
-      console.log(time);
       const remainingBookmarks = this.bookmarks.filter(
         (bookmark) => bookmark.time !== time
       );
-      console.log(
-        "remaining bookmarks: " + JSON.stringify(remainingBookmarks, null, 2)
-      );
+      console.log(this.audioSocket);
       this.audioId = this.audios[this.audioIndex].id;
       const newBookmarksArray = {
         id: this.audioId,
         bookmarks: remainingBookmarks,
+        index: this.audioIndex,
+        audioSocket: this.audioSocket,
       };
       await this.$api.audio.putAudio(newBookmarksArray);
     },

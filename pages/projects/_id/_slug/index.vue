@@ -134,37 +134,27 @@ export default {
     deleteM: false,
   }),
   mounted: function () {
-    this.$watch("showBookmarks", () => {
-      if (this.showBookmarks) {
-        this.calculate();
-      }
-    });
-    this.$watch("audioIndex", () => {
-      this.bookmarks = this.audios[this.audioIndex].bookmarks;
-      this.onGetAudios();
-    });
-    this.socket = this.$nuxtSocket({ persist: false, teardown: true });
-    this.$watch("audioId", () => {
-      //Opens the socket connection
-      // this.socket.emit('joinRoom', this.audioId);
-      // this.socket.on(this.audioId, (received) => {
-      //   console.log(" here" + received);
-      //   this.bookmarks = received;
-      //   this.audios[this.audioIndex].bookmarks = received;
-      // });
-      this.socket.emit("room", this.audioId);
-      this.socket.on("room", (received) => {
-        console.log(JSON.stringify(received, null, 2));
-        this.bookmarks = received;
-        this.audios[this.audioIndex].bookmarks = received;
-      });
-      // this.socket.on(this.audioId, (received) => {
-      //   console.log(JSON.stringify(received, null, 2));
-      //   this.bookmarks = received;
-      //   this.audios[this.audioIndex].bookmarks = received;
-      // });
-      //-----------------------------
-    });
+    // this.$watch("showBookmarks", () => {
+    //   if (this.showBookmarks) {
+    //     this.calculate();
+    //   }
+    // });
+    // this.$watch("audioIndex", () => {
+    //   this.bookmarks = this.audios[this.audioIndex].bookmarks;
+    //   this.onGetAudios();
+    // });
+    // this.socket = this.$nuxtSocket({ persist: false, teardown: true });
+    // this.$watch("audioId", () => {
+    //   //Opens the socket connection
+    //   this.socket.emit("leave", this.oldId);
+    //   this.socket.emit("room", this.audioId);
+    //   this.socket.on("room", (received) => {
+    //     console.log(JSON.stringify(received, null, 2));
+    //     this.bookmarks = received;
+    //     this.audios[this.audioIndex].bookmarks = received;
+    //   });
+    //   //-----------------------------
+    // });
   },
   async fetch() {
     this.startLoading();
