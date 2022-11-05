@@ -1,4 +1,5 @@
 export default (axios) => ({
+
     async addMember(newMember) {
         try {
             console.log('adding user' + newMember);
@@ -8,5 +9,22 @@ export default (axios) => ({
             console.log(error);
         }
     },
+    async getTeam(projectId) {
+
+        try {
+            const { data } = await axios.get(`/team/${projectId}`);
+            return data;
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    async removeMember(projectId,userToRemove) {
+        try {
+            const { data } = await axios.put(`/team/${projectId}`,{userToRemove});
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 });

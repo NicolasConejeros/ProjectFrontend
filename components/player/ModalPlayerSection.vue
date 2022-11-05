@@ -29,9 +29,9 @@
       @prevAudio="prevAudio"
       @audioInfo="audioInfo"
     />
-    <div
+    <div v-if="audios.length > 0"
       class="
-        mt-12
+        mt-28
         text-md
         font-medium
         text-gray-900
@@ -92,6 +92,7 @@ export default {
     });
   },
   methods: {
+    
     //To calculate te positioning of the bookmarks
     calculate(index) {
       if (this.bookmarks.length > 0 && this.bookmarks[index]) {
@@ -124,16 +125,22 @@ export default {
       this.audioId = this.audios[this.audioIndex].id;
     },
     prevAudio() {
+
       this.audioIndex = this.audioIndex - 1;
+
       if (!this.audios[this.audioIndex])
         this.audioIndex = this.audios.length - 1;
+
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
         "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+
       //loads the bookmarks of the next audio
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
+
       //resets the icon and hides the bookmarks
       this.showBookmarks = !this.showBookmarks;
+
       //Saves the id of the audio playing/in queue
       this.audioId = this.audios[this.audioIndex].id;
     },
@@ -144,6 +151,7 @@ export default {
       this.totalTime = audioDuration;
     },
     convertTime(seconds) {
+
       const format = (val) => `0${Math.floor(val)}`.slice(-2);
       const hours = seconds / 3600;
       const minutes = (seconds % 3600) / 60;

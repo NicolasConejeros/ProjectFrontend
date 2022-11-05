@@ -70,6 +70,10 @@ export default {
         await this.$api.audio.deleteAudio(id);
         this.$emit("updateAudios");
       }
+      if (this.forModal === "removeMemberModal") {
+        await this.$api.team.removeMember(id);
+        this.$emit("updateAudios");
+      }
     },
   },
   components: {},

@@ -9,19 +9,15 @@
         class="absolute inset-y-0 right-0 mt-2"
       >
         <ProjectDropdown />
-        <AddMemberModal />
       </div>
     </div>
+    <div v-if="onUserRole === 'leader'">
+      <AddMemberModal />
+      <ProjectsEditTeamModal :team="onUserTeam.members" class="w-96" />
+    </div>
+    
     <div class="row-start-7 col-span-3 col-start-3 items-start">
-      <div class="text-lg font-medium text-neutral-content">
-        Requisitos
-        <!-- <AppModalButton
-          :forModal="'addRequirementModal'"
-          :hover="hover"
-          :width="18"
-          :height="18"
-        /> -->
-      </div>
+      <div class="text-lg font-medium text-neutral-content">Requisitos</div>
       <RequerimentCard
         class="card mt-4 w-9/10"
         v-for="(requirement, index) in requirements"
@@ -196,6 +192,9 @@ export default {
     onUserRole() {
       return this.$store.getters["teams/getRole"];
     },
+    onUserTeam() {
+      return this.$store.getters["teams/getTeam"];
+    },
   },
   methods: {
     //-----------------Nuxt loading stuff-------------------
@@ -221,7 +220,7 @@ export default {
     setTeam() {
       this.$store.dispatch("teams/loadTeam", this.team);
       const user = this.team.members.find(
-        ({ user }) => user === this.$auth.user.id
+        ({ user }) => user.id === this.$auth.user.id
       );
 
       //load user role to store
@@ -279,7 +278,6 @@ export default {
       title,
       timestamp
     ) {
-      
       this.id = id;
       this.joinSocket();
       this.description = description;

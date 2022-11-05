@@ -77,7 +77,7 @@ export default {
     audioTitle: "No hay audio",
     //audio id
     audioId: "",
-    //old audioId
+    //Id of the socket that we'll be using
     audioSocket: "",
     sliderWidth: 0,
     flag: 0,
@@ -110,18 +110,14 @@ export default {
         //loads the bookmarks
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
 
-        //Saves the old id of the audio to leave the room
-        // if (this.audioId) this.oldId = this.audioId;
-
         //Saves the id of the audio playing/in queue
         this.audioId = this.audios[this.audioIndex].id;
         this.audioSocket = this.audioId;
         this.audioTitle = this.audios[this.audioIndex].title;
+        
         this.joinSocket(this.audioId);
+
         this.socket.on("room", (received, index) => {
-          console.log(77);
-          console.log(index);
-          console.log(77);
 
           this.audios[index].bookmarks = received;
           if (index == this.audioIndex) this.bookmarks = received;
@@ -133,16 +129,6 @@ export default {
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
       }
     });
-
-    // this.$watch("audioId", () => {
-    //   if (this.audioId) {
-    //     // this.joinSocket();
-    //     // this.socket.on("room", (received, index) => {
-    //     //   this.bookmarks = received;
-    //     //   this.audios[index].bookmarks = received;
-    //     // });
-    //   }
-    // });
   },
 
   methods: {
@@ -188,10 +174,6 @@ export default {
       //Stops the delete option
       this.deleteM = false;
 
-      //Saves the id of the previous audio
-      // this.oldId = this.audioId;
-      // this.socket.emit("leave", this.oldId);
-
       //Saves the id of the audio playing/in queue
       this.audioId = this.audios[this.audioIndex].id;
     },
@@ -215,10 +197,6 @@ export default {
       //Stops the delete option
       this.deleteM = false;
 
-      //Saves the id of the previous audio
-      // this.oldId = this.audioId;
-      // this.socket.emit("leave", this.oldId);
-
       //Saves the id of the audio playing/in queue
       this.audioId = this.audios[this.audioIndex].id;
     },
@@ -226,9 +204,10 @@ export default {
 
     //Add bookmarks function
     async addBookmark(newBookmark) {
+
       const bookmark = newBookmark;
       this.audioId = this.audios[this.audioIndex].id;
-      console.log(this.audioSocket);
+
       const newAudioBookmark = {
         id: this.audioId,
         bookmarks: this.bookmarks.concat(bookmark),
@@ -237,6 +216,7 @@ export default {
       };
       await this.$api.audio.putAudio(newAudioBookmark);
     },
+
     //Get the info of the audio playing
     audioInfo(audioDuration) {
       this.totalTime = audioDuration;
@@ -254,10 +234,11 @@ export default {
 
     //Deletes the selected bookmark
     async deleteMarker(time) {
+
       const remainingBookmarks = this.bookmarks.filter(
         (bookmark) => bookmark.time !== time
       );
-      console.log(this.audioSocket);
+
       this.audioId = this.audios[this.audioIndex].id;
       const newBookmarksArray = {
         id: this.audioId,
@@ -265,6 +246,7 @@ export default {
         index: this.audioIndex,
         audioSocket: this.audioSocket,
       };
+
       await this.$api.audio.putAudio(newBookmarksArray);
     },
 
@@ -275,7 +257,9 @@ export default {
 
     //Starts the Transcribe Audio process
     async onTranscribeAudio() {
-      this.$api.audio.transcribeAudio({ id: this.audios[this.audioIndex].id });
+      const saveIndex = this.audioIndex;
+      const transcribedAudio = await this.$api.audio.transcribeAudio({ id: this.audios[this.audioIndex].id });
+      this.audios[saveIndex] = transcribedAudio;
     },
     //-------------------Nuxt loading stuff-----------------------
     startLoading() {

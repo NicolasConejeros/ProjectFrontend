@@ -20,15 +20,10 @@
           >Subir</label
         >
       </li>
-      <li v-if="transcription" class="modal-button" @click="startTranscription" type="btn">
-        <label
-          for="addAudioModal"
-          class="hover:bg-primary-focus"
-          :class="[modalButtonString]"
-          >transcribir</label
-        >
+      <li v-if="transcription" @click="startTranscription" type="btn">
+        <label class="hover:bg-primary-focus">transcribir</label>
       </li>
-      <li  v-if="theresAudio" class="modal-button" type="btn">
+      <li v-if="theresAudio" class="modal-button" type="btn">
         <label
           for="deleteAudioModal"
           type="btn"
@@ -65,10 +60,10 @@ export default {
     }
   },
   methods: {
-    startTranscription(){
-      this.$emit('onTranscribeAudio');
-    }
-  }
+    startTranscription() {
+      this.$emit("onTranscribeAudio");
+    },
+  },
 };
 </script>
   

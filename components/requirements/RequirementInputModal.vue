@@ -79,13 +79,8 @@
                 type="text"
                 v-model="description"
                 placeholder="Ej: el siguiente proyecto se basa en.."
-                class="
-                  textarea textarea-primary
-                  rounded-lg
-                  bg-neutral
-                  w-full
-                  p-2.5
-                "
+                style="resize: none; overflow: auto"
+                class="textarea textarea-primary bg-neutral w-full h-40 p-2.5"
               />
             </div>
             <div class="mb-6">
@@ -106,7 +101,8 @@
                 type="text"
                 v-model="acceptanceCriteria"
                 placeholder="Ej: Cuando el usuario.. entonces.."
-                class="textarea textarea-primary bg-neutral w-full p-2.5"
+                style="resize: none; overflow: auto"
+                class="textarea textarea-primary bg-neutral w-full p-2.5 h-40"
               />
             </div>
           </form>
@@ -135,6 +131,7 @@
             text-gray-900
             dark:text-gray-300
             font-semibold
+            mt-1
           "
           >Seleccionar marca para adjuntar al audio</a
         >
@@ -182,10 +179,7 @@ export default {
     acceptanceCriteria: "",
     tempEpics: [],
     bookmarkP: 0,
-    audioId: {
-      type: String,
-      default: "",
-    },
+    audioId: ""
   }),
   async mounted() {
     if (!this.epics) {
@@ -197,18 +191,27 @@ export default {
   methods: {
     async onSubmit() {
       if (!this.epicId) this.addEpic("Sin asignar");
-      const requirement = {
+
+      let requirement = {
         projectId: this.$route.params.id,
         epicId: this.epicId,
         title: this.title,
         description: this.description,
         acceptanceCriteria: this.acceptanceCriteria,
         epicId: this.epicId,
-        timestamp: {
-          audioId: this.audioId,
-          timestamp: this.bookmarkP,
-        },
       };
+
+      console.log(JSON.stringify(this.audioId,null,2));
+      this.audioId == ""
+        ? {}
+        : (requirement = {
+            ...requirement,
+            timestamp: {
+              audioId: this.audioId,
+              timestamp: this.bookmarkP,
+            },
+          });
+
       await this.$api.requirement.createRequirement(requirement);
       this.$emit("updateArray");
     },

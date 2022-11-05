@@ -55,14 +55,14 @@
     <p v-if="descriptionCard" :class="[font, size, justify]">
       {{ acceptanceCriteria }}
     </p>
-    <p v-if="descriptionCard && timestamp" :class="[font, size, justify]">
+    <p v-if="descriptionCard && timestamp.audioId" :class="[font, size, justify]">
       Encontrado en el audio: {{ timestamp.audioId.title }}
     </p>
-    <p v-if="descriptionCard && timestamp" :class="[font, size, justify]">
+    <p v-if="descriptionCard && timestamp.audioId" :class="[font, size, justify]">
       En:
       {{ convertTime(timestamp.timestamp) }}
     </p>
-    <div v-if="descriptionCard && timestamp">
+    <div v-if="descriptionCard && timestamp.audioId">
       <PlayerModalPlayer
         :url="`http://localhost:3080/${timestamp.audioId.music.path}`"
         :new-position="timestamp.timestamp"
