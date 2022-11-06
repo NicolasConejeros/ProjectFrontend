@@ -88,9 +88,10 @@
             v-for="(comment, index) in comments"
             :key="index"
             :id="comment.id"
-            :user-name="comment.user.name"
+            :user-name="comment.userName"
+            :user="comment.user.name"
             :comment-content="comment.content"
-            @updateComments="onGetComments"
+
           />
         </div>
       </div>
@@ -263,6 +264,7 @@ export default {
       const newComment = {
         requirementId: this.id,
         user: this.$auth.user.id,
+        userName:  this.$auth.user.name,
         content: value,
       };
       await this.$api.comment.createComment(newComment);

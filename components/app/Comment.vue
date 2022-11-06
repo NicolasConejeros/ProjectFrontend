@@ -2,7 +2,7 @@
   <div class="card w-full mt-4 bg-base-100 shadow-xl border border-primary">
     <div class="card-body">
       <RequirementCardDropdown class="absolute right-2 top-2" :for-modal-c="'confirmationModalC'"/>
-      <h2 class="card-title">{{ userName }}</h2>
+      <h2 class="card-title">{{ userName !==  "guest" ? userName : user }}</h2>
       <p>{{ commentContent }}</p>
       <div class="card-actions justify-end"></div>
     </div>
@@ -24,6 +24,10 @@ export default {
       default: "",
     },
     userName: {
+      type: String,
+      default: "guest",
+    },
+    user: {
       type: String,
       default: "guest",
     },
