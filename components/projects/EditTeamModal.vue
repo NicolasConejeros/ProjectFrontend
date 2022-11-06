@@ -47,7 +47,10 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody v-for="(user, index) in teamMembers.members" :key="index">
+            <tbody
+              v-for="(user, index) in teamMembers.members"
+              :key="user.role"
+            >
               <!-- row 1 -->
               <tr>
                 <th></th>
@@ -118,6 +121,7 @@
         <button
           v-if="saveChangesButton"
           class="btn w-full bg-primary hover:bg-accent hover:text-base-300"
+          @click="saveTeam"
         >
           Guardar
         </button>
@@ -141,34 +145,63 @@ export default {
     teamMembers: [],
     saveChangesButton: false,
   }),
+  
+  //Loads the data from the vuex store to a local variable
   created() {
-    this.teamMembers = this.onTeamId;
+    this.teamMembers = JSON.parse(JSON.stringify(this.onTeamId));
   },
   methods: {
+
+    //Updates the data in the vuex store
     setMembers(newTeam) {
       this.$store.dispatch("teams/loadTeam", newTeam);
     },
+
+    //Removes a member from the team   
     async onRemoveMember(index) {
       this.teamMembers = await this.$api.team.removeMember(
         this.$route.params.id,
         this.teamMembers.members[index].user.id
       );
+
+      //Updates the data in the vuex store
       this.setMembers(this.teamMembers);
     },
-    updateRole(role, index) {
+
+    //Update the data displayed in the table
+    async updateRole(role, index) {
       this.saveChangesButton = true;
-      this.teamMembers.members[index].user.role = role;
+      this.teamMembers.members[index].role = role;
     },
+
+    //Saves the changes made in the table
+    async saveTeam() {
+      console.log(JSON.stringify(this.teamMembers, null, 2));
+      this.teamMembers = await this.$api.team.updateTeam(
+        this.$route.params.id,
+        this.teamMembers.members
+      );
+
+      //Updates the data in the vuex store
+      this.setMembers(this.teamMembers);
+    },
+
+    //Translates to spanish the user role
     translatedRole(role) {
       if (role === "leader") return "Líder";
       else return "Colaborador";
     },
+
+    //Submit method
     async onSubmit() {
       this.$v.$touch();
       if (this.$v.$invalid) {
+        
         console.log("Error en el formulario de usuario");
       } else {
+
         try {
+
           this.teamMembers = await this.$api.team.addMember({
             userEmail: this.email,
             userRole: this.onUserRole,

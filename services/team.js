@@ -18,9 +18,17 @@ export default (axios) => ({
             console.log(error)
         }
     },
-    async removeMember(projectId,userToRemove) {
+    async removeMember(projectId, userToRemove) {
         try {
-            const { data } = await axios.put(`/team/${projectId}`,{userToRemove});
+            const { data } = await axios.put(`/team/${projectId}`, { userToRemove });
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+    async updateTeam(projectId, team) {
+        try {
+            const { data } = await axios.put(`/team/update/${projectId}`, { members: team });
             return data;
         } catch (error) {
             console.log(error);
