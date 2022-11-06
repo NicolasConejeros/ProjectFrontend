@@ -14,6 +14,7 @@
             top-2
             z-40
           "
+          @click="saveChangesButton = false"
         >
           ✕
         </label>
@@ -31,11 +32,11 @@
             z-40
           "
         >
-          Manejar equipo
+          Administrar equipo
         </div>
 
         <div>
-          <table class="table w-full ">
+          <table class="table w-full">
             <!-- head -->
             <thead>
               <tr>
@@ -46,7 +47,7 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody v-for="(user, index) in teamMembers" :key="index" >
+            <tbody v-for="(user, index) in teamMembers.members" :key="index">
               <!-- row 1 -->
               <tr>
                 <th></th>
@@ -114,6 +115,12 @@
             <!-- foot -->
           </table>
         </div>
+        <button
+          v-if="saveChangesButton"
+          class="btn w-full bg-primary hover:bg-accent hover:text-base-300"
+        >
+          Guardar
+        </button>
       </div>
     </div>
   </div>
@@ -124,22 +131,33 @@ export default {
   props: {
     team: [],
   },
+  computed: {
+    onTeamId() {
+      return this.$store.getters["teams/getTeam"];
+    },
+  },
   data: () => ({
     email: "",
     teamMembers: [],
+    saveChangesButton: false,
   }),
   created() {
-    this.teamMembers = this.team;
+    this.teamMembers = this.onTeamId;
   },
   methods: {
+    setMembers(newTeam) {
+      this.$store.dispatch("teams/loadTeam", newTeam);
+    },
     async onRemoveMember(index) {
       this.teamMembers = await this.$api.team.removeMember(
         this.$route.params.id,
-        this.teamMembers[index].user.id
+        this.teamMembers.members[index].user.id
       );
+      this.setMembers(this.teamMembers);
     },
     updateRole(role, index) {
-      this.teamMembers[index].user.role = role;
+      this.saveChangesButton = true;
+      this.teamMembers.members[index].user.role = role;
     },
     translatedRole(role) {
       if (role === "leader") return "Líder";

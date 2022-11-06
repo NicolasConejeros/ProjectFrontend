@@ -201,7 +201,6 @@ export default {
         epicId: this.epicId,
       };
 
-      console.log(JSON.stringify(this.audioId,null,2));
       this.audioId == ""
         ? {}
         : (requirement = {

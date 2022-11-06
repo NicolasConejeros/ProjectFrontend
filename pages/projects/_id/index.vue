@@ -1,7 +1,7 @@
 <template>
   <div class="container grid grid-cols-12 grid-rows-12 gap-4">
     <div class="row-start-4 col-span-3 col-start-3 relative w-full">
-      <div class="text-4xl font-semibold text-neutral-content">
+      <div class="text-4xl font-semibold text-neutral-content truncate">
         {{ name }}
       </div>
       <div

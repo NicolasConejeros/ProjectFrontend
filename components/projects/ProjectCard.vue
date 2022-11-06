@@ -22,13 +22,14 @@
           tracking-tight
           text-gray-900
           dark:text-white
+          truncate
         "
       >
         {{ name }}
       </h5>
     </nuxt-link>
     <hr class="h-px bg-gray-200 border-0 dark:bg-gray-700" />
-    <p class="mt-2 mb-4 font-normal text-gray-700 dark:text-gray-400 ">
+    <p class="mt-2 mb-4 font-normal text-gray-700 dark:text-gray-400 truncate">
       {{ description }}
     </p>
     <!-- <button

@@ -77,26 +77,31 @@ export default {
     onTeamId() {
       return this.$store.getters["teams/getTeam"];
     },
-    onUserRole(){
-        return this.$store.getters["teams/getRole"];
-    }
+    onUserRole() {
+      return this.$store.getters["teams/getRole"];
+    },
   },
   data: () => ({
     email: "",
   }),
   methods: {
+    setMembers(newTeam) {
+      this.$store.dispatch("teams/loadTeam", newTeam);
+    },
     async onSubmit() {
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log("Error en el formulario de usuario");
       } else {
         try {
-          await this.$api.team.addMember({
+          const team = await this.$api.team.addMember({
             userEmail: this.email,
             userRole: this.onUserRole,
             teamId: this.onTeamId.id,
           });
           //Acá añadir el usuario al store en teams
+          // const temp = this.onTeamId;
+          this.setMembers(team);
         } catch (error) {
           console.log(error);
         }

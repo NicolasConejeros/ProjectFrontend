@@ -45,6 +45,7 @@
         text-neutral-content
         row-start-6
         col-span-2 col-start-10
+        hover:text-primary
       "
     >
       Añadir requerimiento
