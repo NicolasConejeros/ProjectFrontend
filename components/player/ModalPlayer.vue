@@ -23,6 +23,7 @@
       @nextAudio="nextAudio"
       @prevAudio="prevAudio"
       :key="updateButtons"
+      :card="card"
     />
   </div>
 </template>
@@ -74,6 +75,7 @@ export default {
   props: {
     url: "",
     newPosition: 0,
+    card: false
   },
   data() {
     return {

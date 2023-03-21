@@ -20,7 +20,7 @@
           >Subir</label
         >
       </li>
-      <li v-if="transcription" @click="startTranscription" type="btn">
+      <li v-if="transcription && !theresTranscription" @click="startTranscription" type="btn">
         <label class="hover:bg-primary-focus">transcribir</label>
       </li>
       <li v-if="theresAudio" class="modal-button" type="btn">
@@ -47,6 +47,10 @@ export default {
       default: false,
     },
     theresAudio: {
+      type: Boolean,
+      default: false,
+    },
+    theresTranscription: {
       type: Boolean,
       default: false,
     },

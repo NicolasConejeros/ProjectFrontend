@@ -3,11 +3,12 @@
     <div class="text-lg font-semibold text-neutral-content">
       {{ audioTitle }}
     </div>
-    <div class="relative">
+    <div v-if="onUserRole === 'leader'" class="relative">
       <player-dropdown
         class="absolute right-0 -mt-6"
         :transcription="audios.length > 0 ? true : false"
         :theres-audio="audios.length === 0 ? false : true"
+        :theres-transcription="transcriptionSwitch"
         @onTranscribeAudio="onTranscribeAudio"
       />
     </div>
@@ -84,6 +85,7 @@ export default {
     totalTime: 0,
     showBookmarks: false,
     deleteM: false,
+    transcriptionSwitch: false,
   }),
   mounted: function () {
     this.audioIndex = 0;
@@ -114,11 +116,10 @@ export default {
         this.audioId = this.audios[this.audioIndex].id;
         this.audioSocket = this.audioId;
         this.audioTitle = this.audios[this.audioIndex].title;
-        
+
         this.joinSocket(this.audioId);
 
         this.socket.on("room", (received, index) => {
-
           this.audios[index].bookmarks = received;
           if (index == this.audioIndex) this.bookmarks = received;
         });
@@ -127,8 +128,15 @@ export default {
     this.$watch("audioIndex", () => {
       if (this.audiosProp) {
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
+        this.$emit("updateId", this.audios[this.audioIndex].id);
       }
     });
+  },
+
+  computed: {
+    onUserRole() {
+      return this.$store.getters["teams/getRole"];
+    },
   },
 
   methods: {
@@ -156,55 +164,82 @@ export default {
 
     //------------------------Audio controls------------------------------
     nextAudio() {
-      // this.oldId = this.audios[this.audioIndex].id;
-      this.audioIndex = this.audioIndex + 1;
+      let tempIndex = this.audioIndex + 1;
 
-      if (!this.audios[this.audioIndex]) this.audioIndex = 0;
+      //if the next item does not exist and the length of the audios is greater than one
+      if (!this.audios[tempIndex] && this.audios.length > 1)
+        this.audioIndex = 0;
 
-      this.audioTitle = this.audios[this.audioIndex].title;
-      this.url =
-        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+      //if the next item in the track exists
+      if (this.audios[tempIndex]) this.audioIndex = this.audioIndex + 1;
 
-      // //loads the bookmarks of the next audio
-      this.bookmarks = this.audios[this.audioIndex].bookmarks;
+      if (tempIndex - 1 != this.audioIndex) {
+        this.audioTitle = this.audios[this.audioIndex].title;
+        this.url =
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
 
-      //resets the icon and hides the bookmarks
-      this.showBookmarks = !this.showBookmarks;
+        // //loads the bookmarks of the next audio
+        this.bookmarks = this.audios[this.audioIndex].bookmarks;
 
-      //Stops the delete option
-      this.deleteM = false;
+        //resets the icon and hides the bookmarks
+        this.showBookmarks = !this.showBookmarks;
 
-      //Saves the id of the audio playing/in queue
-      this.audioId = this.audios[this.audioIndex].id;
+        //Stops the delete option
+        this.deleteM = false;
+
+        //Saves the id of the audio playing/in queue
+        this.audioId = this.audios[this.audioIndex].id;
+
+        //Saves the transcription if theres one
+        const transcribedAudio = this.audios[this.audioIndex].transcription;
+
+        //if theres one the button to transcribe on the dropdown will be disabled
+        if (transcribedAudio) this.transcriptionSwitch = true;
+        else this.transcriptionSwitch = false;
+        this.$emit("displayTranscription", transcribedAudio);
+      }
     },
     prevAudio() {
-      // this.oldId = this.audios[this.audioIndex].id;
-      this.audioIndex = this.audioIndex - 1;
+      let tempIndex = this.audioIndex - 1;
 
-      if (!this.audios[this.audioIndex])
+      //if the length of the track of audios > 1, it'll connect the last track with the first one
+      if (!this.audios[tempIndex] && this.audios.length > 1)
         this.audioIndex = this.audios.length - 1;
 
-      this.audioTitle = this.audios[this.audioIndex].title;
-      this.url =
-        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
+      //if the next audio does exist
+      if (this.audios[tempIndex]) this.audioIndex = this.audioIndex - 1;
 
-      //loads the bookmarks of the previous audio
-      this.bookmarks = this.audios[this.audioIndex].bookmarks;
+      //if the index got updated, it'll change the audio loaded
+      if (tempIndex + 1 != this.audioIndex) {
+        this.audioTitle = this.audios[this.audioIndex].title;
+        this.url =
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
 
-      //resets the icon and hides the bookmarks
-      this.showBookmarks = !this.showBookmarks;
+        //loads the bookmarks of the previous audio
+        this.bookmarks = this.audios[this.audioIndex].bookmarks;
 
-      //Stops the delete option
-      this.deleteM = false;
+        //resets the icon and hides the bookmarks
+        this.showBookmarks = !this.showBookmarks;
 
-      //Saves the id of the audio playing/in queue
-      this.audioId = this.audios[this.audioIndex].id;
+        //Stops the delete option
+        this.deleteM = false;
+
+        //Saves the id of the audio playing/in queue
+        this.audioId = this.audios[this.audioIndex].id;
+
+        //Saves the transcription if theres one
+        const transcribedAudio = this.audios[this.audioIndex].transcription;
+
+        //if theres one the button to transcribe on the dropdown will be disabled
+        if (transcribedAudio) this.transcriptionSwitch = true;
+        else this.transcriptionSwitch = false;
+        this.$emit("displayTranscription", transcribedAudio);
+      }
     },
     //-----------------------------------------------------------
 
     //Add bookmarks function
     async addBookmark(newBookmark) {
-
       const bookmark = newBookmark;
       this.audioId = this.audios[this.audioIndex].id;
 
@@ -234,7 +269,6 @@ export default {
 
     //Deletes the selected bookmark
     async deleteMarker(time) {
-
       const remainingBookmarks = this.bookmarks.filter(
         (bookmark) => bookmark.time !== time
       );
@@ -255,11 +289,18 @@ export default {
       this.deleteM = false;
     },
 
-    //Starts the Transcribe Audio process
+    //Starts the Transcription
     async onTranscribeAudio() {
       const saveIndex = this.audioIndex;
-      const transcribedAudio = await this.$api.audio.transcribeAudio({ id: this.audios[this.audioIndex].id });
-      this.audios[saveIndex] = transcribedAudio;
+      this.transcriptionSwitch = true;
+      alert(
+        "La transcripción se se mostrará por pantalla cuando esté finalizada"
+      );
+      const transcribedAudio = await this.$api.audio.transcribeAudio({
+        id: this.audios[this.audioIndex].id,
+      });
+      this.audios[saveIndex].transcription = transcribedAudio;
+      this.$emit("displayTranscription", transcribedAudio);
     },
     //-------------------Nuxt loading stuff-----------------------
     startLoading() {

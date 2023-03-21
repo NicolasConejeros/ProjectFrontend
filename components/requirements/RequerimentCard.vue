@@ -66,6 +66,7 @@
       <PlayerModalPlayer
         :url="`http://localhost:3080/${timestamp.audioId.music.path}`"
         :new-position="timestamp.timestamp"
+        :card="true"
       />
     </div>
     <label

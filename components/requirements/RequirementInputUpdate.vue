@@ -48,6 +48,7 @@
             <input
               type="text"
               :value="requirementTitle"
+              :maxlength="40"
               @input="(event) => (title = event.target.value)"
               placeholder="Ej: Proyecto 1"
               class="input input-bordered input-primary bg-neutral w-full p-2.5"
@@ -71,6 +72,7 @@
             <textarea
               type="text"
               :value="requirementDescription"
+              :maxlength="255"
               @input="(event) => (description = event.target.value)"
               placeholder="Ej: el siguiente proyecto se basa en.."
               class="textarea textarea-primary bg-neutral w-full p-2.5"
@@ -93,6 +95,7 @@
             <textarea
               type="text"
               :value="requirementAcceptanceCriteria"
+              :maxlength="255"
               @input="(event) => (acceptanceCriteria = event.target.value)"
               placeholder="Ej: Cuando el usuario.. entonces.."
               class="textarea textarea-primary bg-neutral w-full p-2.5"

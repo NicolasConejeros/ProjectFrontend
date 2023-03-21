@@ -92,6 +92,7 @@ export default {
       this.$v.$touch();
       if (this.$v.$invalid) {
         console.log("Error en el formulario de usuario");
+        alert("Error al añadir usuario");
       } else {
         try {
           const team = await this.$api.team.addMember({
@@ -99,9 +100,14 @@ export default {
             userRole: this.onUserRole,
             teamId: this.onTeamId.id,
           });
-          //Acá añadir el usuario al store en teams
+          if(!team){
+            alert("Error al añadir usuario");
+          }
+          else{
+            //Acá añadir el usuario al store en teams
           // const temp = this.onTeamId;
           this.setMembers(team);
+          }
         } catch (error) {
           console.log(error);
         }

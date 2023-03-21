@@ -49,7 +49,7 @@
             </thead>
             <tbody
               v-for="(user, index) in teamMembers.members"
-              :key="user.role"
+              :key="JSON.stringify(user)"
             >
               <!-- row 1 -->
               <tr>
@@ -78,7 +78,7 @@
                         )
                       "
                     >
-                      {{ translatedRole(user.role) }}
+                    {{ user.role == "leader" ? "Líder" : "Colaborador" }}
                     </option>
                     <option
                       @click="

@@ -50,6 +50,7 @@
               <input
                 type="text"
                 v-model="title"
+                :maxlength="40"
                 placeholder="Ej: Proyecto 1"
                 class="
                   input input-bordered input-primary
@@ -78,6 +79,7 @@
               <textarea
                 type="text"
                 v-model="description"
+                :maxlength="255"
                 placeholder="Ej: el siguiente proyecto se basa en.."
                 style="resize: none; overflow: auto"
                 class="textarea textarea-primary bg-neutral w-full h-40 p-2.5"
@@ -99,6 +101,7 @@
               </div>
               <textarea
                 type="text"
+                :maxlength="255"
                 v-model="acceptanceCriteria"
                 placeholder="Ej: Cuando el usuario.. entonces.."
                 style="resize: none; overflow: auto"

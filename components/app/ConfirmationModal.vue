@@ -65,10 +65,12 @@ export default {
       if (this.forModal === "confirmationModalR") {
         await this.$api.requirement.deleteRequirements(id);
         this.$emit("updateArray");
+        window.location.reload(true);
       }
       if (this.forModal === "deleteAudioModal") {
         await this.$api.audio.deleteAudio(id);
         this.$emit("updateAudios");
+        window.location.reload(true);
       }
       if (this.forModal === "removeMemberModal") {
         await this.$api.team.removeMember(id);

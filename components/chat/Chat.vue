@@ -1,5 +1,5 @@
 <template>
-  <div class="h-96 bg-base-300 relative flex">
+  <div class="h-96 bg-base-300 relative flex drop-shadow-lg">
     <div class="overflow-y-auto h-5/6 w-full">
       <div v-for="(message, index) in messages" :key="index">
         <ChatMessage

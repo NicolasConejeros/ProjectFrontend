@@ -35,7 +35,7 @@
       :key="updateCard"
     >
       <ProjectsProjectCard
-      class="mt-4"
+        class="mt-4"
         v-for="(project, index) in projects"
         :key="index"
         :name="project.project.name"
@@ -46,9 +46,8 @@
         <button
           type="button"
           class="
-            text-blue-700
-            border border-blue-700
-            hover:bg-blue-700 hover:text-white
+            border border-primary
+            hover:bg-primary hover:text-white
             focus:ring-4 focus:outline-none focus:ring-blue-300
             font-medium
             rounded-full
@@ -57,7 +56,6 @@
             text-center
             inline-flex
             items-center
-            dark:border-blue-500
             dark:text-blue-500
             dark:hover:text-white
             dark:focus:ring-blue-800
@@ -66,7 +64,7 @@
         >
           <svg
             aria-hidden="true"
-            class="w-5 h-5"
+            class="w-6 h-6"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +85,7 @@
 import ProjectCard from "../../components/projects/ProjectCard.vue";
 export default {
   layout: "default",
-  middleware: 'auth',
+  middleware: "auth",
   data: () => ({
     projects: [],
     updateCard: 0,

@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-5 grid-flow-col" :key="update">
 
-    <div class="items-center text-primary hover:text-accent mt-4 col-span-1">
+    <div  v-if="!card" class="items-center text-primary hover:text-accent mt-4 col-span-1">
       <svg
         width="24"
         height="24"
@@ -17,7 +17,7 @@
       </svg>
     </div>
 
-    <label class="swap swap-rotate justify-center col-span-1">
+    <label class="swap swap-rotate justify-center col-span-1" :class="card ? 'ml-32' : ''">
       <input type="checkbox" />
       <div
         class="
@@ -74,7 +74,7 @@
         </svg>
       </div>
     </label>
-    <div class="items-center text-primary hover:text-accent mt-4 col-span-1">
+    <div v-if="!card" class="items-center text-primary hover:text-accent mt-4 col-span-1">
       <svg
         width="24"
         height="24"
@@ -92,7 +92,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 export default {
   props: {
     next: {
@@ -100,6 +100,10 @@ export default {
       default: false,
     },
     prev: {
+      type: Boolean,
+      default: false,
+    },
+    card: {
       type: Boolean,
       default: false,
     },

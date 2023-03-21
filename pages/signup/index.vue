@@ -1,11 +1,20 @@
 <template>
   <div class="container grid grid-cols-12 grid-rows-12 gap-4">
     <div
+      class="text-sm text-neutral-content row-start-4 col-span-2 col-start-3"
+    >
+      <nuxt-link to="/" class="hover:underline underline-offset-1"
+        >Home
+      </nuxt-link>
+      <a>\</a>
+      <a>Registro</a>
+    </div>
+    <div
       class="
         text-4xl
         font-semibold
         text-neutral-content
-        row-start-4
+        row-start-5
         col-span-1 col-start-3
       "
     >

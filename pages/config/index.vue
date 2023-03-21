@@ -1,11 +1,20 @@
 <template>
   <div class="container grid grid-cols-12 grid-rows-12 gap-4">
     <div
+      class="text-sm text-neutral-content row-start-4 col-span-2 col-start-3"
+    >
+      <nuxt-link to="/" class="hover:underline underline-offset-1"
+        >Home
+      </nuxt-link>
+      <a>\</a>
+      <a>Configuración</a>
+    </div>
+    <div
       class="
         text-4xl
         font-semibold
         text-neutral-content
-        row-start-4
+        row-start-5
         col-span-1 col-start-3
       "
     >
@@ -188,6 +197,7 @@ export default {
           console.log("Error en el formulario de usuario");
         } else {
           const a = await this.$api.user.updateUser(this.user);
+          this.$router.go()
         }
       } catch (error) {
         console.log(error.response);

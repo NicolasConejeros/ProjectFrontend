@@ -15,23 +15,18 @@
         ></path>
       </svg>
     </button>
-    <label v-else tabindex="0" class="btn btn-ghost btn-circle avatar">
-      <div class="w-10 rounded-full">
-        <img src="https://placeimg.com/80/80/people" />
+    <label
+      v-else
+      tabindex="0"
+      class="btn btn-primary btn-circle flex justify-center"
+    >
+      <div>
+        <img class="object-cover rounded-full" :alt="onUserInitial" />
       </div>
     </label>
     <ul
       tabindex="0"
-      class="
-        mt-3
-        p-2
-        shadow
-        menu menu-compact
-        dropdown-content
-        bg-base-300
-        rounded-box
-        w-52
-      "
+      class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-300 rounded-box w-52"
     >
       <div v-if="!isLoggedIn">
         <nuxt-link to="/signup">
@@ -45,7 +40,7 @@
         <nuxt-link to="/config">
           <li><a>Mi cuenta</a></li>
         </nuxt-link>
-          <li @click="onLogout"><a>Cerrar sesión</a></li>
+        <li @click="onLogout"><a>Cerrar sesión</a></li>
       </div>
     </ul>
   </div>
@@ -59,11 +54,15 @@ export default {
       default: false,
     },
   },
+  computed: {
+    onUserInitial() {
+      return this.$auth.user.name.charAt(0);
+    },
+  },
   methods: {
-    async onLogout(){
+    async onLogout() {
       await this.$auth.logout();
-
-    }
-  }
+    },
+  },
 };
 </script>
