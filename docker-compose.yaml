@@ -1,0 +1,20 @@
+version: "3"
+services:
+  frontend:
+   build:
+      context: ./
+      dockerfile: Dockerfile.dev
+   ports:
+     - 3000:3000
+   container_name: tesis-frontend
+   restart: unless-stopped
+   networks:
+     - tesis-stack-net
+
+networks:
+  tesis-stack-net:
+    driver: bridge
+
+# volumes:
+#   mongo-data:
+#     driver: local
