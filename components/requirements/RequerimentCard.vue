@@ -64,7 +64,7 @@
     </p>
     <div v-if="descriptionCard && timestamp.audioId">
       <PlayerModalPlayer
-        :url="`http://localhost:3080/${timestamp.audioId.music.path}`"
+        :url="`http://192.34.57.153:3080/${timestamp.audioId.music.path}`"
         :new-position="timestamp.timestamp"
         :card="true"
       />
