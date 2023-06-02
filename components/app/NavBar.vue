@@ -25,7 +25,7 @@
     <div class="flex-1">
       <nuxt-link :to="this.$auth.loggedIn ? '/main' : '/'"
         ><a class="btn btn-ghost normal-case text-xl"
-          >Proyecto de Tesis</a
+          >Proyecto</a
         ></nuxt-link
       >
     </div>
