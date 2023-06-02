@@ -82,7 +82,7 @@ export default {
       if (this.audiosProp.length > 0) {
         this.audios = this.audiosProp;
         this.url =
-          "http://192.34.57.153:3080/" + this.audios[this.audioIndex].music.path;
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
         //loads the bookmarks
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
         //Saves the id of the audio playing/in queue
@@ -116,7 +116,7 @@ export default {
       if (!this.audios[this.audioIndex]) this.audioIndex = 0;
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
-        "http://192.34.57.153:3080/" + this.audios[this.audioIndex].music.path;
+        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
       // //loads the bookmarks of the next audio
       this.bookmarks = this.audios[this.audioIndex].bookmarks;
       //resets the icon and hides the bookmarks
@@ -133,7 +133,7 @@ export default {
 
       this.audioTitle = this.audios[this.audioIndex].title;
       this.url =
-        "http://192.34.57.153:3080/" + this.audios[this.audioIndex].music.path;
+        "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
 
       //loads the bookmarks of the next audio
       this.bookmarks = this.audios[this.audioIndex].bookmarks;

@@ -39,7 +39,6 @@ export default {
     var audio = this.$refs.player;
 
     //Wait for audio to load, then run initSlider() to get audio duration and set the max value of our slider
-    // "loademetadata" Event https://www.w3schools.com/tags/av_event_loadedmetadata.asp
     audio.addEventListener(
       "loadedmetadata",
       function (e) {
@@ -121,10 +120,8 @@ export default {
       //Sync local 'playbackTime' var to audio.currentTime and update global state
       this.playbackTime = audio.currentTime;
 
-      //console.log("update: " + audio.currentTime);
       //Add listeners for audio pause and audio end events
       audio.addEventListener("ended", this.endListener);
-      //   audio.addEventListener("pause", this.pauseListener);
     },
     //Function to run when audio play reaches the end of file
     endListener() {
@@ -140,7 +137,6 @@ export default {
       audio.removeEventListener("freqtimeupdate", this.playbackListener);
       audio.removeEventListener("ended", this.endListener);
       audio.removeEventListener("pause", this.pauseListener);
-      //console.log("All cleaned up!");
     },
     convertTime(seconds) {
       const format = (val) => `0${Math.floor(val)}`.slice(-2);
@@ -170,9 +166,9 @@ export default {
     deleteMarker() {
       this.$emit("deleteOption");
     },
-    stopDeleting(){
+    stopDeleting() {
       this.$emit("stopDeleting");
-    }
+    },
   },
 };
 </script>

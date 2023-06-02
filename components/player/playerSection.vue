@@ -106,7 +106,7 @@ export default {
       if (this.audiosProp.length > 0) {
         this.audios = this.audiosProp;
         this.url =
-          "http://192.34.57.153:3080/" +
+          "http://localhost:3080/" +
           this.audiosProp[this.audioIndex].music.path;
 
         //loads the bookmarks
@@ -176,7 +176,7 @@ export default {
       if (tempIndex - 1 != this.audioIndex) {
         this.audioTitle = this.audios[this.audioIndex].title;
         this.url =
-          "http://192.34.57.153:3080/" + this.audios[this.audioIndex].music.path;
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
 
         // //loads the bookmarks of the next audio
         this.bookmarks = this.audios[this.audioIndex].bookmarks;
@@ -213,7 +213,7 @@ export default {
       if (tempIndex + 1 != this.audioIndex) {
         this.audioTitle = this.audios[this.audioIndex].title;
         this.url =
-          "http://192.34.57.153:3080/" + this.audios[this.audioIndex].music.path;
+          "http://localhost:3080/" + this.audios[this.audioIndex].music.path;
 
         //loads the bookmarks of the previous audio
         this.bookmarks = this.audios[this.audioIndex].bookmarks;

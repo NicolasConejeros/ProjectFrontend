@@ -63,7 +63,6 @@ export default {
   },
   methods: {
     getUser(userId) {
-      console.log(JSON.stringify(this.chat,null,2));
       const user = this.chat.chatters.find(({ user }) => user.id == userId);
       if (!user) {
         return { user: { name: "user", avatar: "", id: "" } };

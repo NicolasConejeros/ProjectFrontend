@@ -70,21 +70,6 @@ export default {
     ],
   },
 
-  // publicRuntimeConfig: {
-  //   axios: {
-  //     baseURL: process.env.AXIOS_BASE_URL,
-  //     browserBaseURL: process.env.AXIOS_BROWSER_BASE_URL,
-  //     retry: { retries: 3 },
-  //   },
-  // },
-
-  // privateRuntimeConfig: {
-  //   axios: {
-  //     baseURL: process.env.AXIOS_BASE_URL,
-  //     browserBaseURL: process.env.AXIOS_BROWSER_BASE_URL,
-  //     retry: { retries: 3 },
-  //   },
-  // },
   axios: {
     baseURL: process.env.AXIOS_BASE_URL,
     browserBaseURL: process.env.AXIOS_BROWSER_BASE_URL,
